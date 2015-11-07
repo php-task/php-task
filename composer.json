@@ -1,0 +1,13 @@
+{
+    "name": "php-task/php-task",
+    "description": "Interfaces to work with synchronous and asynchronous tasks in php.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Johannes Wachter",
+            "email": "johannes.wachter@massiveart.at"
+        }
+    ],
+    "require": {}
+}
