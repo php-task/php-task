@@ -1,6 +1,6 @@
 <?php
 
-namespace Tasks\Scheduler;
+namespace Task\Scheduler;
 
 /**
  * Handles tasks.

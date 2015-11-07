@@ -1,6 +1,6 @@
 <?php
 
-namespace Tasks\TaskRunner;
+namespace Task\TaskRunner;
 
 /**
  * Defines interface for a task-runner.

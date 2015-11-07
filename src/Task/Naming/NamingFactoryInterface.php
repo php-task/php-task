@@ -1,9 +1,9 @@
 <?php
 
-namespace Tasks\Naming;
+namespace Task\Naming;
 
-use Tasks\Scheduler\TaskInterface;
-use Tasks\TaskRunner\WorkerInterface;
+use Task\Scheduler\TaskInterface;
+use Task\TaskRunner\WorkerInterface;
 
 /**
  * Generates names for all php-task library components.

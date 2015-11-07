@@ -1,6 +1,6 @@
 <?php
 
-namespace Tasks\Naming;
+namespace Task\Naming;
 
 use Tasks\Scheduler\TaskInterface;
 use Tasks\TaskRunner\WorkerInterface;
