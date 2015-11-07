@@ -2,8 +2,8 @@
 
 namespace Task\Naming;
 
-use Tasks\Scheduler\TaskInterface;
-use Tasks\TaskRunner\WorkerInterface;
+use Task\Scheduler\TaskInterface;
+use Task\TaskRunner\WorkerInterface;
 
 /**
  * Default implementation of naming factory.
