@@ -9,5 +9,10 @@
             "email": "johannes.wachter@massiveart.at"
         }
     ],
-    "require": {}
+    "require": {},
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
 }
