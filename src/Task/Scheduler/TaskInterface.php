@@ -12,13 +12,6 @@ use Serializable;
 interface TaskInterface
 {
     /**
-     * Returns name of requested worker.
-     *
-     * @return string
-     */
-    public function getWorkerName();
-
-    /**
      * Returns workload for the worker.
      *
      * @return string|Serializable

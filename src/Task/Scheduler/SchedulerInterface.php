@@ -2,6 +2,8 @@
 
 namespace Task\Scheduler;
 
+use GuzzleHttp\Promise\PromiseInterface;
+
 /**
  * Handles tasks.
  *
@@ -10,16 +12,18 @@ namespace Task\Scheduler;
 interface SchedulerInterface
 {
     /**
+     * @param string $workerName
      * @param TaskInterface $task
      */
-    public function schedule(TaskInterface $task);
+    public function schedule($workerName, TaskInterface $task);
 
     /**
      * Run task immediately and returns result.
      *
+     * @param string $workerName
      * @param TaskInterface $task
      *
-     * @return mixed
+     * @return PromiseInterface
      */
-    public function run(TaskInterface $task);
+    public function run($workerName, TaskInterface $task);
 }
