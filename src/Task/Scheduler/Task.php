@@ -12,25 +12,11 @@ class Task implements TaskInterface
     /**
      * @var string
      */
-    private $workerName;
-
-    /**
-     * @var string
-     */
     private $workload;
 
-    public function __construct($workerName, $workload)
+    public function __construct($workload)
     {
-        $this->workerName = $workerName;
         $this->workload = $workload;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getWorkerName()
-    {
-        return $this->workerName;
     }
 
     /**

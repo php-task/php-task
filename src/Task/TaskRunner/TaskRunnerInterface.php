@@ -12,9 +12,10 @@ interface TaskRunnerInterface
     /**
      * Adds a worker to process tasks.
      *
+     * @param string $workerName
      * @param WorkerInterface $worker
      */
-    public function addWorker(WorkerInterface $worker);
+    public function addWorker($workerName, WorkerInterface $worker);
 
     /**
      * Process given tasks.

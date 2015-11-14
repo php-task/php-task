@@ -9,11 +9,10 @@ use Task\Scheduler\Task;
  */
 class TaskTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGetter()
+    public function testGetWorkload()
     {
-        $task = new Task('worker-name', 'workload');
+        $task = new Task('workload');
 
-        $this->assertEquals('worker-name', $task->getWorkerName());
         $this->assertEquals('workload', $task->getWorkload());
     }
 }
