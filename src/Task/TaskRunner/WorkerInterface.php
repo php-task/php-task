@@ -19,18 +19,4 @@ interface WorkerInterface
      * @return mixed
      */
     public function run(TaskInterface $task);
-
-    /**
-     * Returns namespace of worker name.
-     *
-     * @return string
-     */
-    public function getNamespace();
-
-    /**
-     * Returns name of worker.
-     *
-     * @return string
-     */
-    public function getName();
 }
