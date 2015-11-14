@@ -12,7 +12,7 @@ use Task\Scheduler\TaskInterface;
 interface WorkerInterface
 {
     /**
-     * Executes task and returns result.
+     * Executes tasks and returns result.
      *
      * @param TaskInterface $task
      *

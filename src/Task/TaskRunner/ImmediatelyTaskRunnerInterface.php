@@ -14,9 +14,8 @@ interface ImmediatelyTaskRunnerInterface extends TaskRunnerInterface
     /**
      * Run tasks immediately and returns result.
      *
+     * @param string $workerName
      * @param TaskInterface $task
-     *
-     * @return mixed
      */
-    public function runImmediately(TaskInterface $task);
+    public function runImmediately($workerName, TaskInterface $task);
 }
