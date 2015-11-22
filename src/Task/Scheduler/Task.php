@@ -2,6 +2,8 @@
 
 namespace Task\Scheduler;
 
+use Serializable;
+
 /**
  * Default task implementation.
  *
@@ -10,9 +12,19 @@ namespace Task\Scheduler;
 class Task implements TaskInterface
 {
     /**
-     * @var string
+     * @var string|Serializable
      */
     private $workload;
+
+    /**
+     * @var string|Serializable
+     */
+    private $result;
+
+    /**
+     * @var bool
+     */
+    private $completed = false;
 
     public function __construct($workload)
     {
@@ -25,5 +37,37 @@ class Task implements TaskInterface
     public function getWorkload()
     {
         return $this->workload;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCompleted()
+    {
+        $this->completed = true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isCompleted()
+    {
+        return $this->completed;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getResult()
+    {
+        return $this->result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setResult($result)
+    {
+        $this->result = $result;
     }
 }
