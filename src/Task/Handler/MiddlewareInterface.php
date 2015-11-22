@@ -11,5 +11,5 @@ use Task\Scheduler\TaskInterface;
  */
 interface MiddlewareInterface
 {
-    public function handle(TaskInterface $task, MiddlewareInterface $next);
+    public function handle($handlerName, TaskInterface $task, callable $next);
 }

@@ -13,20 +13,25 @@ use Task\Scheduler\TaskInterface;
 class HandlerMiddleware implements MiddlewareInterface
 {
     /**
-     * @var HandlerInterface
+     * @var HandlerInterface[]
      */
-    protected $handler;
+    protected $handler = [];
 
-    public function __construct(HandlerInterface $handler)
+    public function addHandler($name, HandlerInterface $handler)
     {
-        $this->handler = $handler;
+        $this->handler[$name] = $handler;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function handle(TaskInterface $task, MiddlewareInterface $next)
+    public function handle($handlerName, TaskInterface $task, callable $next)
     {
-        $this->handler->handle($task);
+        $result = $this->handler[$handlerName]->handle($task);
+
+        $task->setCompleted();
+        $task->setResult($result);
+
+        $next();
     }
 }

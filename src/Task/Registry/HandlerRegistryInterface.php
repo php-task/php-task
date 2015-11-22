@@ -2,6 +2,8 @@
 
 namespace Task\Registry;
 
+use Task\Scheduler\TaskInterface;
+
 /**
  * Defines interface for a handler-registry.
  *
@@ -10,7 +12,10 @@ namespace Task\Registry;
 interface HandlerRegistryInterface
 {
     /**
-     * Handle scheduled Tasks.
+     * Handle given Tasks.
+     *
+     * @param string $handlerName
+     * @param TaskInterface $task
      */
-    public function handle();
+    public function handle($handlerName, TaskInterface $task);
 }

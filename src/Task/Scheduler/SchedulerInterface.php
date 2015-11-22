@@ -24,4 +24,9 @@ interface SchedulerInterface
      * @param TaskInterface $task
      */
     public function run($workerName, TaskInterface $task);
+
+    /**
+     * Run all scheduled tasks.
+     */
+    public function execute();
 }
