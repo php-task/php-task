@@ -24,6 +24,8 @@ abstract class FrequentTask implements FrequentTaskInterface
     public function __construct(TaskInterface $task, \DateTime $start, \DateTime $end = null)
     {
         $this->task = $task;
+        $this->start = $start;
+        $this->end = $end;
     }
 
     /**

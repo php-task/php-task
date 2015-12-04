@@ -2,8 +2,6 @@
 
 namespace Task\Handler;
 
-use Task\TaskInterface;
-
 class Registry implements RegistryInterface
 {
     /**
@@ -21,6 +19,14 @@ class Registry implements RegistryInterface
      */
     public function run($name, $workload)
     {
-        $this->handler[$name]($workload);
+        return $this->handler[$name]->handle($workload);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function has($name)
+    {
+        return array_key_exists($name, $this->handler);
     }
 }

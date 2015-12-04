@@ -14,7 +14,7 @@ class DailyTask extends FrequentTask
         $now = new \DateTime();
         $executionDate = $now->modify('+1 day');
 
-        if ($executionDate >= $this->end) {
+        if (null !== $this->end && $executionDate > $this->end) {
             return;
         }
 

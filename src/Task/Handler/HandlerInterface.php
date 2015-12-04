@@ -6,5 +6,5 @@ use Task\TaskInterface;
 
 interface HandlerInterface
 {
-    public function handle(TaskInterface $task);
+    public function handle($workload);
 }
