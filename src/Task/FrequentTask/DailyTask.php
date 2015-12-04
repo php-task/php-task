@@ -1,6 +1,6 @@
 <?php
 
-namespace Task\FrequendTask;
+namespace Task\FrequentTask;
 
 use Task\SchedulerInterface;
 
