@@ -2,21 +2,32 @@
 
 namespace Task\Storage;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Task\TaskInterface;
 
 class ArrayStorage implements StorageInterface
 {
     /**
-     * @var TaskInterface[]
+     * @var Collection
      */
     private $tasks = [];
+
+    public function __construct(Collection $tasks = null)
+    {
+        if ($tasks === null) {
+            $tasks = new ArrayCollection();
+        }
+
+        $this->tasks = $tasks;
+    }
 
     /**
      * {@inheritdoc}
      */
     public function store(TaskInterface $task)
     {
-        $this->tasks[] = $task;
+        $this->tasks->add($task);
     }
 
     /**
@@ -24,13 +35,10 @@ class ArrayStorage implements StorageInterface
      */
     public function findScheduled()
     {
-        return new \ArrayIterator(
-            array_filter(
-                $this->tasks,
-                function (TaskInterface $task) {
-                    return !$task->isCompleted() && $task->getExecutionDate() <= new \DateTime();
-                }
-            )
+        return $this->tasks->filter(
+            function (TaskInterface $task) {
+                return !$task->isCompleted() && $task->getExecutionDate() <= new \DateTime();
+            }
         );
     }
 }
