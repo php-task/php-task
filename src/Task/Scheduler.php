@@ -2,7 +2,7 @@
 
 namespace Task;
 
-use Task\FrequendTask\FrequentTaskInterface;
+use Task\FrequentTask\FrequentTaskInterface;
 use Task\Handler\RegistryInterface;
 use Task\Storage\StorageInterface;
 
