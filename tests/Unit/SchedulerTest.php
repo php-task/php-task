@@ -115,4 +115,6 @@ class SchedulerTest extends \PHPUnit_Framework_TestCase
 
         $scheduler->run();
     }
+
+    // TODO run with frequent tasks.
 }
