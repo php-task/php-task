@@ -3,6 +3,7 @@
 namespace Unit;
 
 use Prophecy\Argument;
+use Task\FrequentTask\FrequentTaskInterface;
 use Task\Handler\RegistryInterface;
 use Task\Scheduler;
 use Task\Storage\StorageInterface;
@@ -87,24 +88,7 @@ class SchedulerTest extends \PHPUnit_Framework_TestCase
         $storage = $this->prophesize(StorageInterface::class);
         $registry = $this->prophesize(RegistryInterface::class);
 
-        $tasks = array_map(
-            function ($item) use ($registry) {
-                $task = $this->prophesize(TaskInterface::class);
-                $task->getTaskName()->willReturn($item[0]);
-                $task->getExecutionDate()->willReturn(new \DateTime('1 minute ago'));
-                $task->getWorkload()->willReturn($item[1]);
-                $task->isCompleted()->willReturn(false);
-
-                $registry->run($item[0], $item[1])->shouldBeCalledTimes(1)->willReturn($item[2]);
-                $registry->has($item[0])->shouldBeCalledTimes(1)->willReturn(true);
-
-                $task->setResult($item[2])->shouldBeCalledTimes(1);
-                $task->setCompleted()->shouldBeCalledTimes(1);
-
-                return $task->reveal();
-            },
-            $taskData
-        );
+        $tasks = $this->mapTasks($taskData, $registry);
 
         $registry->has(Argument::any())->willReturn(false);
 
@@ -116,5 +100,49 @@ class SchedulerTest extends \PHPUnit_Framework_TestCase
         $scheduler->run();
     }
 
-    // TODO run with frequent tasks.
+    /**
+     * @dataProvider runProvider
+     */
+    public function testRunFrequent($taskData = [])
+    {
+        $storage = $this->prophesize(StorageInterface::class);
+        $registry = $this->prophesize(RegistryInterface::class);
+
+        $scheduler = new Scheduler($storage->reveal(), $registry->reveal());
+
+        $tasks = $this->mapTasks($taskData, $registry, true);
+
+        $registry->has(Argument::any())->willReturn(false);
+
+        $storage->store(Argument::any())->shouldNotBeCalled();
+        $storage->findScheduled()->willReturn($tasks);
+
+        $scheduler->run();
+    }
+
+    private function mapTasks($taskData, $registry, $frequent = false)
+    {
+        return array_map(
+            function ($item) use ($registry, $frequent) {
+                $task = $this->prophesize($frequent ? FrequentTaskInterface::class : TaskInterface::class);
+                $task->getTaskName()->willReturn($item[0]);
+                $task->getExecutionDate()->willReturn(new \DateTime('1 minute ago'));
+                $task->getWorkload()->willReturn($item[1]);
+                $task->isCompleted()->willReturn(false);
+
+                $registry->run($item[0], $item[1])->shouldBeCalledTimes(1)->willReturn($item[2]);
+                $registry->has($item[0])->shouldBeCalledTimes(1)->willReturn(true);
+
+                $task->setResult($item[2])->shouldBeCalledTimes(1);
+                $task->setCompleted()->shouldBeCalledTimes(1);
+
+                if ($frequent) {
+                    $task->scheduleNext(Argument::type(Scheduler::class))->shouldBeCalledTimes(1);
+                }
+
+                return $task->reveal();
+            },
+            $taskData
+        );
+    }
 }
