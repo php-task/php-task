@@ -86,4 +86,32 @@ class ArrayStorageTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals($expectedData[++$i], $item->getTaskName());
         }
     }
+
+    /**
+     * @dataProvider findScheduledProvider
+     */
+    public function testFindAll($taskData)
+    {
+        $tasks = array_map(
+            function ($item) {
+                $task = $this->prophesize(TaskInterface::class);
+                $task->getTaskName()->willReturn($item[0]);
+                $task->getExecutionDate()->willReturn($item[1]);
+                $task->isCompleted()->willReturn($item[2]);
+
+                return $task->reveal();
+            },
+            $taskData
+        );
+
+        $arrayStorage = new ArrayStorage(new ArrayCollection($tasks));
+
+        $result = $arrayStorage->findAll();
+        $this->assertCount(count($taskData), $result);
+
+        $i = -1;
+        foreach ($result as $item) {
+            $this->assertEquals($taskData[++$i][0], $item->getTaskName());
+        }
+    }
 }
