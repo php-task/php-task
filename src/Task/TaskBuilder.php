@@ -2,9 +2,9 @@
 
 namespace Task;
 
-use Task\FrequendTask\DailyTask;
+use Task\FrequentTask\DailyTask;
 
-class TaskBuilder
+class TaskBuilder implements TaskBuilderInterface
 {
     /**
      * @var SchedulerInterface
@@ -28,10 +28,7 @@ class TaskBuilder
     }
 
     /**
-     * @param \DateTime $start
-     * @param \DateTime $end
-     *
-     * @return TaskBuilder
+     * {@inheritdoc}
      */
     public function daily(\DateTime $start = null, \DateTime $end = null)
     {
@@ -41,9 +38,7 @@ class TaskBuilder
     }
 
     /**
-     * @param \DateTime $executionDate
-     *
-     * @return TaskBuilder
+     * {@inheritdoc}
      */
     public function setExecutionDate(\DateTime $executionDate)
     {
@@ -53,7 +48,7 @@ class TaskBuilder
     }
 
     /**
-     * Schedules task with given scheduler.
+     * {@inheritdoc}
      */
     public function schedule()
     {

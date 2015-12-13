@@ -20,14 +20,24 @@ class Scheduler implements SchedulerInterface
     private $registry;
 
     /**
+     * @var TaskBuilderFactoryInterface
+     */
+    private $factory;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
 
-    public function __construct(StorageInterface $storage, RegistryInterface $registry, LoggerInterface $logger = null)
-    {
+    public function __construct(
+        StorageInterface $storage,
+        RegistryInterface $registry,
+        TaskBuilderFactoryInterface $factory,
+        LoggerInterface $logger = null
+    ) {
         $this->storage = $storage;
         $this->registry = $registry;
+        $this->factory = $factory;
         $this->logger = $logger;
     }
 
@@ -36,7 +46,7 @@ class Scheduler implements SchedulerInterface
      */
     public function createTask($taskName, $workload)
     {
-        return TaskBuilder::create($this, $taskName, $workload);
+        return $this->factory->create($this, $taskName, $workload);
     }
 
     /**

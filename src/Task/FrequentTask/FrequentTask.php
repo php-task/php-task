@@ -75,6 +75,7 @@ abstract class FrequentTask implements FrequentTaskInterface
     {
         $this->task->setResult($result);
     }
+
     public function getExecutionDate()
     {
         return $this->task->getExecutionDate();
@@ -83,5 +84,21 @@ abstract class FrequentTask implements FrequentTaskInterface
     public function setExecutionDate(\DateTime $executionDate)
     {
         $this->task->setExecutionDate($executionDate);
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getStart()
+    {
+        return $this->start;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getEnd()
+    {
+        return $this->end;
     }
 }

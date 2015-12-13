@@ -7,7 +7,7 @@ use Task\FrequentTask\FrequentTaskInterface;
 use Task\Handler\RegistryInterface;
 use Task\Scheduler;
 use Task\Storage\StorageInterface;
-use Task\TaskBuilder;
+use Task\TaskBuilderFactoryInterface;
 use Task\TaskInterface;
 
 class SchedulerTest extends \PHPUnit_Framework_TestCase
@@ -16,6 +16,7 @@ class SchedulerTest extends \PHPUnit_Framework_TestCase
     {
         $storage = $this->prophesize(StorageInterface::class);
         $registry = $this->prophesize(RegistryInterface::class);
+        $factory = $this->prophesize(TaskBuilderFactoryInterface::class);
 
         $registry->run(Argument::any(), Argument::any())->shouldNotBeCalled();
         $registry->has(Argument::any())->shouldNotBeCalled();
@@ -23,11 +24,11 @@ class SchedulerTest extends \PHPUnit_Framework_TestCase
         $storage->store(Argument::any())->shouldNotBeCalled();
         $storage->findScheduled()->shouldNotBeCalled();
 
-        $scheduler = new Scheduler($storage->reveal(), $registry->reveal());
+        $scheduler = new Scheduler($storage->reveal(), $registry->reveal(), $factory->reveal());
 
-        $result = $scheduler->createTask('test', 'test-workload');
+        $scheduler->createTask('test', 'test-workload');
 
-        $this->assertInstanceOf(TaskBuilder::class, $result);
+        $factory->create($scheduler, 'test', 'test-workload')->shouldBeCalledTimes(1);
     }
 
     public function scheduleProvider()
@@ -54,6 +55,7 @@ class SchedulerTest extends \PHPUnit_Framework_TestCase
 
         $storage = $this->prophesize(StorageInterface::class);
         $registry = $this->prophesize(RegistryInterface::class);
+        $factory = $this->prophesize(TaskBuilderFactoryInterface::class);
 
         $registry->run(Argument::any(), Argument::any())->shouldNotBeCalled();
         $registry->has($taskName)->willReturn($exists);
@@ -66,7 +68,7 @@ class SchedulerTest extends \PHPUnit_Framework_TestCase
         }
         $storage->findScheduled()->shouldNotBeCalled();
 
-        $scheduler = new Scheduler($storage->reveal(), $registry->reveal());
+        $scheduler = new Scheduler($storage->reveal(), $registry->reveal(), $factory->reveal());
 
         $scheduler->schedule($task->reveal());
     }
@@ -87,6 +89,7 @@ class SchedulerTest extends \PHPUnit_Framework_TestCase
     {
         $storage = $this->prophesize(StorageInterface::class);
         $registry = $this->prophesize(RegistryInterface::class);
+        $factory = $this->prophesize(TaskBuilderFactoryInterface::class);
 
         $tasks = $this->mapTasks($taskData, $registry);
 
@@ -95,7 +98,7 @@ class SchedulerTest extends \PHPUnit_Framework_TestCase
         $storage->store(Argument::any())->shouldNotBeCalled();
         $storage->findScheduled()->willReturn($tasks);
 
-        $scheduler = new Scheduler($storage->reveal(), $registry->reveal());
+        $scheduler = new Scheduler($storage->reveal(), $registry->reveal(), $factory->reveal());
 
         $scheduler->run();
     }
@@ -107,8 +110,9 @@ class SchedulerTest extends \PHPUnit_Framework_TestCase
     {
         $storage = $this->prophesize(StorageInterface::class);
         $registry = $this->prophesize(RegistryInterface::class);
+        $factory = $this->prophesize(TaskBuilderFactoryInterface::class);
 
-        $scheduler = new Scheduler($storage->reveal(), $registry->reveal());
+        $scheduler = new Scheduler($storage->reveal(), $registry->reveal(), $factory->reveal());
 
         $tasks = $this->mapTasks($taskData, $registry, true);
 
