@@ -9,10 +9,10 @@ php:
 install:
    - composer self-update
    - composer update
+   - wget https://scrutinizer-ci.com/ocular.phar
 
 script:
-   - phpunit -c phpunit.xml.dist
+   - phpunit -c phpunit.xml.dist --coverage-clover=coverage.clover
 
-matrix:
-  allow_failures:
-    - php: hhvm
+after_script:
+  - php ocular.phar code-coverage:upload --access-token="230ec5e01daf5bb3e46ea304fb20348b52d80de73463ec08ee9c96fcd1349e35" --format=php-clover coverage.clover
