@@ -41,4 +41,12 @@ class ArrayStorage implements StorageInterface
             }
         );
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findAll()
+    {
+        return $this->tasks;
+    }
 }
