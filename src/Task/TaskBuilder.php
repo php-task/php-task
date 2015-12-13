@@ -12,7 +12,7 @@ class TaskBuilder implements TaskBuilderInterface
     private $scheduler;
 
     /**
-     * @var Task
+     * @var TaskInterface
      */
     private $task;
 

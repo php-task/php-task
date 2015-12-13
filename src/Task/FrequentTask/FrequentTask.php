@@ -49,7 +49,7 @@ abstract class FrequentTask implements FrequentTaskInterface
      */
     public function isCompleted()
     {
-        return $this->task->getWorkload();
+        return $this->task->isCompleted();
     }
 
     /**
