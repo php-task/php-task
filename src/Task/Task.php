@@ -2,8 +2,15 @@
 
 namespace Task;
 
+use Ramsey\Uuid\Uuid;
+
 class Task implements TaskInterface
 {
+    /**
+     * @var string
+     */
+    private $uuid;
+
     /**
      * @var string
      */
@@ -29,11 +36,20 @@ class Task implements TaskInterface
      */
     private $result;
 
-    public function __construct($taskName, $workload)
+    public function __construct($taskName, $workload, $uuid = null)
     {
+        $this->uuid = $uuid ?: Uuid::uuid4();
         $this->taskName = $taskName;
         $this->workload = $workload;
         $this->executionDate = new \DateTime();
+    }
+
+    /**
+     * @return string
+     */
+    public function getUuid()
+    {
+        return $this->uuid;
     }
 
     /**

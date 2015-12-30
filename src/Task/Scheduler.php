@@ -3,6 +3,10 @@
 namespace Task;
 
 use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Task\Event\Events;
+use Task\Event\TaskEvent;
+use Task\Event\TaskFailedEvent;
 use Task\FrequentTask\FrequentTaskInterface;
 use Task\Handler\RegistryInterface;
 use Task\Storage\StorageInterface;
@@ -25,6 +29,11 @@ class Scheduler implements SchedulerInterface
     private $factory;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -33,11 +42,13 @@ class Scheduler implements SchedulerInterface
         StorageInterface $storage,
         RegistryInterface $registry,
         TaskBuilderFactoryInterface $factory,
+        EventDispatcherInterface $eventDispatcher,
         LoggerInterface $logger = null
     ) {
         $this->storage = $storage;
         $this->registry = $registry;
         $this->factory = $factory;
+        $this->eventDispatcher = $eventDispatcher;
         $this->logger = $logger;
     }
 
@@ -73,10 +84,20 @@ class Scheduler implements SchedulerInterface
                 continue;
             }
 
-            $result = $this->registry->run($task->getTaskName(), $task->getWorkload());
+            $this->eventDispatcher->dispatch(Events::TASK_BEFORE, new TaskEvent($task));
 
-            $task->setResult($result);
-            $task->setCompleted();
+            try {
+                $result = $this->registry->run($task->getTaskName(), $task->getWorkload());
+
+                $task->setResult($result);
+                $task->setCompleted();
+
+                $this->eventDispatcher->dispatch(Events::TASK_PASSED, new TaskEvent($task));
+            } catch (\Exception $ex) {
+                $this->eventDispatcher->dispatch(Events::TASK_FAILED, new TaskFailedEvent($task, $ex));
+            }
+
+            $this->eventDispatcher->dispatch(Events::TASK_AFTER, new TaskEvent($task));
 
             // TODO move to event-dispatcher
             if ($task instanceof FrequentTaskInterface) {
