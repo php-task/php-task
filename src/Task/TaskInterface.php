@@ -7,6 +7,11 @@ interface TaskInterface
     /**
      * @return string
      */
+    public function getUuid();
+
+    /**
+     * @return string
+     */
     public function getTaskName();
 
     /**

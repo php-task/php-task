@@ -11,7 +11,7 @@ class ArrayStorage implements StorageInterface
     /**
      * @var Collection
      */
-    private $tasks = [];
+    private $tasks;
 
     public function __construct(Collection $tasks = null)
     {
@@ -48,5 +48,17 @@ class ArrayStorage implements StorageInterface
     public function findAll()
     {
         return $this->tasks;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function persist(TaskInterface $task)
+    {
+    }
+
+    public function clear()
+    {
+        $this->tasks->clear();
     }
 }

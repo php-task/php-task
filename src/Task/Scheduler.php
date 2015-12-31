@@ -92,9 +92,13 @@ class Scheduler implements SchedulerInterface
                 $task->setResult($result);
                 $task->setCompleted();
 
+                $this->storage->persist($task);
+
                 $this->eventDispatcher->dispatch(Events::TASK_PASSED, new TaskEvent($task));
             } catch (\Exception $ex) {
                 $this->eventDispatcher->dispatch(Events::TASK_FAILED, new TaskFailedEvent($task, $ex));
+
+                throw $ex;
             }
 
             $this->eventDispatcher->dispatch(Events::TASK_AFTER, new TaskEvent($task));

@@ -111,6 +111,7 @@ class SchedulerTest extends \PHPUnit_Framework_TestCase
 
         $storage->store(Argument::any())->shouldNotBeCalled();
         $storage->findScheduled()->willReturn($tasks);
+        $storage->persist(Argument::any())->willReturn(true);
 
         $scheduler = new Scheduler(
             $storage->reveal(),
@@ -145,6 +146,7 @@ class SchedulerTest extends \PHPUnit_Framework_TestCase
 
         $storage->store(Argument::any())->shouldNotBeCalled();
         $storage->findScheduled()->willReturn($tasks);
+        $storage->persist(Argument::any())->willReturn(true);
 
         $scheduler->run();
     }

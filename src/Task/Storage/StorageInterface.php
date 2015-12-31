@@ -20,4 +20,11 @@ interface StorageInterface
      * @return TaskInterface[]
      */
     public function findAll();
+
+    /**
+     * @param TaskInterface $task
+     */
+    public function persist(TaskInterface $task);
+
+    public function clear();
 }

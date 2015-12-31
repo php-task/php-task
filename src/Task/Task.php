@@ -29,7 +29,7 @@ class Task implements TaskInterface
     /**
      * @var bool
      */
-    private $completed;
+    private $completed = false;
 
     /**
      * @var string|\Serializable
@@ -38,7 +38,7 @@ class Task implements TaskInterface
 
     public function __construct($taskName, $workload, $uuid = null)
     {
-        $this->uuid = $uuid ?: Uuid::uuid4();
+        $this->uuid = $uuid ?: Uuid::uuid4()->toString();
         $this->taskName = $taskName;
         $this->workload = $workload;
         $this->executionDate = new \DateTime();

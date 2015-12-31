@@ -87,6 +87,14 @@ abstract class FrequentTask implements FrequentTaskInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getUuid()
+    {
+        return $this->task->getUuid();
+    }
+
+    /**
      * @return \DateTime
      */
     public function getStart()
