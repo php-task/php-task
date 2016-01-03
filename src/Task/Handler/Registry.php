@@ -1,7 +1,22 @@
 <?php
+/*
+ * This file is part of PHP-Task library.
+ *
+ * (c) php-task
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
 
 namespace Task\Handler;
 
+/**
+ * Task handler registry.
+ *
+ * Allows to add handler instances to run tasks.
+ *
+ * @author Johannes Wachter <@wachterjohannes>
+ */
 class Registry implements RegistryInterface
 {
     /**
@@ -9,6 +24,12 @@ class Registry implements RegistryInterface
      */
     private $handler = [];
 
+    /**
+     * Adds handler with given name to registry.
+     *
+     * @param string $name handler name.
+     * @param HandlerInterface $handler
+     */
     public function add($name, HandlerInterface $handler)
     {
         $this->handler[$name] = $handler;
@@ -19,6 +40,10 @@ class Registry implements RegistryInterface
      */
     public function run($name, $workload)
     {
+        if (!$this->has($name)) {
+            throw new HandlerNotExistsException($name);
+        }
+
         return $this->handler[$name]->handle($workload);
     }
 

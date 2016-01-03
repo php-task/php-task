@@ -1,4 +1,12 @@
 <?php
+/*
+ * This file is part of PHP-Task library.
+ *
+ * (c) php-task
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
 
 namespace Unit\Storage;
 
@@ -7,6 +15,11 @@ use Doctrine\Common\Collections\Collection;
 use Task\Storage\ArrayStorage;
 use Task\TaskInterface;
 
+/**
+ * Test for class ArrayStorage.
+ *
+ * @author Johannes Wachter <@wachterjohannes>
+ */
 class ArrayStorageTest extends \PHPUnit_Framework_TestCase
 {
     public function testAdd()
@@ -85,5 +98,26 @@ class ArrayStorageTest extends \PHPUnit_Framework_TestCase
         foreach ($result as $item) {
             $this->assertEquals($expectedData[++$i], $item->getTaskName());
         }
+    }
+
+    public function testClear()
+    {
+        $collection = $this->prophesize(Collection::class);
+
+        $arrayStorage = new ArrayStorage($collection->reveal());
+        $arrayStorage->clear();
+
+        $collection->clear()->shouldBeCalled();
+    }
+
+    /**
+     * @expectedException \Task\Storage\TaskNotExistsException
+     */
+    public function testPersist()
+    {
+        $task = $this->prophesize(TaskInterface::class);
+
+        $arrayStorage = new ArrayStorage();
+        $arrayStorage->persist($task->reveal());
     }
 }
