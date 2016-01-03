@@ -13,7 +13,7 @@ namespace Task\Handler;
 /**
  * Interface for task handler registry.
  *
- * @author Johannes Wachter <@wachterjohannes>
+ * @author @wachterjohannes <johannes.wachter@massiveart.com>
  */
 interface RegistryInterface
 {

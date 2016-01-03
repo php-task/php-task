@@ -17,7 +17,7 @@ use Task\TaskInterface;
 /**
  * Holds tasks in in-memory array.
  *
- * @author Johannes Wachter <@wachterjohannes>
+ * @author @wachterjohannes <johannes.wachter@massiveart.com>
  */
 class ArrayStorage implements StorageInterface
 {

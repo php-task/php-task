@@ -16,7 +16,7 @@ use Task\TaskInterface;
 /**
  * Extends Event with frequent operations.
  *
- * @author Johannes Wachter <@wachterjohannes>
+ * @author @wachterjohannes <johannes.wachter@massiveart.com>
  */
 interface FrequentTaskInterface extends TaskInterface
 {

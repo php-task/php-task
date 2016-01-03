@@ -15,7 +15,7 @@ use Task\SchedulerInterface;
 /**
  * Extends Event with daily operations.
  *
- * @author Johannes Wachter <@wachterjohannes>
+ * @author @wachterjohannes <johannes.wachter@massiveart.com>
  */
 class DailyTask extends FrequentTask
 {

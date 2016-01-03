@@ -15,7 +15,7 @@ use Task\TaskInterface;
 /**
  * Task failed Event will be triggered by the Scheduler when the run of given task fails.
  *
- * @author Johannes Wachter <@wachterjohannes>
+ * @author @wachterjohannes <johannes.wachter@massiveart.com>
  */
 class TaskFailedEvent extends TaskEvent
 {

@@ -1,9 +1,22 @@
 <?php
+/*
+ * This file is part of PHP-Task library.
+ *
+ * (c) php-task
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
 
 namespace Task;
 
 use Ramsey\Uuid\Uuid;
 
+/**
+ * Task contains name and workload to run with a handler.
+ *
+ * @author @wachterjohannes <johannes.wachter@massiveart.com>
+ */
 class Task implements TaskInterface
 {
     /**
@@ -45,7 +58,7 @@ class Task implements TaskInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getUuid()
     {
@@ -53,7 +66,7 @@ class Task implements TaskInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getTaskName()
     {
@@ -61,7 +74,7 @@ class Task implements TaskInterface
     }
 
     /**
-     * @return \Serializable|string
+     * {@inheritdoc}
      */
     public function getWorkload()
     {
@@ -69,7 +82,7 @@ class Task implements TaskInterface
     }
 
     /**
-     * @return boolean
+     * {@inheritdoc}
      */
     public function isCompleted()
     {
@@ -77,7 +90,7 @@ class Task implements TaskInterface
     }
 
     /**
-     *
+     * {@inheritdoc}
      */
     public function setCompleted()
     {
@@ -85,7 +98,7 @@ class Task implements TaskInterface
     }
 
     /**
-     * @return \Serializable|string
+     * {@inheritdoc}
      */
     public function getResult()
     {
@@ -93,7 +106,7 @@ class Task implements TaskInterface
     }
 
     /**
-     * @param \Serializable|string $result
+     * {@inheritdoc}
      */
     public function setResult($result)
     {
@@ -101,7 +114,7 @@ class Task implements TaskInterface
     }
 
     /**
-     * @return \DateTime
+     * {@inheritdoc}
      */
     public function getExecutionDate()
     {
@@ -109,7 +122,7 @@ class Task implements TaskInterface
     }
 
     /**
-     * @param \DateTime $executionDate
+     * {@inheritdoc}
      */
     public function setExecutionDate(\DateTime $executionDate)
     {

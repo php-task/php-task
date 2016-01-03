@@ -15,7 +15,7 @@ namespace Task\Event;
  *
  * This class cannot be instantiated.
  *
- * @author Johannes Wachter <@wachterjohannes>
+ * @author @wachterjohannes <johannes.wachter@massiveart.com>
  */
 final class Events
 {

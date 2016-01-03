@@ -15,7 +15,7 @@ use Task\TaskInterface;
 /**
  * Extends Event with frequent operations.
  *
- * @author Johannes Wachter <@wachterjohannes>
+ * @author @wachterjohannes <johannes.wachter@massiveart.com>
  */
 abstract class FrequentTask implements FrequentTaskInterface
 {

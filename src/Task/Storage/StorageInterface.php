@@ -15,7 +15,7 @@ use Task\TaskInterface;
 /**
  * Interface for task storage.
  *
- * @author Johannes Wachter <@wachterjohannes>
+ * @author @wachterjohannes <johannes.wachter@massiveart.com>
  */
 interface StorageInterface
 {

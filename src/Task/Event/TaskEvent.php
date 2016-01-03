@@ -16,7 +16,7 @@ use Task\TaskInterface;
 /**
  * Task Events are triggered by the Scheduler during scheduling and run process.
  *
- * @author Johannes Wachter <@wachterjohannes>
+ * @author @wachterjohannes <johannes.wachter@massiveart.com>
  */
 class TaskEvent extends Event
 {

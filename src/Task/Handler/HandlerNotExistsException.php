@@ -13,7 +13,7 @@ namespace Task\Handler;
 /**
  * Thrown when the requested handler not exists.
  *
- * @author Johannes Wachter <@wachterjohannes>
+ * @author @wachterjohannes <johannes.wachter@massiveart.com>
  */
 class HandlerNotExistsException extends \Exception
 {

@@ -15,7 +15,7 @@ namespace Task\Handler;
  *
  * Allows to add handler instances to run tasks.
  *
- * @author Johannes Wachter <@wachterjohannes>
+ * @author @wachterjohannes <johannes.wachter@massiveart.com>
  */
 class Registry implements RegistryInterface
 {

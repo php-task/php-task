@@ -15,7 +15,7 @@ use Task\TaskInterface;
 /**
  * Thrown when the requested task not exists in storage.
  *
- * @author Johannes Wachter <@wachterjohannes>
+ * @author @wachterjohannes <johannes.wachter@massiveart.com>
  */
 class TaskNotExistsException extends \Exception
 {
