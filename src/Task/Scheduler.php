@@ -96,6 +96,8 @@ class Scheduler implements SchedulerInterface
 
                 $this->eventDispatcher->dispatch(Events::TASK_PASSED, new TaskEvent($task));
             } catch (\Exception $ex) {
+                // TODO set task failed. failed tasks, can be restarted by adding a flag to run command.
+
                 $this->eventDispatcher->dispatch(Events::TASK_FAILED, new TaskFailedEvent($task, $ex));
 
                 throw $ex;

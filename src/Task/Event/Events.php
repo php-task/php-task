@@ -1,7 +1,22 @@
 <?php
+/*
+ * This file is part of PHP-Task library.
+ *
+ * (c) php-task
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
 
 namespace Task\Event;
 
+/**
+ * Container for all Task events.
+ *
+ * This class cannot be instantiated.
+ *
+ * @author Johannes Wachter <@wachterjohannes>
+ */
 final class Events
 {
     /**

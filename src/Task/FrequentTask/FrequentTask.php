@@ -1,9 +1,22 @@
 <?php
+/*
+ * This file is part of PHP-Task library.
+ *
+ * (c) php-task
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
 
 namespace Task\FrequentTask;
 
 use Task\TaskInterface;
 
+/**
+ * Extends Event with frequent operations.
+ *
+ * @author Johannes Wachter <@wachterjohannes>
+ */
 abstract class FrequentTask implements FrequentTaskInterface
 {
     /**
@@ -76,11 +89,17 @@ abstract class FrequentTask implements FrequentTaskInterface
         $this->task->setResult($result);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getExecutionDate()
     {
         return $this->task->getExecutionDate();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setExecutionDate(\DateTime $executionDate)
     {
         $this->task->setExecutionDate($executionDate);
@@ -95,7 +114,7 @@ abstract class FrequentTask implements FrequentTaskInterface
     }
 
     /**
-     * @return \DateTime
+     * {@inheritdoc}
      */
     public function getStart()
     {
@@ -103,7 +122,7 @@ abstract class FrequentTask implements FrequentTaskInterface
     }
 
     /**
-     * @return \DateTime
+     * {@inheritdoc}
      */
     public function getEnd()
     {

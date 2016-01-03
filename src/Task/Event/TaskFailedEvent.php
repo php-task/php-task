@@ -1,9 +1,22 @@
 <?php
+/*
+ * This file is part of PHP-Task library.
+ *
+ * (c) php-task
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
 
 namespace Task\Event;
 
 use Task\TaskInterface;
 
+/**
+ * Task failed Event will be triggered by the Scheduler when the run of given task fails.
+ *
+ * @author Johannes Wachter <@wachterjohannes>
+ */
 class TaskFailedEvent extends TaskEvent
 {
     /**
@@ -19,6 +32,8 @@ class TaskFailedEvent extends TaskEvent
     }
 
     /**
+     * Returns exception which was thrown by the task.
+     *
      * @return \Exception
      */
     public function getException()

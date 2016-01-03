@@ -1,4 +1,12 @@
 <?php
+/*
+ * This file is part of PHP-Task library.
+ *
+ * (c) php-task
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
 
 namespace Unit\FrequentTask;
 
@@ -8,6 +16,11 @@ use Task\Scheduler;
 use Task\TaskBuilder;
 use Task\TaskInterface;
 
+/**
+ * Test for class DailyTask.
+ *
+ * @author Johannes Wachter <@wachterjohannes>
+ */
 class DailyTaskTest extends \PHPUnit_Framework_TestCase
 {
     public function scheduleNextProvider()
