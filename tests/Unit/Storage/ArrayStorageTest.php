@@ -33,6 +33,18 @@ class ArrayStorageTest extends \PHPUnit_Framework_TestCase
         $taskCollection->add($task->reveal())->shouldBeCalled();
     }
 
+    public function testFindAll()
+    {
+        $task = $this->prophesize(TaskInterface::class);
+
+        $arrayStorage = new ArrayStorage();
+        $arrayStorage->store($task->reveal());
+
+        $all = $arrayStorage->findAll();
+        $this->assertCount(1, $all);
+        $this->assertEquals($task->reveal(), $all[0]);
+    }
+
     public function findScheduledProvider()
     {
         return [
@@ -113,11 +125,20 @@ class ArrayStorageTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Task\Storage\TaskNotExistsException
      */
-    public function testPersist()
+    public function testPersistNotExists()
     {
         $task = $this->prophesize(TaskInterface::class);
 
         $arrayStorage = new ArrayStorage();
+        $arrayStorage->persist($task->reveal());
+    }
+
+    public function testPersist()
+    {
+        $task = $this->prophesize(TaskInterface::class);
+        $collection = new ArrayCollection([$task->reveal()]);
+
+        $arrayStorage = new ArrayStorage($collection);
         $arrayStorage->persist($task->reveal());
     }
 }
