@@ -22,7 +22,7 @@ interface TaskBuilderFactoryInterface
      *
      * @param SchedulerInterface $scheduler
      * @param string $taskName
-     * @param string $workload
+     * @param string|\Serializable $workload
      *
      * @return TaskBuilderInterface
      */
