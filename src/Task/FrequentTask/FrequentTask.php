@@ -52,6 +52,22 @@ abstract class FrequentTask implements FrequentTaskInterface
     /**
      * {@inheritdoc}
      */
+    public function getKey()
+    {
+        return $this->task->getKey();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setKey($key)
+    {
+        $this->task->setKey($key);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getWorkload()
     {
         return $this->task->getWorkload();

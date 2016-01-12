@@ -40,6 +40,20 @@ interface TaskInterface
     public function getWorkload();
 
     /**
+     * Returns key.
+     *
+     * @return string
+     */
+    public function getKey();
+
+    /**
+     * Set key.
+     *
+     * @param string $key
+     */
+    public function setKey($key);
+
+    /**
      * Returns flag which indicates that task is completed or not.
      *
      * @return boolean
