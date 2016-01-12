@@ -68,6 +68,8 @@ class Scheduler implements SchedulerInterface
     }
 
     /**
+     * TODO key see createTaskAndSchedula
+     *
      * {@inheritdoc}
      */
     public function createTask($taskName, $workload)
@@ -125,6 +127,16 @@ class Scheduler implements SchedulerInterface
                 $task->scheduleNext($this);
             }
         }
+    }
+
+
+    public function createTaskAndSchedule(
+        $handler,
+        $interval,
+        $workload,
+        $key
+    ) {
+        $this->createTask($handler, $workload)->setKey($key)->{$interval}()->schedule();
     }
 
     /**

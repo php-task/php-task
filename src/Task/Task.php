@@ -30,6 +30,11 @@ class Task implements TaskInterface
     private $taskName;
 
     /**
+     * @var string
+     */
+    private $key;
+
+    /**
      * @var string|\Serializable
      */
     private $workload;
@@ -71,6 +76,26 @@ class Task implements TaskInterface
     public function getTaskName()
     {
         return $this->taskName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getKey()
+    {
+        return $this->key;
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return $this
+     */
+    public function setKey($key)
+    {
+        $this->key = $key;
+
+        return $this;
     }
 
     /**
