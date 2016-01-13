@@ -70,9 +70,27 @@ class Scheduler implements SchedulerInterface
     /**
      * {@inheritdoc}
      */
-    public function createTask($taskName, $workload)
+    public function createTask($handlerName, $workload = null)
     {
-        return $this->factory->create($this, $taskName, $workload);
+        return $this->factory->create($this, $handlerName, $workload);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createTaskAndSchedule($handlerName, $workload = null, $interval = null, $key = null)
+    {
+        $taskBuilder = $this->createTask($handlerName, $workload);
+
+        if ($interval) {
+            $taskBuilder->{$interval}();
+        }
+
+        if ($key) {
+            $taskBuilder->setKey($key);
+        }
+
+        return $taskBuilder->schedule();
     }
 
     /**
@@ -85,6 +103,8 @@ class Scheduler implements SchedulerInterface
         }
 
         $this->storage->store($task);
+
+        return $task;
     }
 
     /**

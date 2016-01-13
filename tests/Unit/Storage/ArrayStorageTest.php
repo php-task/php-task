@@ -12,6 +12,7 @@ namespace Unit\Storage;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Prophecy\Argument;
 use Task\Storage\ArrayStorage;
 use Task\TaskInterface;
 
@@ -22,7 +23,7 @@ use Task\TaskInterface;
  */
 class ArrayStorageTest extends \PHPUnit_Framework_TestCase
 {
-    public function testAdd()
+    public function testStore()
     {
         $task = $this->prophesize(TaskInterface::class);
         $taskCollection = $this->prophesize(Collection::class);
@@ -32,6 +33,36 @@ class ArrayStorageTest extends \PHPUnit_Framework_TestCase
 
         $taskCollection->add($task->reveal())->shouldBeCalled();
     }
+
+    public function testStoreWithKeyTaskNotExists()
+    {
+        $task = $this->prophesize(TaskInterface::class);
+        $taskCollection = $this->prophesize(Collection::class);
+
+        $task->getKey()->willReturn('test-key');
+        $taskCollection->filter(Argument::type('callable'))->shouldBeCalledTimes(1)->willReturn(new ArrayCollection());
+        $taskCollection->add($task->reveal())->shouldBeCalled();
+
+        $arrayStorage = new ArrayStorage($taskCollection->reveal());
+        $arrayStorage->store($task->reveal());
+    }
+
+    public function testStoreWithKeyTaskExists()
+    {
+        $task = $this->prophesize(TaskInterface::class);
+        $taskCollection = $this->prophesize(Collection::class);
+
+        $task->getKey()->willReturn('test-key');
+        $taskCollection->filter(Argument::type('callable'))->shouldBeCalledTimes(1)->willReturn(
+            new ArrayCollection([$task->reveal()])
+        );
+        $taskCollection->add($task->reveal())->shouldNotBeCalled();
+
+        $arrayStorage = new ArrayStorage($taskCollection->reveal());
+        $arrayStorage->store($task->reveal());
+    }
+
+    // TODO test callback function of store with key
 
     public function testFindAll()
     {

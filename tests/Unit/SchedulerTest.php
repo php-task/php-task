@@ -9,6 +9,7 @@ use Task\Handler\RegistryInterface;
 use Task\Scheduler;
 use Task\Storage\StorageInterface;
 use Task\TaskBuilderFactoryInterface;
+use Task\TaskBuilderInterface;
 use Task\TaskInterface;
 
 class SchedulerTest extends \PHPUnit_Framework_TestCase
@@ -36,6 +37,61 @@ class SchedulerTest extends \PHPUnit_Framework_TestCase
         $scheduler->createTask('test', 'test-workload');
 
         $factory->create($scheduler, 'test', 'test-workload')->shouldBeCalledTimes(1);
+    }
+
+    public function createTaskAndScheduleProvider()
+    {
+        return [
+            ['test-handler'],
+            ['test-handler', 'test-workload'],
+            ['test-handler', 'test-workload', 'daily'],
+            ['test-handler', 'test-workload', 'daily', 'test-key'],
+            ['test-handler', null, 'daily', 'test-key'],
+            ['test-handler', null, null, 'test-key'],
+            ['test-handler', 'test-workload', null, 'test-key'],
+        ];
+    }
+
+    /**
+     * @dataProvider createTaskAndScheduleProvider
+     */
+    public function testCreateTaskAndSchedule($handlerName, $workload = null, $interval = null, $key = null)
+    {
+        $storage = $this->prophesize(StorageInterface::class);
+        $registry = $this->prophesize(RegistryInterface::class);
+        $factory = $this->prophesize(TaskBuilderFactoryInterface::class);
+        $eventDispatcher = $this->prophesize(EventDispatcher::class);
+        $taskBuilder = $this->prophesize(TaskBuilderInterface::class);
+        $task = $this->prophesize(TaskInterface::class);
+
+        $scheduler = new Scheduler(
+            $storage->reveal(),
+            $registry->reveal(),
+            $factory->reveal(),
+            $eventDispatcher->reveal()
+        );
+
+
+        $factory->create($scheduler, $handlerName, $workload)->willReturn($taskBuilder->reveal());
+
+        if ($interval) {
+            $taskBuilder->{$interval}(null, null)->shouldBeCalledTimes(1)->willReturn($taskBuilder->reveal());
+        } else {
+            // TODO add other intervals
+            $taskBuilder->daily(null, null)->shouldNotBeCalled();
+        }
+
+        if ($key) {
+            $taskBuilder->setKey($key)->shouldBeCalledTimes(1)->willReturn($taskBuilder->reveal());
+        } else {
+            $taskBuilder->setKey(Argument::any())->shouldNotBeCalled();
+        }
+
+        $taskBuilder->schedule()->willReturn($task->reveal());
+
+        $result = $scheduler->createTaskAndSchedule($handlerName, $workload, $interval, $key);
+
+        $this->assertEquals($task->reveal(), $result);
     }
 
     public function scheduleProvider()
@@ -151,11 +207,11 @@ class SchedulerTest extends \PHPUnit_Framework_TestCase
         $scheduler->run();
     }
 
-    private function mapTasks($taskData, $registry, $frequent = false)
+    private function mapTasks($taskData, $registry, $interval = false)
     {
         return array_map(
-            function ($item) use ($registry, $frequent) {
-                $task = $this->prophesize($frequent ? FrequentTaskInterface::class : TaskInterface::class);
+            function ($item) use ($registry, $interval) {
+                $task = $this->prophesize($interval ? FrequentTaskInterface::class : TaskInterface::class);
                 $task->getTaskName()->willReturn($item[0]);
                 $task->getExecutionDate()->willReturn(new \DateTime('1 minute ago'));
                 $task->getWorkload()->willReturn($item[1]);
@@ -167,7 +223,7 @@ class SchedulerTest extends \PHPUnit_Framework_TestCase
                 $task->setResult($item[2])->shouldBeCalledTimes(1);
                 $task->setCompleted()->shouldBeCalledTimes(1);
 
-                if ($frequent) {
+                if ($interval) {
                     $task->scheduleNext(Argument::type(Scheduler::class))->shouldBeCalledTimes(1);
                 }
 

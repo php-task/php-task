@@ -33,6 +33,13 @@ interface TaskBuilderInterface
     public function setExecutionDate(\DateTime $executionDate);
 
     /**
+     * @param string $key
+     *
+     * @return TaskBuilder
+     */
+    public function setKey($key);
+
+    /**
      * Schedules task with given scheduler.
      */
     public function schedule();

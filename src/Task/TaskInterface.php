@@ -17,7 +17,6 @@ namespace Task;
  */
 interface TaskInterface
 {
-
     /**
      * Returns uuid.
      *
@@ -38,6 +37,20 @@ interface TaskInterface
      * @return \Serializable|string
      */
     public function getWorkload();
+
+    /**
+     * Returns key.
+     *
+     * @return string
+     */
+    public function getKey();
+
+    /**
+     * Set key.
+     *
+     * @param string $key
+     */
+    public function setKey($key);
 
     /**
      * Returns flag which indicates that task is completed or not.

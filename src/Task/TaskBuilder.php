@@ -45,7 +45,7 @@ class TaskBuilder implements TaskBuilderInterface
      */
     public function daily(\DateTime $start = null, \DateTime $end = null)
     {
-        $this->task = new DailyTask($this->task, $start ?: new \DateTime(), $end ?: new \DateTime());
+        $this->task = new DailyTask($this->task, $start ?: new \DateTime(), $end);
 
         return $this;
     }
@@ -63,8 +63,18 @@ class TaskBuilder implements TaskBuilderInterface
     /**
      * {@inheritdoc}
      */
+    public function setKey($key)
+    {
+        $this->task->setKey($key);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function schedule()
     {
-        $this->scheduler->schedule($this->task);
+        return $this->scheduler->schedule($this->task);
     }
 }

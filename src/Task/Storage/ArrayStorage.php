@@ -40,6 +40,22 @@ class ArrayStorage implements StorageInterface
      */
     public function store(TaskInterface $task)
     {
+        if ($task->getKey()) {
+            $key = $task->getKey();
+
+            $tasks = $this->tasks->filter(
+                function (TaskInterface $task) use ($key) {
+                    return !$task->isCompleted() && $task->getKey() === $key;
+                }
+            );
+
+            if ($tasks->count() > 0) {
+                // TODO update task (warning execution date should not be changed)
+
+                return;
+            }
+        }
+
         $this->tasks->add($task);
     }
 
