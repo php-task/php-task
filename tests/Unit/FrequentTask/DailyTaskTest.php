@@ -29,6 +29,7 @@ class DailyTaskTest extends \PHPUnit_Framework_TestCase
             [new \DateTime('2 days ago'), new \DateTime('1 day ago')],
             [new \DateTime('1 day ago'), new \DateTime('+2 days'), new \DateTime('+1 day')],
             [new \DateTime('1 day ago'), new \DateTime('+25 hours'), new \DateTime('+1 day')],
+            [new \DateTime('1 day ago'), new \DateTime('+25 hours'), new \DateTime('+1 day'), 'test-key'],
         ];
     }
 

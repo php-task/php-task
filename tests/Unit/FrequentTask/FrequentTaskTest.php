@@ -161,4 +161,26 @@ class FrequentTaskTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($end, $frequentTask->getEnd());
     }
+
+    public function testGetKey()
+    {
+        $task = $this->prophesize(TaskInterface::class);
+        $start = new \DateTime();
+        $task->getKey()->willReturn('test-key');
+
+        $frequentTask = $this->getMockForAbstractClass(FrequentTask::class, [$task->reveal(), $start]);
+
+        $this->assertEquals('test-key', $frequentTask->getKey());
+    }
+
+    public function testSetKey()
+    {
+        $task = $this->prophesize(TaskInterface::class);
+        $start = new \DateTime();
+        $task->setKey('test-key')->shouldBecalledTimes(1);
+
+        $frequentTask = $this->getMockForAbstractClass(FrequentTask::class, [$task->reveal(), $start]);
+
+        $frequentTask->setKey('test-key');
+    }
 }

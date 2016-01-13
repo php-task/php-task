@@ -17,7 +17,6 @@ namespace Task;
  */
 interface TaskInterface
 {
-
     /**
      * Returns uuid.
      *

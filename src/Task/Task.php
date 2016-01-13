@@ -79,7 +79,7 @@ class Task implements TaskInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getKey()
     {
@@ -87,9 +87,7 @@ class Task implements TaskInterface
     }
 
     /**
-     * @param string $key
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function setKey($key)
     {

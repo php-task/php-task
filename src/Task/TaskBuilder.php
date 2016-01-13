@@ -75,6 +75,6 @@ class TaskBuilder implements TaskBuilderInterface
      */
     public function schedule()
     {
-        $this->scheduler->schedule($this->task);
+        return $this->scheduler->schedule($this->task);
     }
 }
