@@ -56,7 +56,7 @@ class ArrayStorageTest extends \PHPUnit_Framework_TestCase
         $taskCollection->filter(Argument::type('callable'))->shouldBeCalledTimes(1)->willReturn(
             new ArrayCollection([$task->reveal()])
         );
-        $taskCollection->add($task->reveal())->shouldBeCalled();
+        $taskCollection->add($task->reveal())->shouldNotBeCalled();
 
         $arrayStorage = new ArrayStorage($taskCollection->reveal());
         $arrayStorage->store($task->reveal());
