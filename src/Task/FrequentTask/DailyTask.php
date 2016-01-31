@@ -25,6 +25,9 @@ class DailyTask extends FrequentTask
     public function scheduleNext(SchedulerInterface $scheduler)
     {
         $executionDate = $this->getExecutionDate()->modify('+1 day');
+        if ($executionDate < new \DateTime()) {
+            $executionDate = new \DateTime('+1 day');
+        }
 
         if (null !== $this->end && $executionDate > $this->end) {
             return;

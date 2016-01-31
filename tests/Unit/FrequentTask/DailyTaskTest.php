@@ -26,10 +26,17 @@ class DailyTaskTest extends \PHPUnit_Framework_TestCase
     public function scheduleNextProvider()
     {
         return [
-            [new \DateTime('2 days ago'), new \DateTime('1 day ago')],
-            [new \DateTime('1 day ago'), new \DateTime('+2 days'), new \DateTime('+1 day')],
-            [new \DateTime('1 day ago'), new \DateTime('+25 hours'), new \DateTime('+1 day')],
-            [new \DateTime('1 day ago'), new \DateTime('+25 hours'), new \DateTime('+1 day'), 'test-key'],
+            [new \DateTime('2 days ago'), new \DateTime('1 day ago'), new \DateTime()],
+            [new \DateTime('1 day ago'), new \DateTime('+2 days'), new \DateTime(), new \DateTime('+1 day')],
+            [new \DateTime('1 day ago'), new \DateTime('+25 hours'), new \DateTime(), new \DateTime('+1 day')],
+            [
+                new \DateTime('1 day ago'),
+                new \DateTime('+25 hours'),
+                new \DateTime(),
+                new \DateTime('+1 day'),
+                'test-key'
+            ],
+            [new \DateTime('2 days ago'), new \DateTime('+5 days'), new \DateTime('4 days ago'), new \DateTime('+1 day')],
         ];
     }
 
@@ -39,6 +46,7 @@ class DailyTaskTest extends \PHPUnit_Framework_TestCase
     public function testScheduleNext(
         \DateTime $start,
         \DateTime $end,
+        \DateTime $executionDate,
         \DateTime $scheduledExecutionDate = null,
         $key = null
     ) {
@@ -64,7 +72,7 @@ class DailyTaskTest extends \PHPUnit_Framework_TestCase
         $task = $this->prophesize(TaskInterface::class);
         $task->getTaskName()->willReturn('test-task');
         $task->getWorkload()->willReturn('test-task: workload');
-        $task->getExecutionDate()->willReturn(new \DateTime());
+        $task->getExecutionDate()->willReturn($executionDate);
         $task->getKey()->willReturn($key);
 
         $task = new DailyTask($task->reveal(), $start, $end);
