@@ -10,7 +10,13 @@
 
 namespace Task;
 
+use Cron\CronExpression;
+use Task\FrequentTask\CronTask;
 use Task\FrequentTask\DailyTask;
+use Task\FrequentTask\HourlyTask;
+use Task\FrequentTask\MonthlyTask;
+use Task\FrequentTask\WeeklyTask;
+use Task\FrequentTask\YearlyTask;
 
 /**
  * Builder for tasks.
@@ -31,7 +37,7 @@ class TaskBuilder implements TaskBuilderInterface
 
     public static function create(SchedulerInterface $scheduler, $taskName, $workload)
     {
-        return new TaskBuilder($scheduler, new Task($taskName, $workload));
+        return new self($scheduler, new Task($taskName, $workload));
     }
 
     private function __construct(SchedulerInterface $scheduler, TaskInterface $task)
@@ -43,11 +49,60 @@ class TaskBuilder implements TaskBuilderInterface
     /**
      * {@inheritdoc}
      */
+    public function hourly(\DateTime $start = null, \DateTime $end = null)
+    {
+        $this->task = new HourlyTask($this->task, $start ?: new \DateTime(), $end);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function daily(\DateTime $start = null, \DateTime $end = null)
     {
         $this->task = new DailyTask($this->task, $start ?: new \DateTime(), $end);
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function weekly(\DateTime $start = null, \DateTime $end = null)
+    {
+        $this->task = new WeeklyTask($this->task, $start ?: new \DateTime(), $end);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function monthly(\DateTime $start = null, \DateTime $end = null)
+    {
+        $this->task = new MonthlyTask($this->task, $start ?: new \DateTime(), $end);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function yearly(\DateTime $start = null, \DateTime $end = null)
+    {
+        $this->task = new YearlyTask($this->task, $start ?: new \DateTime(), $end);
+        $this->setExecutionDate($this->task->getNextRunDateTime());
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function cron($cronExpression, \DateTime $start = null, \DateTime $end = null)
+    {
+        $this->task = new CronTask(CronExpression::factory($cronExpression), $this->task, $start, $end);
     }
 
     /**
@@ -66,6 +121,16 @@ class TaskBuilder implements TaskBuilderInterface
     public function setKey($key)
     {
         $this->task->setKey($key);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function immediately()
+    {
+        $this->task->setExecutionDate(new \DateTime());
 
         return $this;
     }

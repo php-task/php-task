@@ -71,7 +71,6 @@ class SchedulerTest extends \PHPUnit_Framework_TestCase
             $eventDispatcher->reveal()
         );
 
-
         $factory->create($scheduler, $handlerName, $workload)->willReturn($taskBuilder->reveal());
 
         if ($interval) {
@@ -91,7 +90,32 @@ class SchedulerTest extends \PHPUnit_Framework_TestCase
 
         $result = $scheduler->createTaskAndSchedule($handlerName, $workload, $interval, $key);
 
-        $this->assertEquals($task->reveal(), $result);
+        self::assertEquals($task->reveal(), $result);
+    }
+
+    public function testCreateTaskAndScheduleWithCron()
+    {
+        $storage = $this->prophesize(StorageInterface::class);
+        $registry = $this->prophesize(RegistryInterface::class);
+        $factory = $this->prophesize(TaskBuilderFactoryInterface::class);
+        $eventDispatcher = $this->prophesize(EventDispatcher::class);
+        $taskBuilder = $this->prophesize(TaskBuilderInterface::class);
+        $task = $this->prophesize(TaskInterface::class);
+
+        $scheduler = new Scheduler(
+            $storage->reveal(),
+            $registry->reveal(),
+            $factory->reveal(),
+            $eventDispatcher->reveal()
+        );
+
+        $factory->create($scheduler, 'test', null)->willReturn($taskBuilder->reveal());
+        $taskBuilder->cron('0 0 * * * *')->shouldBeCalled();
+        $taskBuilder->schedule()->willReturn($task->reveal());
+
+        $result = $scheduler->createTaskAndSchedule('test', null, '0 0 * * * *');
+
+        self::assertEquals($task->reveal(), $result);
     }
 
     public function scheduleProvider()

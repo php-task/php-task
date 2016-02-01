@@ -14,14 +14,14 @@ use Cron\CronExpression;
 use Task\TaskInterface;
 
 /**
- * Run once a day, midnight.
+ * Run once an hour, first minute.
  *
  * @author @wachterjohannes <johannes.wachter@massiveart.com>
  */
-class DailyTask extends CronTask
+class HourlyTask extends CronTask
 {
     public function __construct(TaskInterface $task, \DateTime $start, \DateTime $end = null)
     {
-        parent::__construct(CronExpression::factory('@daily'), $task, $start, $end);
+        parent::__construct(CronExpression::factory('@hourly'), $task, $start, $end);
     }
 }

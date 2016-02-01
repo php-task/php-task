@@ -10,18 +10,19 @@
 
 namespace Unit\FrequentTask;
 
+use Cron\CronExpression;
 use Prophecy\Argument;
-use Task\FrequentTask\DailyTask;
+use Task\FrequentTask\CronTask;
 use Task\Scheduler;
 use Task\TaskBuilder;
 use Task\TaskInterface;
 
 /**
- * Test for class DailyTask.
+ * Test for class CronTask.
  *
  * @author Johannes Wachter <@wachterjohannes>
  */
-class DailyTaskTest extends \PHPUnit_Framework_TestCase
+class CronTaskTest extends \PHPUnit_Framework_TestCase
 {
     public function scheduleNextProvider()
     {
@@ -65,7 +66,7 @@ class DailyTaskTest extends \PHPUnit_Framework_TestCase
             $taskBuilder->setExecutionDate(
                 Argument::that(
                     function (\DateTime $dateTime) use ($scheduledExecutionDate) {
-                        $this->assertEquals($scheduledExecutionDate->setTime(0, 0, 0), $dateTime, '', 2);
+                        self::assertEquals($scheduledExecutionDate->setTime(0, 0, 0), $dateTime, '', 2);
 
                         return true;
                     }
@@ -80,8 +81,18 @@ class DailyTaskTest extends \PHPUnit_Framework_TestCase
         $task->getExecutionDate()->willReturn($executionDate);
         $task->getKey()->willReturn($key);
 
-        $task = new DailyTask($task->reveal(), $start, $end);
+        $task = new CronTask(CronExpression::factory('0 0 * * *'), $task->reveal(), $start, $end);
 
         $task->scheduleNext($scheduler->reveal());
+    }
+
+    public function testGetNextRunDateTime()
+    {
+        $task = $this->prophesize(TaskInterface::class);
+        $task = new CronTask(CronExpression::factory('0 0 * * *'), $task->reveal(), new \DateTime());
+
+        $dateTime = new \DateTime('+1 day');
+
+        self::assertEquals($dateTime->setTime(0, 0, 0), $task->getNextRunDateTime(), '', 2);
     }
 }

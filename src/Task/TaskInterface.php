@@ -55,7 +55,7 @@ interface TaskInterface
     /**
      * Returns flag which indicates that task is completed or not.
      *
-     * @return boolean
+     * @return bool
      */
     public function isCompleted();
 

@@ -10,6 +10,7 @@
 
 namespace Task;
 
+use Cron\CronExpression;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Task\Event\Events;
@@ -83,7 +84,11 @@ class Scheduler implements SchedulerInterface
         $taskBuilder = $this->createTask($handlerName, $workload);
 
         if ($interval) {
-            $taskBuilder->{$interval}();
+            if (CronExpression::isValidExpression($interval)) {
+                $taskBuilder->cron($interval);
+            } else {
+                $taskBuilder->{$interval}();
+            }
         }
 
         if ($key) {

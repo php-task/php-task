@@ -86,7 +86,7 @@ class ArrayStorageTest extends \PHPUnit_Framework_TestCase
                     ['test-1', new \DateTime('+1 minute'), false],
                     ['test-2', new \DateTime('1 minute ago'), false],
                 ],
-                ['test-2']
+                ['test-2'],
             ],
             [
                 [
@@ -94,7 +94,7 @@ class ArrayStorageTest extends \PHPUnit_Framework_TestCase
                     ['test-2', new \DateTime('1 minute ago'), false],
                     ['test-3', new \DateTime(), false],
                 ],
-                ['test-2', 'test-3']
+                ['test-2', 'test-3'],
             ],
             [
                 [
@@ -102,7 +102,7 @@ class ArrayStorageTest extends \PHPUnit_Framework_TestCase
                     ['test-2', new \DateTime('1 minute ago'), true],
                     ['test-3', new \DateTime(), false],
                 ],
-                ['test-3']
+                ['test-3'],
             ],
             [
                 [
@@ -110,7 +110,7 @@ class ArrayStorageTest extends \PHPUnit_Framework_TestCase
                     ['test-2', new \DateTime('1 minute ago'), true],
                     ['test-3', new \DateTime(), true],
                 ],
-                []
+                [],
             ],
         ];
     }
