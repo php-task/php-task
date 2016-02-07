@@ -40,4 +40,11 @@ interface FrequentTaskInterface extends TaskInterface
      * @return \DateTime
      */
     public function getEnd();
+
+    /**
+     * Returns next date-time to run this task.
+     *
+     * @return \DateTime
+     */
+    public function getNextRunDateTime();
 }

@@ -11,36 +11,36 @@
 namespace Unit\FrequentTask;
 
 use Prophecy\Argument;
-use Task\FrequentTask\DailyTask;
+use Task\FrequentTask\YearlyTask;
 use Task\Scheduler;
 use Task\TaskBuilder;
 use Task\TaskInterface;
 
 /**
- * Test for class DailyTask.
+ * Test for class YearlyTask.
  *
  * @author Johannes Wachter <@wachterjohannes>
  */
-class DailyTaskTest extends \PHPUnit_Framework_TestCase
+class YearlyTaskTest extends \PHPUnit_Framework_TestCase
 {
     public function scheduleNextProvider()
     {
         return [
-            [new \DateTime('2 days ago'), new \DateTime('1 day ago'), new \DateTime()],
-            [new \DateTime('1 day ago'), new \DateTime('+2 days'), new \DateTime(), new \DateTime('+1 day')],
-            [new \DateTime('1 day ago'), new \DateTime('+25 hours'), new \DateTime(), new \DateTime('+1 day')],
+            [new \DateTime('2 years ago'), new \DateTime('1 year ago'), new \DateTime()],
+            [new \DateTime('1 year ago'), new \DateTime('+2 years'), new \DateTime(), new \DateTime('+1 year')],
+            [new \DateTime('1 year ago'), new \DateTime('+1 year +1 month'), new \DateTime(), new \DateTime('+1 year')],
             [
-                new \DateTime('1 day ago'),
-                new \DateTime('+25 hours'),
+                new \DateTime('1 year ago'),
+                new \DateTime('+1 year +1 month'),
                 new \DateTime(),
-                new \DateTime('+1 day'),
+                new \DateTime('+1 year'),
                 'test-key',
             ],
             [
-                new \DateTime('2 days ago'),
-                new \DateTime('+5 days'),
-                new \DateTime('4 days ago'),
-                new \DateTime('+1 day'),
+                new \DateTime('2 years ago'),
+                new \DateTime('+5 years'),
+                new \DateTime('4 years ago'),
+                new \DateTime('+1 year'),
             ],
         ];
     }
@@ -60,12 +60,18 @@ class DailyTaskTest extends \PHPUnit_Framework_TestCase
             $taskBuilder = $this->prophesize(TaskBuilder::class);
             $scheduler->createTask('test-task', 'test-task: workload')->willReturn($taskBuilder->reveal());
 
-            $taskBuilder->cron('0 0 * * *', $start, $end)->shouldBeCalledTimes(1)->willReturn($taskBuilder->reveal());
+            $taskBuilder->cron('0 0 1 1 *', $start, $end)->shouldBeCalledTimes(1)->willReturn($taskBuilder->reveal());
             $taskBuilder->setKey($key)->shouldBeCalledTimes(1)->willReturn($taskBuilder->reveal());
             $taskBuilder->setExecutionDate(
                 Argument::that(
                     function (\DateTime $dateTime) use ($scheduledExecutionDate) {
-                        $this->assertEquals($scheduledExecutionDate->setTime(0, 0, 0), $dateTime, '', 2);
+                        $this->assertEquals(
+                            $scheduledExecutionDate->setTime(0, 0, 0)
+                                ->setDate($scheduledExecutionDate->format('Y'), 1, 1),
+                            $dateTime,
+                            '',
+                            2
+                        );
 
                         return true;
                     }
@@ -80,7 +86,7 @@ class DailyTaskTest extends \PHPUnit_Framework_TestCase
         $task->getExecutionDate()->willReturn($executionDate);
         $task->getKey()->willReturn($key);
 
-        $task = new DailyTask($task->reveal(), $start, $end);
+        $task = new YearlyTask($task->reveal(), $start, $end);
 
         $task->scheduleNext($scheduler->reveal());
     }

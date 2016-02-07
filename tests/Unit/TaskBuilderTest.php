@@ -16,7 +16,7 @@ class TaskBuilderTest extends \PHPUnit_Framework_TestCase
         $scheduler = $this->prophesize(SchedulerInterface::class);
         $taskBuilder = TaskBuilder::create($scheduler->reveal(), 'test-name', 'test-workload');
 
-        $this->assertInstanceOf(TaskBuilder::class, $taskBuilder);
+        self::assertInstanceOf(TaskBuilder::class, $taskBuilder);
 
         return [$taskBuilder, $scheduler];
     }
@@ -29,8 +29,8 @@ class TaskBuilderTest extends \PHPUnit_Framework_TestCase
         $scheduler->schedule(
             Argument::that(
                 function (Task $task) {
-                    $this->assertEquals('test-name', $task->getTaskName());
-                    $this->assertEquals('test-workload', $task->getWorkload());
+                    self::assertEquals('test-name', $task->getTaskName());
+                    self::assertEquals('test-workload', $task->getWorkload());
 
                     return true;
                 }
@@ -51,18 +51,18 @@ class TaskBuilderTest extends \PHPUnit_Framework_TestCase
         $scheduler->schedule(
             Argument::that(
                 function (DailyTask $task) use ($start, $end) {
-                    $this->assertEquals('test-name', $task->getTaskName());
-                    $this->assertEquals('test-workload', $task->getWorkload());
+                    self::assertEquals('test-name', $task->getTaskName());
+                    self::assertEquals('test-workload', $task->getWorkload());
 
-                    $this->assertEquals($start, $task->getStart());
-                    $this->assertEquals($end, $task->getEnd());
+                    self::assertEquals($start, $task->getStart());
+                    self::assertEquals($end, $task->getEnd());
 
                     return true;
                 }
             )
         )->shouldBeCalledTimes(1);
 
-        $this->assertEquals($taskBuilder, $taskBuilder->daily($start, $end));
+        self::assertEquals($taskBuilder, $taskBuilder->daily($start, $end));
         $taskBuilder->schedule();
     }
 
@@ -76,18 +76,18 @@ class TaskBuilderTest extends \PHPUnit_Framework_TestCase
         $scheduler->schedule(
             Argument::that(
                 function (DailyTask $task) use ($start) {
-                    $this->assertEquals('test-name', $task->getTaskName());
-                    $this->assertEquals('test-workload', $task->getWorkload());
+                    self::assertEquals('test-name', $task->getTaskName());
+                    self::assertEquals('test-workload', $task->getWorkload());
 
-                    $this->assertEquals($start, $task->getStart());
-                    $this->assertEquals(null, $task->getEnd());
+                    self::assertEquals($start, $task->getStart());
+                    self::assertEquals(null, $task->getEnd());
 
                     return true;
                 }
             )
         )->shouldBeCalledTimes(1);
 
-        $this->assertEquals($taskBuilder, $taskBuilder->daily($start));
+        self::assertEquals($taskBuilder, $taskBuilder->daily($start));
         $taskBuilder->schedule();
     }
 
@@ -99,18 +99,18 @@ class TaskBuilderTest extends \PHPUnit_Framework_TestCase
         $scheduler->schedule(
             Argument::that(
                 function (DailyTask $task) {
-                    $this->assertEquals('test-name', $task->getTaskName());
-                    $this->assertEquals('test-workload', $task->getWorkload());
+                    self::assertEquals('test-name', $task->getTaskName());
+                    self::assertEquals('test-workload', $task->getWorkload());
 
-                    $this->assertEquals(new \DateTime(), $task->getStart(), '', 2);
-                    $this->assertEquals(null, $task->getEnd());
+                    self::assertEquals(new \DateTime(), $task->getStart(), '', 2);
+                    self::assertEquals(null, $task->getEnd());
 
                     return true;
                 }
             )
         )->shouldBeCalledTimes(1);
 
-        $this->assertEquals($taskBuilder, $taskBuilder->daily());
+        self::assertEquals($taskBuilder, $taskBuilder->daily());
         $taskBuilder->schedule();
     }
 
@@ -124,18 +124,18 @@ class TaskBuilderTest extends \PHPUnit_Framework_TestCase
         $scheduler->schedule(
             Argument::that(
                 function (DailyTask $task) use ($end) {
-                    $this->assertEquals('test-name', $task->getTaskName());
-                    $this->assertEquals('test-workload', $task->getWorkload());
+                    self::assertEquals('test-name', $task->getTaskName());
+                    self::assertEquals('test-workload', $task->getWorkload());
 
-                    $this->assertEquals(new \DateTime(), $task->getStart(), '', 2);
-                    $this->assertEquals($end, $task->getEnd());
+                    self::assertEquals(new \DateTime(), $task->getStart(), '', 2);
+                    self::assertEquals($end, $task->getEnd());
 
                     return true;
                 }
             )
         )->shouldBeCalledTimes(1);
 
-        $this->assertEquals($taskBuilder, $taskBuilder->daily(null, $end));
+        self::assertEquals($taskBuilder, $taskBuilder->daily(null, $end));
         $taskBuilder->schedule();
     }
 
@@ -149,18 +149,18 @@ class TaskBuilderTest extends \PHPUnit_Framework_TestCase
         $scheduler->schedule(
             Argument::that(
                 function (TaskInterface $task) use ($date) {
-                    $this->assertEquals('test-name', $task->getTaskName());
-                    $this->assertEquals('test-workload', $task->getWorkload());
-                    $this->assertEquals($date, $task->getExecutionDate());
+                    self::assertEquals('test-name', $task->getTaskName());
+                    self::assertEquals('test-workload', $task->getWorkload());
+                    self::assertEquals($date, $task->getExecutionDate());
 
-                    $this->assertInstanceOf(Task::class, $task);
+                    self::assertInstanceOf(Task::class, $task);
 
                     return true;
                 }
             )
         )->shouldBeCalledTimes(1);
 
-        $this->assertEquals($taskBuilder, $taskBuilder->setExecutionDate($date));
+        self::assertEquals($taskBuilder, $taskBuilder->setExecutionDate($date));
         $taskBuilder->schedule();
     }
 
@@ -174,18 +174,39 @@ class TaskBuilderTest extends \PHPUnit_Framework_TestCase
         $scheduler->schedule(
             Argument::that(
                 function (TaskInterface $task) use ($key) {
-                    $this->assertEquals('test-name', $task->getTaskName());
-                    $this->assertEquals('test-workload', $task->getWorkload());
-                    $this->assertEquals($key, $task->getKey());
+                    self::assertEquals('test-name', $task->getTaskName());
+                    self::assertEquals('test-workload', $task->getWorkload());
+                    self::assertEquals($key, $task->getKey());
 
-                    $this->assertInstanceOf(Task::class, $task);
+                    self::assertInstanceOf(Task::class, $task);
 
                     return true;
                 }
             )
         )->shouldBeCalledTimes(1);
 
-        $this->assertEquals($taskBuilder, $taskBuilder->setKey($key));
+        self::assertEquals($taskBuilder, $taskBuilder->setKey($key));
+        $taskBuilder->schedule();
+    }
+
+    public function testImmediately()
+    {
+        $scheduler = $this->prophesize(SchedulerInterface::class);
+        $taskBuilder = TaskBuilder::create($scheduler->reveal(), 'test-name', 'test-workload');
+
+        $scheduler->schedule(
+            Argument::that(
+                function (TaskInterface $task) {
+                    self::assertEquals(new \DateTime(), $task->getExecutionDate(), '', 2);
+
+                    self::assertInstanceOf(Task::class, $task);
+
+                    return true;
+                }
+            )
+        )->shouldBeCalledTimes(1);
+
+        self::assertEquals($taskBuilder, $taskBuilder->immediately());
         $taskBuilder->schedule();
     }
 }

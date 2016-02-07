@@ -21,23 +21,71 @@ interface TaskBuilderInterface
      * @param \DateTime $start
      * @param \DateTime $end
      *
-     * @return TaskBuilder
+     * @return TaskBuilderInterface
      */
     public function daily(\DateTime $start = null, \DateTime $end = null);
 
     /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     *
+     * @return TaskBuilderInterface
+     */
+    public function hourly(\DateTime $start = null, \DateTime $end = null);
+
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     *
+     * @return TaskBuilderInterface
+     */
+    public function weekly(\DateTime $start = null, \DateTime $end = null);
+
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     *
+     * @return TaskBuilderInterface
+     */
+    public function monthly(\DateTime $start = null, \DateTime $end = null);
+
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     *
+     * @return TaskBuilderInterface
+     */
+    public function yearly(\DateTime $start = null, \DateTime $end = null);
+
+    /**
+     * @param string $cronExpression
+     * @param \DateTime $start
+     * @param \DateTime $end
+     *
+     * @return TaskBuilderInterface
+     */
+    public function cron($cronExpression, \DateTime $start = null, \DateTime $end = null);
+
+    /**
      * @param \DateTime $executionDate
      *
-     * @return TaskBuilder
+     * @return TaskBuilderInterface
      */
     public function setExecutionDate(\DateTime $executionDate);
 
     /**
      * @param string $key
      *
-     * @return TaskBuilder
+     * @return TaskBuilderInterface
      */
     public function setKey($key);
+
+    /**
+     * Set execution date immediately.
+     *
+     * @return TaskBuilderInterface
+     */
+    public function immediately();
 
     /**
      * Schedules task with given scheduler.

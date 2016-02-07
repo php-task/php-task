@@ -23,7 +23,7 @@ interface RegistryInterface
      * @param string $name name of handler.
      * @param string|\Serializable $workload
      *
-     * @return mixed result of task handler.
+     * @return string|\Serializable result of task handler.
      */
     public function run($name, $workload);
 

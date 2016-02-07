@@ -24,7 +24,7 @@ interface HandlerInterface
      *
      * @param string|\Serializable $workload
      *
-     * @return mixed
+     * @return string|\Serializable
      */
     public function handle($workload);
 }
