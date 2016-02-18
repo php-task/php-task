@@ -54,6 +54,11 @@ class Task implements TaskInterface
      */
     private $result;
 
+    /**
+     * @var TaskExecution[]
+     */
+    private $executions;
+
     public function __construct($taskName, $workload, $uuid = null)
     {
         $this->uuid = $uuid ?: Uuid::uuid4()->toString();
@@ -150,5 +155,29 @@ class Task implements TaskInterface
     public function setExecutionDate(\DateTime $executionDate)
     {
         $this->executionDate = $executionDate;
+    }
+
+    /**
+     * @return TaskExecution[]
+     */
+    public function getExecutions()
+    {
+        return $this->executions;
+    }
+
+    /**
+     * @param TaskExecution $execution
+     */
+    public function addExecution(TaskExecution $execution)
+    {
+        $this->executions[] = $execution;
+    }
+
+    /**
+     * @return TaskExecution
+     */
+    public function getLastExecution()
+    {
+        return end($this->executions);
     }
 }
