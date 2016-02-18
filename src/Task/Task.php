@@ -10,6 +10,7 @@
 
 namespace Task;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -65,6 +66,7 @@ class Task implements TaskInterface
         $this->taskName = $taskName;
         $this->workload = $workload;
         $this->executionDate = new \DateTime();
+        $this->executions = new ArrayCollection();
     }
 
     /**

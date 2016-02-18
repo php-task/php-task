@@ -38,9 +38,21 @@ interface StorageInterface
     /**
      * Returns all tasks.
      *
+     * @param int|null $limit The maximum number of elements to return, or null for no limit.
+     *
      * @return TaskInterface[]
      */
-    public function findAll();
+    public function findAll($limit = null);
+
+    /**
+     * Returns array of tasks
+     *
+     * @param string $key
+     * @param int|null $limit The maximum number of elements to return, or null for no limit.
+     *
+     * @return TaskInterface[]
+     */
+    public function findByKey($key, $limit = null);
 
     /**
      * Update task in storage.

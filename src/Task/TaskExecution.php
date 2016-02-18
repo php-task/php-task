@@ -29,7 +29,7 @@ class TaskExecution
     }
 
     /**
-     * @return \DateTime
+     * @return float
      */
     public function getStartedAt()
     {
@@ -39,8 +39,46 @@ class TaskExecution
     /**
      * @return \DateTime
      */
+    public function getStartedAtAsDateTime()
+    {
+        return $this->getDateTime($this->startedAt);
+    }
+
+    /**
+     * @return float
+     */
     public function getFinishedAt()
     {
         return $this->finishedAt;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getFinishedAtAsDateTime()
+    {
+        return $this->getDateTime($this->startedAt);
+    }
+
+    /**
+     * Returns duration of execution in microseconds
+     *
+     * @return int
+     */
+    public function getExecutionDuration()
+    {
+        return $this->finishedAt - $this->startedAt;
+    }
+
+    /**
+     * Returns microtime as datetime.
+     *
+     * @param float $microTime
+     *
+     * @return \DateTime
+     */
+    private function getDateTime($microTime)
+    {
+        return \DateTime::createFromFormat('U.u', $microTime);
     }
 }
