@@ -1,5 +1,7 @@
 # CHANGELOG
 
-* dev-master
+* 0.2.0 (2016-02-27)
     * ENHANCEMENT #7 Added task execution to hold information for one single try
     * FEATURE     #6 Added cron task  
+
+* 0.1.0 (2016-01-31)
