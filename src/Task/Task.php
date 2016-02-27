@@ -180,6 +180,6 @@ class Task implements TaskInterface
      */
     public function getLastExecution()
     {
-        return end($this->executions);
+        return $this->executions->last();
     }
 }
