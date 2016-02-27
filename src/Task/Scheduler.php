@@ -127,10 +127,13 @@ class Scheduler implements SchedulerInterface
             $this->eventDispatcher->dispatch(Events::TASK_BEFORE, new TaskEvent($task));
 
             try {
+                $startedAt = microtime(true);
                 $result = $this->registry->run($task->getTaskName(), $task->getWorkload());
+                $finishedAt = microtime(true);
 
                 $task->setResult($result);
                 $task->setCompleted();
+                $task->addExecution(new TaskExecution($startedAt, $finishedAt));
 
                 $this->storage->persist($task);
 

@@ -10,6 +10,7 @@ use Task\Scheduler;
 use Task\Storage\StorageInterface;
 use Task\TaskBuilderFactoryInterface;
 use Task\TaskBuilderInterface;
+use Task\TaskExecution;
 use Task\TaskInterface;
 
 class SchedulerTest extends \PHPUnit_Framework_TestCase
@@ -250,6 +251,14 @@ class SchedulerTest extends \PHPUnit_Framework_TestCase
                 if ($interval) {
                     $task->scheduleNext(Argument::type(Scheduler::class))->shouldBeCalledTimes(1);
                 }
+
+                $task->addExecution(
+                    Argument::that(
+                        function (TaskExecution $run) {
+                            return $run->getFinishedAt() > $run->getStartedAt();
+                        }
+                    )
+                )->shouldBeCalled();
 
                 return $task->reveal();
             },

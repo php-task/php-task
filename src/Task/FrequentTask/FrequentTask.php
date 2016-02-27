@@ -10,6 +10,7 @@
 
 namespace Task\FrequentTask;
 
+use Task\TaskExecution;
 use Task\TaskInterface;
 
 /**
@@ -143,5 +144,29 @@ abstract class FrequentTask implements FrequentTaskInterface
     public function getEnd()
     {
         return $this->end;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExecutions()
+    {
+        return $this->task->getExecutions();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addExecution(TaskExecution $execution)
+    {
+        $this->task->addExecution($execution);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLastExecution()
+    {
+        return $this->task->getLastExecution();
     }
 }

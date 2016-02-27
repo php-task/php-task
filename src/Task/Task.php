@@ -10,6 +10,7 @@
 
 namespace Task;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -54,12 +55,18 @@ class Task implements TaskInterface
      */
     private $result;
 
+    /**
+     * @var TaskExecution[]
+     */
+    private $executions;
+
     public function __construct($taskName, $workload, $uuid = null)
     {
         $this->uuid = $uuid ?: Uuid::uuid4()->toString();
         $this->taskName = $taskName;
         $this->workload = $workload;
         $this->executionDate = new \DateTime();
+        $this->executions = new ArrayCollection();
     }
 
     /**
@@ -150,5 +157,29 @@ class Task implements TaskInterface
     public function setExecutionDate(\DateTime $executionDate)
     {
         $this->executionDate = $executionDate;
+    }
+
+    /**
+     * @return TaskExecution[]
+     */
+    public function getExecutions()
+    {
+        return $this->executions;
+    }
+
+    /**
+     * @param TaskExecution $execution
+     */
+    public function addExecution(TaskExecution $execution)
+    {
+        $this->executions[] = $execution;
+    }
+
+    /**
+     * @return TaskExecution
+     */
+    public function getLastExecution()
+    {
+        return $this->executions->last();
     }
 }

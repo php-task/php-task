@@ -91,4 +91,19 @@ interface TaskInterface
      * @param \DateTime $executionDate
      */
     public function setExecutionDate(\DateTime $executionDate);
+
+    /**
+     * @return TaskExecution[]
+     */
+    public function getExecutions();
+
+    /**
+     * @param TaskExecution $execution
+     */
+    public function addExecution(TaskExecution $execution);
+
+    /**
+     * @return TaskExecution
+     */
+    public function getLastExecution();
 }

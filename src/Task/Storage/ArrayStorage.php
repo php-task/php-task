@@ -74,9 +74,21 @@ class ArrayStorage implements StorageInterface
     /**
      * {@inheritdoc}
      */
-    public function findAll()
+    public function findAll($limit = null)
     {
-        return $this->tasks;
+        return $this->tasks->slice(0, $limit);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByKey($key, $limit = -1)
+    {
+        $this->tasks->filter(
+            function (TaskInterface $task) use ($key) {
+                return $task->getKey() === $key;
+            }
+        )->slice(0, $limit);
     }
 
     /**
