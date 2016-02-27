@@ -26,12 +26,12 @@ interface TaskBuilderInterface
     public function daily(\DateTime $start = null, \DateTime $end = null);
 
     /**
-     * @param \DateTime $start
-     * @param \DateTime $end
+     * @param \DateTime $firstExecution
+     * @param \DateTime $lastExecution
      *
      * @return TaskBuilderInterface
      */
-    public function hourly(\DateTime $start = null, \DateTime $end = null);
+    public function hourly(\DateTime $firstExecution = null, \DateTime $lastExecution = null);
 
     /**
      * @param \DateTime $start
@@ -67,20 +67,6 @@ interface TaskBuilderInterface
     public function cron($cronExpression, \DateTime $start = null, \DateTime $end = null);
 
     /**
-     * @param \DateTime $executionDate
-     *
-     * @return TaskBuilderInterface
-     */
-    public function setExecutionDate(\DateTime $executionDate);
-
-    /**
-     * @param string $key
-     *
-     * @return TaskBuilderInterface
-     */
-    public function setKey($key);
-
-    /**
      * Set execution date immediately.
      *
      * @return TaskBuilderInterface
@@ -89,6 +75,8 @@ interface TaskBuilderInterface
 
     /**
      * Schedules task with given scheduler.
+     *
+     * @return TaskInterface
      */
-    public function schedule();
+    public function getTask();
 }

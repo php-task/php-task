@@ -8,23 +8,23 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Task;
+namespace Task\Handler;
 
 /**
- * Interface for task builder factory.
+ * Task handler registry.
+ *
+ * Allows to add handler instances to run tasks.
  *
  * @author @wachterjohannes <johannes.wachter@massiveart.com>
  */
-interface TaskBuilderFactoryInterface
+interface TaskHandlerInterface
 {
     /**
-     * Returns task-builder.
+     * Handles given workload and returns result.
      *
-     * @param SchedulerInterface $scheduler
-     * @param string $taskName
      * @param string|\Serializable $workload
      *
-     * @return TaskBuilderInterface
+     * @return string|\Serializable
      */
-    public function create(SchedulerInterface $scheduler, $taskName, $workload);
+    public function handle($workload);
 }

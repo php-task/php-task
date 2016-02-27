@@ -10,6 +10,8 @@
 
 namespace Task;
 
+use Cron\CronExpression;
+
 /**
  * Interface for task.
  *
@@ -29,7 +31,7 @@ interface TaskInterface
      *
      * @return string
      */
-    public function getTaskName();
+    public function getHandlerClass();
 
     /**
      * Returns workload.
@@ -39,71 +41,32 @@ interface TaskInterface
     public function getWorkload();
 
     /**
-     * Returns key.
+     * Returns interval.
      *
-     * @return string
+     * @return CronExpression|null
      */
-    public function getKey();
+    public function getInterval();
 
     /**
-     * Set key.
-     *
-     * @param string $key
-     */
-    public function setKey($key);
-
-    /**
-     * Returns flag which indicates that task is completed or not.
-     *
-     * @return bool
-     */
-    public function isCompleted();
-
-    /**
-     * Sets completed flag.
-     */
-    public function setCompleted();
-
-    /**
-     * Returns result.
-     *
-     * @return \Serializable|string
-     */
-    public function getResult();
-
-    /**
-     * Set result.
-     *
-     * @param \Serializable|string $result
-     */
-    public function setResult($result);
-
-    /**
-     * Returns execution date.
+     * Returns first-execution date-time.
      *
      * @return \DateTime
      */
-    public function getExecutionDate();
+    public function getFirstExecution();
 
     /**
-     * Set execution date.
+     * Returns first-execution date-time.
      *
-     * @param \DateTime $executionDate
-     */
-    public function setExecutionDate(\DateTime $executionDate);
-
-    /**
-     * @return TaskExecution[]
-     */
-    public function getExecutions();
-
-    /**
-     * @param TaskExecution $execution
-     */
-    public function addExecution(TaskExecution $execution);
-
-    /**
-     * @return TaskExecution
+     * @return \DateTime
      */
     public function getLastExecution();
+
+    /**
+     * Set interval.
+     *
+     * @param CronExpression|null $interval
+     * @param \DateTime $firstExecution null means for "now"
+     * @param \DateTime $lastExecution null means forever
+     */
+    public function setInterval($interval, \DateTime $firstExecution = null, \DateTime $lastExecution = null);
 }

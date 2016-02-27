@@ -15,18 +15,18 @@ namespace Task\Handler;
  *
  * @author @wachterjohannes <johannes.wachter@massiveart.com>
  */
-class HandlerNotExistsException extends \Exception
+class TaskHandlerNotExistsException extends \Exception
 {
     /**
      * @var string
      */
-    private $name;
+    private $className;
 
-    public function __construct($name)
+    public function __construct($className)
     {
-        parent::__construct(sprintf('Handler with name "%s" not exists.', $name));
+        parent::__construct(sprintf('Handler with name "%s" not exists.', $className));
 
-        $this->name = $name;
+        $this->className = $className;
     }
 
     /**
@@ -34,8 +34,8 @@ class HandlerNotExistsException extends \Exception
      *
      * @return string
      */
-    public function getName()
+    public function getClassName()
     {
-        return $this->name;
+        return $this->className;
     }
 }

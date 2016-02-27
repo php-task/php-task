@@ -10,7 +10,7 @@
 
 namespace Task;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use Cron\CronExpression;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -28,12 +28,7 @@ class Task implements TaskInterface
     /**
      * @var string
      */
-    private $taskName;
-
-    /**
-     * @var string
-     */
-    private $key;
+    private $handlerClass;
 
     /**
      * @var string|\Serializable
@@ -41,32 +36,25 @@ class Task implements TaskInterface
     private $workload;
 
     /**
+     * @var CronExpression
+     */
+    private $interval;
+
+    /**
      * @var \DateTime
      */
-    private $executionDate;
+    private $firstExecution;
 
     /**
-     * @var bool
+     * @var \DateTime
      */
-    private $completed = false;
+    private $lastExecution;
 
-    /**
-     * @var string|\Serializable
-     */
-    private $result;
-
-    /**
-     * @var TaskExecution[]
-     */
-    private $executions;
-
-    public function __construct($taskName, $workload, $uuid = null)
+    public function __construct($handlerClass, $workload = null, $uuid = null)
     {
         $this->uuid = $uuid ?: Uuid::uuid4()->toString();
-        $this->taskName = $taskName;
+        $this->handlerClass = $handlerClass;
         $this->workload = $workload;
-        $this->executionDate = new \DateTime();
-        $this->executions = new ArrayCollection();
     }
 
     /**
@@ -80,27 +68,9 @@ class Task implements TaskInterface
     /**
      * {@inheritdoc}
      */
-    public function getTaskName()
+    public function getHandlerClass()
     {
-        return $this->taskName;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getKey()
-    {
-        return $this->key;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setKey($key)
-    {
-        $this->key = $key;
-
-        return $this;
+        return $this->handlerClass;
     }
 
     /**
@@ -114,72 +84,34 @@ class Task implements TaskInterface
     /**
      * {@inheritdoc}
      */
-    public function isCompleted()
+    public function getInterval()
     {
-        return $this->completed;
+        return $this->interval;
     }
 
     /**
-     * {@inheritdoc}
+     * @return \DateTime
      */
-    public function setCompleted()
+    public function getFirstExecution()
     {
-        $this->completed = true;
+        return $this->firstExecution;
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getResult()
-    {
-        return $this->result;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setResult($result)
-    {
-        $this->result = $result;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getExecutionDate()
-    {
-        return $this->executionDate;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setExecutionDate(\DateTime $executionDate)
-    {
-        $this->executionDate = $executionDate;
-    }
-
-    /**
-     * @return TaskExecution[]
-     */
-    public function getExecutions()
-    {
-        return $this->executions;
-    }
-
-    /**
-     * @param TaskExecution $execution
-     */
-    public function addExecution(TaskExecution $execution)
-    {
-        $this->executions[] = $execution;
-    }
-
-    /**
-     * @return TaskExecution
+     * @return \DateTime
      */
     public function getLastExecution()
     {
-        return $this->executions->last();
+        return $this->lastExecution;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setInterval($interval, \DateTime $firstExecution = null, \DateTime $lastExecution = null)
+    {
+        $this->interval = $interval;
+        $this->firstExecution = $firstExecution ?: new \DateTime();
+        $this->lastExecution = $lastExecution;
     }
 }

@@ -11,20 +11,20 @@
 namespace Task\Handler;
 
 /**
- * Task handler registry.
+ * Task handler factory.
  *
  * Allows to add handler instances to run tasks.
  *
  * @author @wachterjohannes <johannes.wachter@massiveart.com>
  */
-interface HandlerInterface
+class TaskHandlerFactory implements TaskHandlerFactoryInterface
 {
-    /**
-     * Handles given workload and returns result.
-     *
-     * @param string|\Serializable $workload
-     *
-     * @return string|\Serializable
-     */
-    public function handle($workload);
+    public function create($className)
+    {
+        if (!class_exists($className)) {
+            throw new TaskHandlerNotExistsException($className);
+        }
+
+        return new $className();
+    }
 }
