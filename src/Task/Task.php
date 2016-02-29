@@ -172,6 +172,10 @@ class Task implements TaskInterface
      */
     public function addExecution(TaskExecution $execution)
     {
+        if (!$this->executions) {
+            $this->executions = new ArrayCollection();
+        }
+
         $this->executions[] = $execution;
     }
 
@@ -180,6 +184,10 @@ class Task implements TaskInterface
      */
     public function getLastExecution()
     {
+        if (!$this->executions) {
+            return null;
+        }
+
         return $this->executions->last();
     }
 }
