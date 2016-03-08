@@ -185,7 +185,7 @@ class Task implements TaskInterface
     public function getLastExecution()
     {
         if (!$this->executions) {
-            return null;
+            return;
         }
 
         return $this->executions->last();

@@ -61,7 +61,7 @@ class TaskExecution
     }
 
     /**
-     * Returns duration of execution in microseconds
+     * Returns duration of execution in microseconds.
      *
      * @return int
      */
