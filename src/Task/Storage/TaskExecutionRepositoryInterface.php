@@ -21,4 +21,8 @@ interface TaskExecutionRepositoryInterface
      * @return TaskExecutionInterface
      */
     public function findByStartTime(TaskInterface $task, \DateTime $scheduleTime);
+
+    public function save(TaskExecutionInterface $execution);
+
+    public function add(TaskExecutionInterface$execution);
 }

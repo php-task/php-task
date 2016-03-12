@@ -16,14 +16,22 @@ class TaskRunner implements TaskRunnerInterface
     /**
      * @var TaskHandlerFactoryInterface
      */
-    private $handlerRegistry;
+    private $taskHandlerFactory;
+
+    public function __construct(
+        TaskExecutionRepositoryInterface $executionRepository,
+        TaskHandlerFactoryInterface $taskHandlerFactory
+    ) {
+        $this->executionRepository = $executionRepository;
+        $this->taskHandlerFactory = $taskHandlerFactory;
+    }
 
     public function runTasks()
     {
         $executions = $this->executionRepository->findScheduled();
 
         foreach ($executions as $execution) {
-            $handler = $this->handlerRegistry->create($execution->getHandlerClass());
+            $handler = $this->taskHandlerFactory->create($execution->getHandlerClass());
 
             try {
                 $result = $handler->handle($execution->getWorkload());
@@ -34,6 +42,8 @@ class TaskRunner implements TaskRunnerInterface
                 $execution->setException($ex);
                 $execution->setStatus(TaskStatus::FAILED);
             }
+
+            $this->executionRepository->save($execution);
         }
     }
 }

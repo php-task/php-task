@@ -11,6 +11,7 @@
 namespace Task;
 
 use Task\Execution\TaskExecution;
+use Task\Scheduler\SchedulerInterface;
 
 /**
  * Factory for task .

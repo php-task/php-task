@@ -21,6 +21,8 @@ interface TaskHandlerFactoryInterface
      * @param string $className
      *
      * @return TaskHandlerInterface
+     *
+     * @throws TaskHandlerNotExistsException
      */
     public function create($className);
 }

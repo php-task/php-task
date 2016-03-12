@@ -33,6 +33,16 @@ class Scheduler implements SchedulerInterface
      */
     private $executionRepository;
 
+    public function __construct(
+        FactoryInterface $factory,
+        TaskRepositoryInterface $taskRepository,
+        TaskExecutionRepositoryInterface $executionRepository
+    ) {
+        $this->factory = $factory;
+        $this->taskRepository = $taskRepository;
+        $this->executionRepository = $executionRepository;
+    }
+
     public function createTask($handlerClass, $workload = null)
     {
         return $this->factory->createTaskBuilder($this, $handlerClass, $workload);
@@ -57,6 +67,8 @@ class Scheduler implements SchedulerInterface
             if (null === $this->executionRepository->findByStartTime($task, $scheduleTime)) {
                 $execution = $this->factory->createTaskExecution($task, $scheduleTime);
                 $execution->setStatus(TaskStatus::PLANNED);
+
+                $this->executionRepository->add($execution);
             }
         }
     }

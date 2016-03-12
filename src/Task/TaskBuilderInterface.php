@@ -79,4 +79,6 @@ interface TaskBuilderInterface
      * @return TaskInterface
      */
     public function getTask();
+
+    public function schedule();
 }

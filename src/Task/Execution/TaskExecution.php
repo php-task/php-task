@@ -9,57 +9,57 @@ class TaskExecution implements TaskExecutionInterface
     /**
      * @var string
      */
-    private $uuid;
+    protected $uuid;
 
     /**
      * @var TaskInterface
      */
-    private $task;
+    protected $task;
 
     /**
      * @var \Serializable|string
      */
-    private $workload;
+    protected $workload;
 
     /**
      * @var string
      */
-    private $handlerClass;
+    protected $handlerClass;
 
     /**
      * @var \DateTime
      */
-    private $scheduleTime;
+    protected $scheduleTime;
 
     /**
      * @var \DateTime
      */
-    private $startTime;
+    protected $startTime;
 
     /**
      * @var \DateTime
      */
-    private $endTime;
+    protected $endTime;
 
     /**
      * @var float
      */
-    private $duration;
+    protected $duration;
 
     /**
      * @var string
      */
-    private $status;
+    protected $status;
 
     /**
      * @var string|\Serializable
      */
-    private $result;
+    protected $result;
 
     /**
      * @var \Exception
      */
-    private $exception;
+    protected $exception;
 
     public function __construct(TaskInterface $task, $handlerClass, \DateTime $scheduleTime, $workload = null)
     {

@@ -43,7 +43,7 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
         $filtered = $this->taskExecutionCollection->filter(
             function (TaskExecutionInterface $execution) use ($task, $scheduleTime) {
                 return $execution->getTask()->getUuid() === $task->getUuid()
-                && $execution->getScheduleTime() === $scheduleTime;
+                    && $execution->getScheduleTime() === $scheduleTime;
             }
         );
 
@@ -52,5 +52,21 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
         }
 
         return $filtered->first();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function save(TaskExecutionInterface $execution)
+    {
+        $this->taskExecutionCollection->add($execution);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function add(TaskExecutionInterface $execution)
+    {
+        // do nothing
     }
 }
