@@ -1,6 +1,7 @@
 # CHANGELOG
 
-* dev-master
+* 0.2.1 (2016-03-30)
+    * HOTFIX      #-  Fixed return of task-builder
     * HOTFIX      #16 Added sort-order to storage interface
     * HOTFIX      #-  Fixed executions null variable after deserialize
 

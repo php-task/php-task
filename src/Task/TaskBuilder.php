@@ -103,6 +103,8 @@ class TaskBuilder implements TaskBuilderInterface
     public function cron($cronExpression, \DateTime $start = null, \DateTime $end = null)
     {
         $this->task = new CronTask(CronExpression::factory($cronExpression), $this->task, $start, $end);
+
+        return $this;
     }
 
     /**
