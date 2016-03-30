@@ -74,7 +74,7 @@ class ArrayStorage implements StorageInterface
     /**
      * {@inheritdoc}
      */
-    public function findAll($limit = null)
+    public function findAll($limit = null, $sortOrder = 'ASC')
     {
         return $this->tasks->slice(0, $limit);
     }
@@ -82,7 +82,7 @@ class ArrayStorage implements StorageInterface
     /**
      * {@inheritdoc}
      */
-    public function findByKey($key, $limit = -1)
+    public function findByKey($key, $limit = -1, $sortOrder = 'ASC')
     {
         $this->tasks->filter(
             function (TaskInterface $task) use ($key) {
