@@ -54,6 +54,11 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
         return $filtered->first();
     }
 
+    public function findAll($limit = null)
+    {
+        return $this->taskExecutionCollection->slice(0, $limit);
+    }
+
     /**
      * {@inheritdoc}
      */

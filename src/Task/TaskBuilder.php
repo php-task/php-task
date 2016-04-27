@@ -99,16 +99,6 @@ class TaskBuilder implements TaskBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function immediately()
-    {
-        // TODO immediately
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getTask()
     {
         return $this->task;

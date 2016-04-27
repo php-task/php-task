@@ -35,9 +35,9 @@ class ArrayTaskRepository implements TaskRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findAll()
+    public function findAll($limit = null)
     {
-        return $this->taskCollection;
+        return $this->taskCollection->slice(0, $limit);
     }
 
     /**

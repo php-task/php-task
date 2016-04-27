@@ -2,6 +2,7 @@
 
 namespace Task\Execution;
 
+use Ramsey\Uuid\Uuid;
 use Task\TaskInterface;
 
 class TaskExecution implements TaskExecutionInterface
@@ -61,8 +62,14 @@ class TaskExecution implements TaskExecutionInterface
      */
     protected $exception;
 
-    public function __construct(TaskInterface $task, $handlerClass, \DateTime $scheduleTime, $workload = null)
-    {
+    public function __construct(
+        TaskInterface $task,
+        $handlerClass,
+        \DateTime $scheduleTime,
+        $workload = null,
+        $uuid = null
+    ) {
+        $this->uuid = $uuid ?: Uuid::uuid4()->toString();
         $this->task = $task;
         $this->handlerClass = $handlerClass;
         $this->scheduleTime = $scheduleTime;
@@ -107,6 +114,36 @@ class TaskExecution implements TaskExecutionInterface
     public function getScheduleTime()
     {
         return $this->scheduleTime;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStartTime(\DateTime $startTime)
+    {
+        $this->startTime = $startTime;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEndTime(\DateTime $endTime)
+    {
+        $this->endTime = $endTime;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDuration($duration)
+    {
+        $this->duration = $duration;
+
+        return $this;
     }
 
     /**

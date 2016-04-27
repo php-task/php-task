@@ -81,4 +81,19 @@ interface TaskExecutionInterface
      * @return $this
      */
     public function setException(\Exception $exception);
+
+    /**
+     * @param $startTime
+     */
+    public function setStartTime(\DateTime $startTime);
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEndTime(\DateTime $endTime);
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDuration($duration);
 }

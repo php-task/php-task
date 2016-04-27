@@ -51,6 +51,8 @@ class Scheduler implements SchedulerInterface
     public function addTask(TaskInterface $task)
     {
         $this->taskRepository->add($task);
+
+        $this->scheduleTasks();
     }
 
     /**

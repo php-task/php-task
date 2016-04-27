@@ -33,14 +33,23 @@ class TaskRunner implements TaskRunnerInterface
         foreach ($executions as $execution) {
             $handler = $this->taskHandlerFactory->create($execution->getHandlerClass());
 
+            $start = microtime(true);
+            $execution->setStartTime(new \DateTime());
+
             try {
                 $result = $handler->handle($execution->getWorkload());
+
+                $execution->setEndTime(new \DateTime());
+                $execution->setDuration(microtime(true) - $start);
 
                 $execution->setStatus(TaskStatus::COMPLETE);
                 $execution->setResult($result);
             } catch (\Exception $ex) {
                 $execution->setException($ex);
                 $execution->setStatus(TaskStatus::FAILED);
+
+                $execution->setEndTime(new \DateTime());
+                $execution->setDuration(microtime(true) - $start);
             }
 
             $this->executionRepository->save($execution);

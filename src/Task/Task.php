@@ -55,6 +55,9 @@ class Task implements TaskInterface
         $this->uuid = $uuid ?: Uuid::uuid4()->toString();
         $this->handlerClass = $handlerClass;
         $this->workload = $workload;
+
+        $this->firstExecution = new \DateTime();
+        $this->lastExecution = new \DateTime();
     }
 
     /**
@@ -108,8 +111,11 @@ class Task implements TaskInterface
     /**
      * {@inheritdoc}
      */
-    public function setInterval(CronExpression $interval, \DateTime $firstExecution = null, \DateTime $lastExecution = null)
-    {
+    public function setInterval(
+        CronExpression $interval,
+        \DateTime $firstExecution = null,
+        \DateTime $lastExecution = null
+    ) {
         $this->interval = $interval;
         $this->firstExecution = $firstExecution ?: new \DateTime();
         $this->lastExecution = $lastExecution;

@@ -12,9 +12,11 @@ interface TaskRepositoryInterface
     public function add(TaskInterface $task);
 
     /**
+     * @param int|null $limit
+     *
      * @return TaskInterface[]
      */
-    public function findAll();
+    public function findAll($limit = null);
 
     /**
      * @return TaskInterface[]
