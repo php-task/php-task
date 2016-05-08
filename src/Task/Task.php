@@ -23,38 +23,41 @@ class Task implements TaskInterface
     /**
      * @var string
      */
-    private $uuid;
+    protected $uuid;
 
     /**
      * @var string
      */
-    private $handlerClass;
+    protected $handlerClass;
 
     /**
      * @var string|\Serializable
      */
-    private $workload;
+    protected $workload;
 
     /**
      * @var TaskInterval
      */
-    private $interval;
+    protected $interval;
 
     /**
      * @var \DateTime
      */
-    private $firstExecution;
+    protected $firstExecution;
 
     /**
      * @var \DateTime
      */
-    private $lastExecution;
+    protected $lastExecution;
 
     public function __construct($handlerClass, $workload = null, $uuid = null)
     {
         $this->uuid = $uuid ?: Uuid::uuid4()->toString();
         $this->handlerClass = $handlerClass;
         $this->workload = $workload;
+
+        $this->firstExecution = new \DateTime();
+        $this->lastExecution = new \DateTime();
     }
 
     /**
@@ -108,8 +111,11 @@ class Task implements TaskInterface
     /**
      * {@inheritdoc}
      */
-    public function setInterval($interval, \DateTime $firstExecution = null, \DateTime $lastExecution = null)
-    {
+    public function setInterval(
+        CronExpression $interval,
+        \DateTime $firstExecution = null,
+        \DateTime $lastExecution = null
+    ) {
         $this->interval = $interval;
         $this->firstExecution = $firstExecution ?: new \DateTime();
         $this->lastExecution = $lastExecution;

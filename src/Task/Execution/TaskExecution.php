@@ -2,6 +2,7 @@
 
 namespace Task\Execution;
 
+use Ramsey\Uuid\Uuid;
 use Task\TaskInterface;
 
 class TaskExecution implements TaskExecutionInterface
@@ -9,60 +10,66 @@ class TaskExecution implements TaskExecutionInterface
     /**
      * @var string
      */
-    private $uuid;
+    protected $uuid;
 
     /**
      * @var TaskInterface
      */
-    private $task;
+    protected $task;
 
     /**
      * @var \Serializable|string
      */
-    private $workload;
+    protected $workload;
 
     /**
      * @var string
      */
-    private $handlerClass;
+    protected $handlerClass;
 
     /**
      * @var \DateTime
      */
-    private $scheduleTime;
+    protected $scheduleTime;
 
     /**
      * @var \DateTime
      */
-    private $startTime;
+    protected $startTime;
 
     /**
      * @var \DateTime
      */
-    private $endTime;
+    protected $endTime;
 
     /**
      * @var float
      */
-    private $duration;
+    protected $duration;
 
     /**
      * @var string
      */
-    private $status;
+    protected $status;
 
     /**
      * @var string|\Serializable
      */
-    private $result;
+    protected $result;
 
     /**
      * @var \Exception
      */
-    private $exception;
+    protected $exception;
 
-    public function __construct(TaskInterface $task, $handlerClass, \DateTime $scheduleTime, $workload = null)
-    {
+    public function __construct(
+        TaskInterface $task,
+        $handlerClass,
+        \DateTime $scheduleTime,
+        $workload = null,
+        $uuid = null
+    ) {
+        $this->uuid = $uuid ?: Uuid::uuid4()->toString();
         $this->task = $task;
         $this->handlerClass = $handlerClass;
         $this->scheduleTime = $scheduleTime;
@@ -107,6 +114,36 @@ class TaskExecution implements TaskExecutionInterface
     public function getScheduleTime()
     {
         return $this->scheduleTime;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStartTime(\DateTime $startTime)
+    {
+        $this->startTime = $startTime;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEndTime(\DateTime $endTime)
+    {
+        $this->endTime = $endTime;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDuration($duration)
+    {
+        $this->duration = $duration;
+
+        return $this;
     }
 
     /**

@@ -11,6 +11,7 @@
 namespace Task;
 
 use Cron\CronExpression;
+use Task\Scheduler\SchedulerInterface;
 
 /**
  * Builder for tasks.

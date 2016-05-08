@@ -10,6 +10,7 @@
 
 namespace Task\Scheduler;
 
+use Task\TaskBuilderInterface;
 use Task\TaskInterface;
 
 /**
@@ -19,6 +20,12 @@ use Task\TaskInterface;
  */
 interface SchedulerInterface
 {
+    /**
+     * @param $handlerClass
+     * @param string|\Serializable $workload
+     *
+     * @return TaskBuilderInterface
+     */
     public function createTask($handlerClass, $workload = null);
 
     public function addTask(TaskInterface $task);
