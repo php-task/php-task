@@ -67,13 +67,6 @@ interface TaskBuilderInterface
     public function cron($cronExpression, \DateTime $start = null, \DateTime $end = null);
 
     /**
-     * Set execution date immediately.
-     *
-     * @return TaskBuilderInterface
-     */
-    public function immediately();
-
-    /**
      * Schedules task with given scheduler.
      *
      * @return TaskInterface

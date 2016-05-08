@@ -7,14 +7,13 @@ use Task\TaskInterface;
 
 interface TaskExecutionRepositoryInterface
 {
-    /**
-     * Returns all task-executions which should be executed.
-     *
-     * @return TaskExecutionInterface[]
-     */
-    public function findScheduled();
+    public function add(TaskExecutionInterface $execution);
+
+    public function get($uuid);
 
     /**
+     * Used to check whether a specific task has been scheduled at a specific time.
+     *
      * @param TaskInterface $task
      * @param \DateTime $scheduleTime
      *

@@ -11,6 +11,7 @@
 namespace Task;
 
 use Task\Execution\TaskExecution;
+use Task\Schedule\Schedule;
 
 /**
  * Factory for task .
@@ -22,9 +23,9 @@ class Factory implements FactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function createTaskBuilder(SchedulerInterface $scheduler, $handlerClass, $workload)
+    public function createTaskBuilder($handlerClass, $workload)
     {
-        return new TaskBuilder($scheduler, $this->createTask($handlerClass, $workload));
+        return new TaskBuilder($this->createTask($handlerClass, $workload));
     }
 
     /**
@@ -41,5 +42,17 @@ class Factory implements FactoryInterface
     public function createTask($handlerClass, $workload)
     {
         return new Task($handlerClass, $workload);
+    }
+
+    /**
+     * Create a new schedule.
+     *
+     * @param TaskInterface[] $tasks
+     *
+     * @return Schedule
+     */
+    public function createSchedule($tasks)
+    {
+        return new Schedule($tasks);
     }
 }
