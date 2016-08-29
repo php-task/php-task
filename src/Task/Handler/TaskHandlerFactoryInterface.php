@@ -1,6 +1,7 @@
 <?php
+
 /*
- * This file is part of PHP-Task library.
+ * This file is part of php-task library.
  *
  * (c) php-task
  *
@@ -11,13 +12,13 @@
 namespace Task\Handler;
 
 /**
- * Interface for task handler registry.
- *
- * @author @wachterjohannes <johannes.wachter@massiveart.com>
+ * Interface for task-handler registry.
  */
 interface TaskHandlerFactoryInterface
 {
     /**
+     * Returns task-handle for given class-name.
+     *
      * @param string $className
      *
      * @return TaskHandlerInterface

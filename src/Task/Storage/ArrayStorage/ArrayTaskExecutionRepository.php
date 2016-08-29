@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of php-task library.
+ *
+ * (c) php-task
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Task\Storage\ArrayStorage;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -8,6 +17,9 @@ use Task\Execution\TaskExecutionInterface;
 use Task\Execution\TaskExecutionRepositoryInterface;
 use Task\TaskInterface;
 
+/**
+ * Storage task-execution in an array.
+ */
 class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
 {
     /**
@@ -15,9 +27,32 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
      */
     private $taskExecutionCollection;
 
+    /**
+     * @param array $taskExecutions
+     */
     public function __construct(array $taskExecutions = [])
     {
         $this->taskExecutionCollection = new ArrayCollection($taskExecutions);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function store(TaskExecutionInterface $execution)
+    {
+        $this->taskExecutionCollection->add($execution);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function save(TaskExecutionInterface $execution)
+    {
+        $this->taskExecutionCollection->add($execution);
+
+        return $this;
     }
 
     /**
@@ -39,6 +74,9 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
         return $filtered->first();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function findAll($limit = null)
     {
         return $this->taskExecutionCollection->slice(0, $limit);
@@ -47,25 +85,8 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function save(TaskExecutionInterface $execution)
+    public function findScheduled()
     {
-        $this->taskExecutionCollection->add($execution);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function add(TaskExecutionInterface $execution)
-    {
-        $this->taskExecutionCollection->add($execution);
-    }
-
-    public function get($uuid)
-    {
-        return $this->taskExecutionCollection->filter(
-            function (TaskExecutionInterface $execution) use ($uuid) {
-                return $execution->getUuid() === $uuid;
-            }
-        )->first();
+        // TODO: Implement findScheduled() method.
     }
 }

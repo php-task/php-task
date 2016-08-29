@@ -1,6 +1,7 @@
 <?php
+
 /*
- * This file is part of PHP-Task library.
+ * This file is part of php-task library.
  *
  * (c) php-task
  *
@@ -14,9 +15,7 @@ use Cron\CronExpression;
 use Ramsey\Uuid\Uuid;
 
 /**
- * Task contains name and workload to run with a handler.
- *
- * @author @wachterjohannes <johannes.wachter@massiveart.com>
+ * Task information.
  */
 class Task implements TaskInterface
 {
@@ -50,6 +49,11 @@ class Task implements TaskInterface
      */
     protected $lastExecution;
 
+    /**
+     * @param string $handlerClass
+     * @param string|null $workload
+     * @param string|null $uuid
+     */
     public function __construct($handlerClass, $workload = null, $uuid = null)
     {
         $this->uuid = $uuid ?: Uuid::uuid4()->toString();
@@ -93,7 +97,7 @@ class Task implements TaskInterface
     }
 
     /**
-     * @return \DateTime
+     * {@inheritdoc}
      */
     public function getFirstExecution()
     {
@@ -101,7 +105,7 @@ class Task implements TaskInterface
     }
 
     /**
-     * @return \DateTime
+     * {@inheritdoc}
      */
     public function getLastExecution()
     {

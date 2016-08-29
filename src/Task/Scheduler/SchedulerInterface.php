@@ -1,6 +1,7 @@
 <?php
+
 /*
- * This file is part of PHP-Task library.
+ * This file is part of php-task library.
  *
  * (c) php-task
  *
@@ -14,13 +15,13 @@ use Task\TaskBuilderInterface;
 use Task\TaskInterface;
 
 /**
- * Interface for task scheduler.
- *
- * @author @wachterjohannes <johannes.wachter@massiveart.com>
+ * Interface for task-scheduler.
  */
 interface SchedulerInterface
 {
     /**
+     * Returns new task-builder.
+     *
      * @param $handlerClass
      * @param string|\Serializable $workload
      *
@@ -28,10 +29,17 @@ interface SchedulerInterface
      */
     public function createTask($handlerClass, $workload = null);
 
+    /**
+     * Schedule task.
+     *
+     * @param TaskInterface $task
+     *
+     * @return $this
+     */
     public function addTask(TaskInterface $task);
 
     /**
-     * Schedules tasks.
+     * Schedules task-executions.
      */
     public function scheduleTasks();
 }

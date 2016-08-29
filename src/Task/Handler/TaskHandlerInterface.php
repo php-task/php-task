@@ -1,6 +1,7 @@
 <?php
+
 /*
- * This file is part of PHP-Task library.
+ * This file is part of php-task library.
  *
  * (c) php-task
  *
@@ -14,8 +15,6 @@ namespace Task\Handler;
  * Task handler registry.
  *
  * Allows to add handler instances to run tasks.
- *
- * @author @wachterjohannes <johannes.wachter@massiveart.com>
  */
 interface TaskHandlerInterface
 {

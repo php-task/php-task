@@ -1,6 +1,7 @@
 <?php
+
 /*
- * This file is part of PHP-Task library.
+ * This file is part of php-task library.
  *
  * (c) php-task
  *
@@ -10,12 +11,19 @@
 
 namespace Task\Scheduler;
 
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Task\Event\Events;
+use Task\Event\TaskEvent;
+use Task\Event\TaskExecutionEvent;
 use Task\Execution\TaskExecutionRepositoryInterface;
 use Task\FactoryInterface;
 use Task\Storage\TaskRepositoryInterface;
 use Task\TaskInterface;
 use Task\TaskStatus;
 
+/**
+ * Scheduler creates and manages tasks.
+ */
 class Scheduler implements SchedulerInterface
 {
     /**
@@ -32,27 +40,48 @@ class Scheduler implements SchedulerInterface
      * @var TaskExecutionRepositoryInterface
      */
     private $executionRepository;
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
 
+    /**
+     * @param FactoryInterface $factory
+     * @param TaskRepositoryInterface $taskRepository
+     * @param TaskExecutionRepositoryInterface $executionRepository
+     * @param EventDispatcherInterface $eventDispatcher
+     */
     public function __construct(
         FactoryInterface $factory,
         TaskRepositoryInterface $taskRepository,
-        TaskExecutionRepositoryInterface $executionRepository
+        TaskExecutionRepositoryInterface $executionRepository,
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->factory = $factory;
         $this->taskRepository = $taskRepository;
         $this->executionRepository = $executionRepository;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function createTask($handlerClass, $workload = null)
     {
         return $this->factory->createTaskBuilder($handlerClass, $workload);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function addTask(TaskInterface $task)
     {
-        $this->taskRepository->add($task);
+        $this->eventDispatcher->dispatch(Events::TASK_CREATE, new TaskEvent($task));
 
+        $this->taskRepository->store($task);
         $this->scheduleTasks();
+
+        return $this;
     }
 
     /**
@@ -70,7 +99,12 @@ class Scheduler implements SchedulerInterface
                 $execution = $this->factory->createTaskExecution($task, $scheduleTime);
                 $execution->setStatus(TaskStatus::PLANNED);
 
-                $this->executionRepository->add($execution);
+                $this->eventDispatcher->dispatch(
+                    Events::TASK_EXECUTION_CREATE,
+                    new TaskExecutionEvent($task, $execution)
+                );
+
+                $this->executionRepository->store($execution);
             }
         }
     }

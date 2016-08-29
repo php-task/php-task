@@ -1,6 +1,7 @@
 <?php
+
 /*
- * This file is part of PHP-Task library.
+ * This file is part of php-task library.
  *
  * (c) php-task
  *
@@ -14,8 +15,6 @@ namespace Task\Event;
  * Container for all Task events.
  *
  * This class cannot be instantiated.
- *
- * @author @wachterjohannes <johannes.wachter@massiveart.com>
  */
 final class Events
 {
@@ -25,6 +24,11 @@ final class Events
     const TASK_CREATE = 'tasks.create';
 
     /**
+     * Emitted when new new tasks created.
+     */
+    const TASK_EXECUTION_CREATE = 'tasks.create_execution';
+
+    /**
      * Emitted when task will be started.
      */
     const TASK_BEFORE = 'tasks.before';
@@ -32,7 +36,7 @@ final class Events
     /**
      * Emitted when after task finished.
      */
-    const TASK_AFTER = 'tasks.after';
+    const TASK_FINISHED = 'tasks.finished';
 
     /**
      * Emitted when task passed.
@@ -44,6 +48,9 @@ final class Events
      */
     const TASK_FAILED = 'tasks.failed';
 
+    /**
+     * Private constructor.
+     */
     private function __construct()
     {
     }

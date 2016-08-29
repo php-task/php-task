@@ -1,6 +1,7 @@
 <?php
+
 /*
- * This file is part of PHP-Task library.
+ * This file is part of php-task library.
  *
  * (c) php-task
  *
@@ -14,8 +15,6 @@ use Cron\CronExpression;
 
 /**
  * Interface for task.
- *
- * @author @wachterjohannes <johannes.wachter@massiveart.com>
  */
 interface TaskInterface
 {

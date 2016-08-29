@@ -1,6 +1,7 @@
 <?php
+
 /*
- * This file is part of PHP-Task library.
+ * This file is part of php-task library.
  *
  * (c) php-task
  *
@@ -12,57 +13,67 @@ namespace Task;
 
 /**
  * Interface for task builder.
- *
- * @author @wachterjohannes <johannes.wachter@massiveart.com>
  */
 interface TaskBuilderInterface
 {
     /**
-     * @param \DateTime $start
-     * @param \DateTime $end
+     * Use hourly interval.
      *
-     * @return TaskBuilderInterface
-     */
-    public function daily(\DateTime $start = null, \DateTime $end = null);
-
-    /**
      * @param \DateTime $firstExecution
      * @param \DateTime $lastExecution
      *
-     * @return TaskBuilderInterface
+     * @return $this
      */
     public function hourly(\DateTime $firstExecution = null, \DateTime $lastExecution = null);
 
     /**
+     * Use daily interval.
+     *
      * @param \DateTime $start
      * @param \DateTime $end
      *
-     * @return TaskBuilderInterface
+     * @return $this
+     */
+    public function daily(\DateTime $start = null, \DateTime $end = null);
+
+    /**
+     * Use weekly interval.
+     *
+     * @param \DateTime $start
+     * @param \DateTime $end
+     *
+     * @return $this
      */
     public function weekly(\DateTime $start = null, \DateTime $end = null);
 
     /**
+     * Use monthly interval.
+     *
      * @param \DateTime $start
      * @param \DateTime $end
      *
-     * @return TaskBuilderInterface
+     * @return $this
      */
     public function monthly(\DateTime $start = null, \DateTime $end = null);
 
     /**
+     * Use yearly interval.
+     *
      * @param \DateTime $start
      * @param \DateTime $end
      *
-     * @return TaskBuilderInterface
+     * @return $this
      */
     public function yearly(\DateTime $start = null, \DateTime $end = null);
 
     /**
+     * Use given cron-interval.
+     *
      * @param string $cronExpression
      * @param \DateTime $start
      * @param \DateTime $end
      *
-     * @return TaskBuilderInterface
+     * @return $this
      */
     public function cron($cronExpression, \DateTime $start = null, \DateTime $end = null);
 

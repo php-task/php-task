@@ -1,6 +1,7 @@
 <?php
+
 /*
- * This file is part of PHP-Task library.
+ * This file is part of php-task library.
  *
  * (c) php-task
  *
@@ -12,8 +13,6 @@ namespace Task\Handler;
 
 /**
  * Thrown when the requested handler not exists.
- *
- * @author @wachterjohannes <johannes.wachter@massiveart.com>
  */
 class TaskHandlerNotExistsException extends \Exception
 {
@@ -22,6 +21,9 @@ class TaskHandlerNotExistsException extends \Exception
      */
     private $className;
 
+    /**
+     * @param string $className
+     */
     public function __construct($className)
     {
         parent::__construct(sprintf('Handler with name "%s" not exists.', $className));
