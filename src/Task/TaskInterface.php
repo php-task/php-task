@@ -43,7 +43,7 @@ interface TaskInterface
     /**
      * Returns interval.
      *
-     * @return TaskInterval
+     * @return CronExpression
      */
     public function getInterval();
 

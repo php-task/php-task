@@ -11,7 +11,6 @@
 namespace Task;
 
 use Task\Execution\TaskExecutionInterface;
-use Task\Schedule\Schedule;
 
 /**
  * Interface for task builder factory.
@@ -49,13 +48,4 @@ interface FactoryInterface
      * @return TaskInterface
      */
     public function createTask($handlerClass, $workload);
-
-    /**
-     * Create a new schedule.
-     *
-     * @param TaskInterface[] $tasks
-     *
-     * @return Schedule
-     */
-    public function createSchedule($tasks);
 }

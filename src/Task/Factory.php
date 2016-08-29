@@ -11,10 +11,9 @@
 namespace Task;
 
 use Task\Execution\TaskExecution;
-use Task\Schedule\Schedule;
 
 /**
- * Factory for task .
+ * Factory for task.
  *
  * @author @wachterjohannes <johannes.wachter@massiveart.com>
  */
@@ -42,17 +41,5 @@ class Factory implements FactoryInterface
     public function createTask($handlerClass, $workload)
     {
         return new Task($handlerClass, $workload);
-    }
-
-    /**
-     * Create a new schedule.
-     *
-     * @param TaskInterface[] $tasks
-     *
-     * @return Schedule
-     */
-    public function createSchedule($tasks)
-    {
-        return new Schedule($tasks);
     }
 }

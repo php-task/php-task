@@ -36,7 +36,7 @@ class Task implements TaskInterface
     protected $workload;
 
     /**
-     * @var TaskInterval
+     * @var CronExpression
      */
     protected $interval;
 

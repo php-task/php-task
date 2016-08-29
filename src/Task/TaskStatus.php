@@ -7,12 +7,15 @@ namespace Task;
  */
 final class TaskStatus
 {
-    private function __construct()
-    {
-    }
-
     const PLANNED = 'planned';
     const STARTED = 'started';
     const COMPLETE = 'completed';
     const FAILED = 'failed';
+
+    /**
+     * Private constructor.
+     */
+    private function __construct()
+    {
+    }
 }
