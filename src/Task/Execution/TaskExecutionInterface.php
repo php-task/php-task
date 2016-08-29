@@ -76,11 +76,11 @@ interface TaskExecutionInterface
     public function setResult($result);
 
     /**
-     * @param \Exception $exception
+     * @param string $exception
      *
      * @return $this
      */
-    public function setException(\Exception $exception);
+    public function setException($exception);
 
     /**
      * @param $startTime

@@ -58,7 +58,7 @@ class TaskExecution implements TaskExecutionInterface
     protected $result;
 
     /**
-     * @var \Exception
+     * @var string
      */
     protected $exception;
 
@@ -217,7 +217,7 @@ class TaskExecution implements TaskExecutionInterface
     /**
      * {@inheritdoc}
      */
-    public function setException(\Exception $exception)
+    public function setException($exception)
     {
         $this->exception = $exception;
 

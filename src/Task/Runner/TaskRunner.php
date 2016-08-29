@@ -45,7 +45,7 @@ class TaskRunner implements TaskRunnerInterface
                 $execution->setStatus(TaskStatus::COMPLETE);
                 $execution->setResult($result);
             } catch (\Exception $ex) {
-                $execution->setException($ex);
+                $execution->setException($ex->__toString());
                 $execution->setStatus(TaskStatus::FAILED);
 
                 $execution->setEndTime(new \DateTime());

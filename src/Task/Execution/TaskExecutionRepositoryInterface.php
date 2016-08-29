@@ -28,4 +28,9 @@ interface TaskExecutionRepositoryInterface
     public function findAll($limit = null);
 
     public function save(TaskExecutionInterface $execution);
+
+    /**
+     * @return TaskExecutionInterface[]
+     */
+    public function findScheduled();
 }
