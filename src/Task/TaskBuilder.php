@@ -13,7 +13,6 @@ namespace Task;
 
 use Cron\CronExpression;
 
-
 /**
  * Builder for tasks.
  */

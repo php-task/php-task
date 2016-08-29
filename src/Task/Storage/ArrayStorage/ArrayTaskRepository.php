@@ -63,4 +63,12 @@ class ArrayTaskRepository implements TaskRepositoryInterface
             }
         );
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function clear()
+    {
+        return $this->taskCollection->clear();
+    }
 }

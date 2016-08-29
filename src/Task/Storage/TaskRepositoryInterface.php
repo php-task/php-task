@@ -40,4 +40,9 @@ interface TaskRepositoryInterface
      * @return TaskInterface[]
      */
     public function findEndBeforeNow();
+
+    /**
+     * Clear storage.
+     */
+    public function clear();
 }
