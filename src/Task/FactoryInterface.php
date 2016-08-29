@@ -12,7 +12,6 @@ namespace Task;
 
 use Task\Execution\TaskExecutionInterface;
 use Task\Schedule\Schedule;
-use Task\Scheduler\SchedulerInterface;
 
 /**
  * Interface for task builder factory.

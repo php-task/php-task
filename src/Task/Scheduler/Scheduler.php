@@ -10,8 +10,8 @@
 
 namespace Task\Scheduler;
 
+use Task\Execution\TaskExecutionRepositoryInterface;
 use Task\FactoryInterface;
-use Task\Storage\TaskExecutionRepositoryInterface;
 use Task\Storage\TaskRepositoryInterface;
 use Task\TaskInterface;
 use Task\TaskStatus;
@@ -45,7 +45,7 @@ class Scheduler implements SchedulerInterface
 
     public function createTask($handlerClass, $workload = null)
     {
-        return $this->factory->createTaskBuilder($this, $handlerClass, $workload);
+        return $this->factory->createTaskBuilder($handlerClass, $workload);
     }
 
     public function addTask(TaskInterface $task)

@@ -5,14 +5,13 @@ namespace Task;
 use Cron\CronExpression;
 
 /**
- * TODO introduce interface
+ * TODO introduce interface.
  */
 class TaskInterval
 {
-
     public static function once()
     {
-        return null;
+        return;
     }
 
     public static function hourly()

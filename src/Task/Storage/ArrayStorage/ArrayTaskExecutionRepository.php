@@ -5,9 +5,8 @@ namespace Task\Storage\ArrayStorage;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Task\Execution\TaskExecutionInterface;
-use Task\Storage\TaskExecutionRepositoryInterface;
+use Task\Execution\TaskExecutionRepositoryInterface;
 use Task\TaskInterface;
-use Task\TaskStatus;
 
 class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
 {
@@ -24,26 +23,12 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findScheduled()
-    {
-        $now = new \DateTime();
-
-        return $this->taskExecutionCollection->filter(
-            function (TaskExecutionInterface $execution) use ($now) {
-                return $execution->getStatus() === TaskStatus::PLANNED && $execution->getScheduleTime() < $now;
-            }
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function findByStartTime(TaskInterface $task, \DateTime $scheduleTime)
     {
         $filtered = $this->taskExecutionCollection->filter(
             function (TaskExecutionInterface $execution) use ($task, $scheduleTime) {
                 return $execution->getTask()->getUuid() === $task->getUuid()
-                    && $execution->getScheduleTime() === $scheduleTime;
+                && $execution->getScheduleTime() === $scheduleTime;
             }
         );
 
@@ -72,6 +57,15 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
      */
     public function add(TaskExecutionInterface $execution)
     {
-        // do nothing
+        $this->taskExecutionCollection->add($execution);
+    }
+
+    public function get($uuid)
+    {
+        return $this->taskExecutionCollection->filter(
+            function (TaskExecutionInterface $execution) use ($uuid) {
+                return $execution->getUuid() === $uuid;
+            }
+        )->first();
     }
 }

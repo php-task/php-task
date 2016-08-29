@@ -2,8 +2,9 @@
 
 namespace Task\Schedule;
 
-interface ScheduleRepositoryInterface
+interface ScheduleRepository
 {
     public function set(Schedule $schedule);
+
     public function get();
 }

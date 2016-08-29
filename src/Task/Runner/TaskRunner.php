@@ -2,8 +2,8 @@
 
 namespace Task\Runner;
 
+use Task\Execution\TaskExecutionRepositoryInterface;
 use Task\Handler\TaskHandlerFactoryInterface;
-use Task\Storage\TaskExecutionRepositoryInterface;
 use Task\TaskStatus;
 
 class TaskRunner implements TaskRunnerInterface

@@ -6,7 +6,7 @@ use Task\FactoryInterface;
 use Task\TaskBuilderInterface;
 
 /**
- * TODO introduce interface
+ * TODO introduce interface.
  */
 class ScheduleBuilder
 {

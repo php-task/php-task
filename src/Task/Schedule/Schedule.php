@@ -5,7 +5,7 @@ namespace Task\Schedule;
 use Task\TaskInterface;
 
 /**
- * TODO introduce interface
+ * TODO introduce interface.
  */
 class Schedule extends \ArrayIterator
 {

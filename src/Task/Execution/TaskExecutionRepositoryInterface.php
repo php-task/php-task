@@ -1,8 +1,7 @@
 <?php
 
-namespace Task\Storage;
+namespace Task\Execution;
 
-use Task\Execution\TaskExecutionInterface;
 use Task\TaskInterface;
 
 interface TaskExecutionRepositoryInterface
@@ -29,6 +28,4 @@ interface TaskExecutionRepositoryInterface
     public function findAll($limit = null);
 
     public function save(TaskExecutionInterface $execution);
-
-    public function add(TaskExecutionInterface$execution);
 }
