@@ -1,5 +1,10 @@
 # CHANGELOG
 
+* 0.2.1 (2016-03-30)
+    * HOTFIX      #-  Fixed return of task-builder
+    * HOTFIX      #16 Added sort-order to storage interface
+    * HOTFIX      #-  Fixed executions null variable after deserialize
+
 * 0.2.0 (2016-02-27)
     * ENHANCEMENT #7 Added task execution to hold information for one single try
     * FEATURE     #6 Added cron task  
