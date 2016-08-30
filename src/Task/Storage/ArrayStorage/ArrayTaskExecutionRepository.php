@@ -16,6 +16,7 @@ use Doctrine\Common\Collections\Collection;
 use Task\Execution\TaskExecutionInterface;
 use Task\Execution\TaskExecutionRepositoryInterface;
 use Task\TaskInterface;
+use Task\TaskStatus;
 
 /**
  * Storage task-execution in an array.
@@ -87,6 +88,12 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
      */
     public function findScheduled()
     {
-        // TODO: Implement findScheduled() method.
+        $dateTime = new \DateTime();
+
+        return $this->taskExecutionCollection->filter(
+            function (TaskExecutionInterface $execution) use ($dateTime) {
+                return $execution->getStatus() === TaskStatus::PLANNED && $execution->getScheduleTime() < $dateTime;
+            }
+        );
     }
 }
