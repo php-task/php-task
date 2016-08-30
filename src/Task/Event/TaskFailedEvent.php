@@ -1,6 +1,7 @@
 <?php
+
 /*
- * This file is part of PHP-Task library.
+ * This file is part of php-task library.
  *
  * (c) php-task
  *
@@ -14,8 +15,6 @@ use Task\TaskInterface;
 
 /**
  * Task failed Event will be triggered by the Scheduler when the run of given task fails.
- *
- * @author @wachterjohannes <johannes.wachter@massiveart.com>
  */
 class TaskFailedEvent extends TaskEvent
 {
@@ -24,6 +23,10 @@ class TaskFailedEvent extends TaskEvent
      */
     private $exception;
 
+    /**
+     * @param TaskInterface $task
+     * @param \Exception $exception
+     */
     public function __construct(TaskInterface $task, \Exception $exception)
     {
         parent::__construct($task);

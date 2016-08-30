@@ -1,6 +1,7 @@
 <?php
+
 /*
- * This file is part of PHP-Task library.
+ * This file is part of php-task library.
  *
  * (c) php-task
  *
@@ -11,47 +12,28 @@
 namespace Task;
 
 use Cron\CronExpression;
-use Task\FrequentTask\CronTask;
-use Task\FrequentTask\DailyTask;
-use Task\FrequentTask\HourlyTask;
-use Task\FrequentTask\MonthlyTask;
-use Task\FrequentTask\WeeklyTask;
-use Task\FrequentTask\YearlyTask;
 
 /**
  * Builder for tasks.
- *
- * @author @wachterjohannes <johannes.wachter@massiveart.com>
  */
 class TaskBuilder implements TaskBuilderInterface
 {
-    /**
-     * @var SchedulerInterface
-     */
-    private $scheduler;
-
     /**
      * @var TaskInterface
      */
     private $task;
 
-    public static function create(SchedulerInterface $scheduler, $taskName, $workload)
+    public function __construct(TaskInterface $task)
     {
-        return new self($scheduler, new Task($taskName, $workload));
-    }
-
-    private function __construct(SchedulerInterface $scheduler, TaskInterface $task)
-    {
-        $this->scheduler = $scheduler;
         $this->task = $task;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function hourly(\DateTime $start = null, \DateTime $end = null)
+    public function hourly(\DateTime $firstExecution = null, \DateTime $lastExecution = null)
     {
-        $this->task = new HourlyTask($this->task, $start ?: new \DateTime(), $end);
+        $this->task->setInterval(CronExpression::factory('@hourly'), $firstExecution, $lastExecution);
 
         return $this;
     }
@@ -59,9 +41,9 @@ class TaskBuilder implements TaskBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function daily(\DateTime $start = null, \DateTime $end = null)
+    public function daily(\DateTime $firstExecution = null, \DateTime $lastExecution = null)
     {
-        $this->task = new DailyTask($this->task, $start ?: new \DateTime(), $end);
+        $this->task->setInterval(CronExpression::factory('@daily'), $firstExecution, $lastExecution);
 
         return $this;
     }
@@ -69,9 +51,9 @@ class TaskBuilder implements TaskBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function weekly(\DateTime $start = null, \DateTime $end = null)
+    public function weekly(\DateTime $firstExecution = null, \DateTime $lastExecution = null)
     {
-        $this->task = new WeeklyTask($this->task, $start ?: new \DateTime(), $end);
+        $this->task->setInterval(CronExpression::factory('@weekly'), $firstExecution, $lastExecution);
 
         return $this;
     }
@@ -79,9 +61,9 @@ class TaskBuilder implements TaskBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function monthly(\DateTime $start = null, \DateTime $end = null)
+    public function monthly(\DateTime $firstExecution = null, \DateTime $lastExecution = null)
     {
-        $this->task = new MonthlyTask($this->task, $start ?: new \DateTime(), $end);
+        $this->task->setInterval(CronExpression::factory('@monthly'), $firstExecution, $lastExecution);
 
         return $this;
     }
@@ -89,10 +71,9 @@ class TaskBuilder implements TaskBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function yearly(\DateTime $start = null, \DateTime $end = null)
+    public function yearly(\DateTime $firstExecution = null, \DateTime $lastExecution = null)
     {
-        $this->task = new YearlyTask($this->task, $start ?: new \DateTime(), $end);
-        $this->setExecutionDate($this->task->getNextRunDateTime());
+        $this->task->setInterval(CronExpression::factory('@yearly'), $firstExecution, $lastExecution);
 
         return $this;
     }
@@ -100,9 +81,9 @@ class TaskBuilder implements TaskBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function cron($cronExpression, \DateTime $start = null, \DateTime $end = null)
+    public function cron($cronExpression, \DateTime $firstExecution = null, \DateTime $lastExecution = null)
     {
-        $this->task = new CronTask(CronExpression::factory($cronExpression), $this->task, $start, $end);
+        $this->task->setInterval(CronExpression::factory($cronExpression), $firstExecution, $lastExecution);
 
         return $this;
     }
@@ -110,38 +91,8 @@ class TaskBuilder implements TaskBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function setExecutionDate(\DateTime $executionDate)
+    public function getTask()
     {
-        $this->task->setExecutionDate($executionDate);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setKey($key)
-    {
-        $this->task->setKey($key);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function immediately()
-    {
-        $this->task->setExecutionDate(new \DateTime());
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function schedule()
-    {
-        return $this->scheduler->schedule($this->task);
+        return $this->task;
     }
 }

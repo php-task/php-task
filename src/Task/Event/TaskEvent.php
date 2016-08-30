@@ -1,6 +1,7 @@
 <?php
+
 /*
- * This file is part of PHP-Task library.
+ * This file is part of php-task library.
  *
  * (c) php-task
  *
@@ -15,8 +16,6 @@ use Task\TaskInterface;
 
 /**
  * Task Events are triggered by the Scheduler during scheduling and run process.
- *
- * @author @wachterjohannes <johannes.wachter@massiveart.com>
  */
 class TaskEvent extends Event
 {
@@ -25,6 +24,9 @@ class TaskEvent extends Event
      */
     private $task;
 
+    /**
+     * @param TaskInterface $task
+     */
     public function __construct(TaskInterface $task)
     {
         $this->task = $task;

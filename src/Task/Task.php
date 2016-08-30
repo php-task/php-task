@@ -1,6 +1,7 @@
 <?php
+
 /*
- * This file is part of PHP-Task library.
+ * This file is part of php-task library.
  *
  * (c) php-task
  *
@@ -10,63 +11,57 @@
 
 namespace Task;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use Cron\CronExpression;
 use Ramsey\Uuid\Uuid;
 
 /**
- * Task contains name and workload to run with a handler.
- *
- * @author @wachterjohannes <johannes.wachter@massiveart.com>
+ * Task information.
  */
 class Task implements TaskInterface
 {
     /**
      * @var string
      */
-    private $uuid;
+    protected $uuid;
 
     /**
      * @var string
      */
-    private $taskName;
-
-    /**
-     * @var string
-     */
-    private $key;
+    protected $handlerClass;
 
     /**
      * @var string|\Serializable
      */
-    private $workload;
+    protected $workload;
+
+    /**
+     * @var CronExpression
+     */
+    protected $interval;
 
     /**
      * @var \DateTime
      */
-    private $executionDate;
+    protected $firstExecution;
 
     /**
-     * @var bool
+     * @var \DateTime
      */
-    private $completed = false;
+    protected $lastExecution;
 
     /**
-     * @var string|\Serializable
+     * @param string $handlerClass
+     * @param string|null $workload
+     * @param string|null $uuid
      */
-    private $result;
-
-    /**
-     * @var TaskExecution[]
-     */
-    private $executions;
-
-    public function __construct($taskName, $workload, $uuid = null)
+    public function __construct($handlerClass, $workload = null, $uuid = null)
     {
         $this->uuid = $uuid ?: Uuid::uuid4()->toString();
-        $this->taskName = $taskName;
+        $this->handlerClass = $handlerClass;
         $this->workload = $workload;
-        $this->executionDate = new \DateTime();
-        $this->executions = new ArrayCollection();
+
+        $this->firstExecution = new \DateTime();
+        $this->lastExecution = new \DateTime();
     }
 
     /**
@@ -80,27 +75,9 @@ class Task implements TaskInterface
     /**
      * {@inheritdoc}
      */
-    public function getTaskName()
+    public function getHandlerClass()
     {
-        return $this->taskName;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getKey()
-    {
-        return $this->key;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setKey($key)
-    {
-        $this->key = $key;
-
-        return $this;
+        return $this->handlerClass;
     }
 
     /**
@@ -114,80 +91,37 @@ class Task implements TaskInterface
     /**
      * {@inheritdoc}
      */
-    public function isCompleted()
+    public function getInterval()
     {
-        return $this->completed;
+        return $this->interval;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setCompleted()
+    public function getFirstExecution()
     {
-        $this->completed = true;
+        return $this->firstExecution;
     }
 
     /**
      * {@inheritdoc}
-     */
-    public function getResult()
-    {
-        return $this->result;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setResult($result)
-    {
-        $this->result = $result;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getExecutionDate()
-    {
-        return $this->executionDate;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setExecutionDate(\DateTime $executionDate)
-    {
-        $this->executionDate = $executionDate;
-    }
-
-    /**
-     * @return TaskExecution[]
-     */
-    public function getExecutions()
-    {
-        return $this->executions;
-    }
-
-    /**
-     * @param TaskExecution $execution
-     */
-    public function addExecution(TaskExecution $execution)
-    {
-        if (!$this->executions) {
-            $this->executions = new ArrayCollection();
-        }
-
-        $this->executions[] = $execution;
-    }
-
-    /**
-     * @return TaskExecution
      */
     public function getLastExecution()
     {
-        if (!$this->executions) {
-            return;
-        }
+        return $this->lastExecution;
+    }
 
-        return $this->executions->last();
+    /**
+     * {@inheritdoc}
+     */
+    public function setInterval(
+        CronExpression $interval,
+        \DateTime $firstExecution = null,
+        \DateTime $lastExecution = null
+    ) {
+        $this->interval = $interval;
+        $this->firstExecution = $firstExecution ?: new \DateTime();
+        $this->lastExecution = $lastExecution;
     }
 }
