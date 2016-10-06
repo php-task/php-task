@@ -66,6 +66,8 @@ interface TaskInterface
      * @param CronExpression $interval
      * @param \DateTime $firstExecution null means for "now"
      * @param \DateTime $lastExecution null means forever
+     *
+     * @return $this
      */
     public function setInterval(CronExpression $interval, \DateTime $firstExecution = null, \DateTime $lastExecution = null);
 }

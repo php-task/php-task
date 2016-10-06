@@ -9,7 +9,9 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Task;
+namespace Task\Builder;
+
+use Task\TaskInterface;
 
 /**
  * Interface for task builder.

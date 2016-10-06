@@ -14,6 +14,7 @@ namespace Task\Storage\ArrayStorage;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Task\Storage\TaskRepositoryInterface;
+use Task\Task;
 use Task\TaskInterface;
 
 /**
@@ -27,19 +28,37 @@ class ArrayTaskRepository implements TaskRepositoryInterface
     private $taskCollection;
 
     /**
-     * @param TaskInterface[] $tasks
+     * @param Collection $tasks
      */
-    public function __construct(array $tasks = [])
+    public function __construct(Collection $tasks = null)
     {
-        $this->taskCollection = new ArrayCollection($tasks);
+        $this->taskCollection = $tasks ?: new ArrayCollection();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function store(TaskInterface $task)
+    public function create($handlerClass, $workload = null)
+    {
+        return new Task($handlerClass, $workload);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function persist(TaskInterface $task)
     {
         $this->taskCollection->add($task);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function flush()
+    {
+        return $this;
     }
 
     /**
@@ -57,18 +76,12 @@ class ArrayTaskRepository implements TaskRepositoryInterface
     {
         $now = new \DateTime();
 
-        return $this->taskCollection->filter(
+        return array_values(
+            $this->taskCollection->filter(
             function (TaskInterface $task) use ($now) {
                 return $task->getLastExecution() === null || $task->getLastExecution() > $now;
             }
+            )->toArray()
         );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function clear()
-    {
-        return $this->taskCollection->clear();
     }
 }

@@ -51,8 +51,8 @@ class Task implements TaskInterface
 
     /**
      * @param string $handlerClass
-     * @param string|null $workload
-     * @param string|null $uuid
+     * @param string|\Serializable $workload
+     * @param string $uuid
      */
     public function __construct($handlerClass, $workload = null, $uuid = null)
     {
@@ -123,5 +123,7 @@ class Task implements TaskInterface
         $this->interval = $interval;
         $this->firstExecution = $firstExecution ?: new \DateTime();
         $this->lastExecution = $lastExecution;
+
+        return $this;
     }
 }

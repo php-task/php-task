@@ -9,8 +9,10 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Task\Execution;
+namespace Task\Storage;
 
+use Doctrine\Common\Collections\Collection;
+use Task\Execution\TaskExecutionInterface;
 use Task\TaskInterface;
 
 /**
@@ -19,22 +21,30 @@ use Task\TaskInterface;
 interface TaskExecutionRepositoryInterface
 {
     /**
-     * Store task-execution.
+     * Create task-execution.
      *
-     * @param TaskExecutionInterface $execution
+     * @param TaskInterface $task
+     * @param \DateTime $scheduleTime
      *
-     * @return $this
+     * @return TaskExecutionInterface
      */
-    public function store(TaskExecutionInterface $execution);
+    public function create(TaskInterface $task, \DateTime $scheduleTime);
 
     /**
-     * Save task-execution.
+     * Persist task-execution.
      *
      * @param TaskExecutionInterface $execution
      *
      * @return $this
      */
-    public function save(TaskExecutionInterface $execution);
+    public function persist(TaskExecutionInterface $execution);
+
+    /**
+     * Flush storage.
+     *
+     * @return $this
+     */
+    public function flush();
 
     /**
      * Used to check whether a specific task has been scheduled at a specific time.
@@ -51,7 +61,7 @@ interface TaskExecutionRepositoryInterface
      *
      * @param int|null $limit
      *
-     * @return TaskExecutionInterface[]
+     * @return TaskExecutionInterface[]|Collection
      */
     public function findAll($limit = null);
 
@@ -60,7 +70,7 @@ interface TaskExecutionRepositoryInterface
      *
      * Scheduled-time in the past.
      *
-     * @return TaskExecutionInterface[]
+     * @return TaskExecutionInterface[]|Collection
      */
     public function findScheduled();
 }

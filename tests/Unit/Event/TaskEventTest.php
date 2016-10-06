@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of PHP-Task library.
  *
@@ -14,9 +15,7 @@ use Task\Event\TaskEvent;
 use Task\TaskInterface;
 
 /**
- * Test for class TaskEvent.
- *
- * @author Johannes Wachter <@wachterjohannes>
+ * Tests for class TaskEvent.
  */
 class TaskEventTest extends \PHPUnit_Framework_TestCase
 {

@@ -78,8 +78,8 @@ class TaskExecution implements TaskExecutionInterface
      * @param TaskInterface $task
      * @param $handlerClass
      * @param \DateTime $scheduleTime
-     * @param string|null $workload
-     * @param string|null $uuid
+     * @param string|\Serializable $workload
+     * @param string $uuid
      */
     public function __construct(
         TaskInterface $task,

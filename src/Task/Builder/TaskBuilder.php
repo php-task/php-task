@@ -9,9 +9,10 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Task;
+namespace Task\Builder;
 
 use Cron\CronExpression;
+use Task\TaskInterface;
 
 /**
  * Builder for tasks.

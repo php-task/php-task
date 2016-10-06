@@ -14,8 +14,8 @@ namespace Task\Runner;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Task\Event\Events;
 use Task\Event\TaskExecutionEvent;
-use Task\Execution\TaskExecutionRepositoryInterface;
 use Task\Handler\TaskHandlerFactoryInterface;
+use Task\Storage\TaskExecutionRepositoryInterface;
 use Task\TaskStatus;
 
 /**
@@ -26,7 +26,7 @@ class TaskRunner implements TaskRunnerInterface
     /**
      * @var TaskExecutionRepositoryInterface
      */
-    private $executionRepository;
+    private $taskExecutionRepository;
 
     /**
      * @var TaskHandlerFactoryInterface
@@ -48,7 +48,7 @@ class TaskRunner implements TaskRunnerInterface
         TaskHandlerFactoryInterface $taskHandlerFactory,
         EventDispatcherInterface $eventDispatcher
     ) {
-        $this->executionRepository = $executionRepository;
+        $this->taskExecutionRepository = $executionRepository;
         $this->taskHandlerFactory = $taskHandlerFactory;
         $this->eventDispatcher = $eventDispatcher;
     }
@@ -58,7 +58,7 @@ class TaskRunner implements TaskRunnerInterface
      */
     public function runTasks()
     {
-        $executions = $this->executionRepository->findScheduled();
+        $executions = $this->taskExecutionRepository->findScheduled();
 
         foreach ($executions as $execution) {
             $handler = $this->taskHandlerFactory->create($execution->getHandlerClass());
@@ -94,12 +94,12 @@ class TaskRunner implements TaskRunnerInterface
             $execution->setEndTime(new \DateTime());
             $execution->setDuration(microtime(true) - $start);
 
-            $this->executionRepository->save($execution);
-
             $this->eventDispatcher->dispatch(
                 Events::TASK_FINISHED,
                 new TaskExecutionEvent($execution->getTask(), $execution)
             );
         }
+
+        $this->taskExecutionRepository->flush();
     }
 }

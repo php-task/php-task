@@ -11,6 +11,7 @@
 
 namespace Task\Storage;
 
+use Doctrine\Common\Collections\Collection;
 use Task\TaskInterface;
 
 /**
@@ -19,30 +20,42 @@ use Task\TaskInterface;
 interface TaskRepositoryInterface
 {
     /**
-     * Store task.
+     * Create task.
+     *
+     * @param string $handlerClass
+     * @param string|\Serializable $workload
+     *
+     * @return TaskInterface
+     */
+    public function create($handlerClass, $workload = null);
+
+    /**
+     * Persist task.
      *
      * @param TaskInterface $task
      */
-    public function store(TaskInterface $task);
+    public function persist(TaskInterface $task);
+
+    /**
+     * Flush storage.
+     *
+     * @return $this
+     */
+    public function flush();
 
     /**
      * Returns all tasks.
      *
      * @param int|null $limit
      *
-     * @return TaskInterface[]
+     * @return TaskInterface[]|Collection
      */
     public function findAll($limit = null);
 
     /**
      * Used to find tasks which has end-date before now.
      *
-     * @return TaskInterface[]
+     * @return TaskInterface[]|Collection
      */
     public function findEndBeforeNow();
-
-    /**
-     * Clear storage.
-     */
-    public function clear();
 }
