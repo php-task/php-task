@@ -11,7 +11,6 @@
 
 namespace Task\Storage;
 
-use Doctrine\Common\Collections\Collection;
 use Task\Execution\TaskExecutionInterface;
 use Task\TaskInterface;
 
@@ -61,7 +60,7 @@ interface TaskExecutionRepositoryInterface
      *
      * @param int|null $limit
      *
-     * @return TaskExecutionInterface[]|Collection
+     * @return TaskExecutionInterface[]
      */
     public function findAll($limit = null);
 
@@ -70,7 +69,7 @@ interface TaskExecutionRepositoryInterface
      *
      * Scheduled-time in the past.
      *
-     * @return TaskExecutionInterface[]|Collection
+     * @return TaskExecutionInterface[]
      */
     public function findScheduled();
 }

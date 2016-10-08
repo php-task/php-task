@@ -11,7 +11,6 @@
 
 namespace Task\Storage;
 
-use Doctrine\Common\Collections\Collection;
 use Task\TaskInterface;
 
 /**
@@ -48,14 +47,14 @@ interface TaskRepositoryInterface
      *
      * @param int|null $limit
      *
-     * @return TaskInterface[]|Collection
+     * @return TaskInterface[]
      */
     public function findAll($limit = null);
 
     /**
      * Used to find tasks which has end-date before now.
      *
-     * @return TaskInterface[]|Collection
+     * @return TaskInterface[]
      */
     public function findEndBeforeNow();
 }
