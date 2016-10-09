@@ -85,9 +85,9 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findAll($limit = null)
+    public function findAll($page = 1, $pageSize = null)
     {
-        return $this->taskExecutionCollection->slice(0, $limit);
+        return array_values($this->taskExecutionCollection->slice(($page - 1) * $pageSize, $pageSize));
     }
 
     /**

@@ -67,7 +67,7 @@ class ArrayTaskRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($tasks[2], $result[2]);
     }
 
-    public function testFindAllLimit()
+    public function testFindAllPaginated()
     {
         $tasks = [
             new Task(\stdClass::class, 'Test 1'),
@@ -77,11 +77,16 @@ class ArrayTaskRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $repository = new ArrayTaskRepository(new ArrayCollection($tasks));
 
-        $result = $repository->findAll(2);
+        $result = $repository->findAll(1, 2);
         $this->assertCount(2, $result);
 
         $this->assertEquals($tasks[0], $result[0]);
         $this->assertEquals($tasks[1], $result[1]);
+
+        $result = $repository->findAll(2, 2);
+        $this->assertCount(1, $result);
+
+        $this->assertEquals($tasks[2], $result[0]);
     }
 
     public function testFindEndBeforeNow()

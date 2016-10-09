@@ -58,11 +58,12 @@ interface TaskExecutionRepositoryInterface
     /**
      * Returns all task-executions.
      *
-     * @param int|null $limit
+     * @param int $page
+     * @param int $pageSize
      *
      * @return TaskExecutionInterface[]
      */
-    public function findAll($limit = null);
+    public function findAll($page = 1, $pageSize = null);
 
     /**
      * Returns scheduled task-executions.

@@ -45,11 +45,12 @@ interface TaskRepositoryInterface
     /**
      * Returns all tasks.
      *
-     * @param int|null $limit
+     * @param int $page
+     * @param int $pageSize
      *
      * @return TaskInterface[]
      */
-    public function findAll($limit = null);
+    public function findAll($page = 1, $pageSize = null);
 
     /**
      * Used to find tasks which has end-date before now.
