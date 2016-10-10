@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Unit\Scheduler;
+namespace Task\Tests\Unit\Scheduler;
 
 use Cron\CronExpression;
 use Prophecy\Argument;

@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Unit\Builder;
+namespace Task\Tests\Unit\Builder;
 
 use Task\Builder\TaskBuilderFactory;
 use Task\Builder\TaskBuilderInterface;

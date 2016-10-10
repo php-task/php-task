@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Unit\Event;
+namespace Task\Tests\Unit\Event;
 
 use Task\Event\TaskEvent;
 use Task\TaskInterface;

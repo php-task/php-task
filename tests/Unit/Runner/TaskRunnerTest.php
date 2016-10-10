@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Unit\Runner;
+namespace Task\Tests\Unit\Runner;
 
 use Prophecy\Argument;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

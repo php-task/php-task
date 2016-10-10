@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Unit\Execution;
+namespace Task\Tests\Unit\Execution;
 
 use Task\Execution\TaskExecution;
 use Task\Task;

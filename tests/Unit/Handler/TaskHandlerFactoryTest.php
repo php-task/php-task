@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Unit\Handler;
+namespace Task\Tests\Unit\Handler;
 
 use Task\Handler\TaskHandlerFactory;
 use Task\Handler\TaskHandlerInterface;
