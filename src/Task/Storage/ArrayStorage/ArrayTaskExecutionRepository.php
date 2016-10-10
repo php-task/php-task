@@ -71,7 +71,8 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
         $filtered = $this->taskExecutionCollection->filter(
             function (TaskExecutionInterface $execution) use ($task, $scheduleTime) {
                 return $execution->getTask()->getUuid() === $task->getUuid()
-                && $execution->getScheduleTime() === $scheduleTime;
+                    && $execution->getScheduleTime() === $scheduleTime
+                    && $execution->getStatus() === TaskStatus::PLANNED;
             }
         );
 

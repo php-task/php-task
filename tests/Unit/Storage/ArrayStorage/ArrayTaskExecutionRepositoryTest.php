@@ -59,6 +59,10 @@ class ArrayTaskExecutionRepositoryTest extends \PHPUnit_Framework_TestCase
             new TaskExecution($task, \stdClass::class, new \DateTime('1 hour ago'), 'Test 1'),
         ];
 
+        foreach ($executions as $execution) {
+            $execution->setStatus(TaskStatus::PLANNED);
+        }
+
         $repository = new ArrayTaskExecutionRepository(new ArrayCollection($executions));
 
         $this->assertEquals($executions[1], $repository->findByStartTime($task, $executions[1]->getScheduleTime()));

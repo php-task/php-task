@@ -94,7 +94,6 @@ class TaskScheduler implements TaskSchedulerInterface
     public function scheduleTasks()
     {
         $tasks = $this->taskRepository->findEndBeforeNow();
-
         foreach ($tasks as $task) {
             $this->scheduleTask($task);
         }
