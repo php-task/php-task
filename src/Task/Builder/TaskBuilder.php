@@ -92,6 +92,16 @@ class TaskBuilder implements TaskBuilderInterface
     /**
      * {@inheritdoc}
      */
+    public function executeAt(\DateTime $executionDate)
+    {
+        $this->task->setFirstExecution($executionDate);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getTask()
     {
         return $this->task;

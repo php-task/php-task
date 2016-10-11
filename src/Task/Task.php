@@ -107,6 +107,17 @@ class Task implements TaskInterface
     /**
      * {@inheritdoc}
      */
+    public function setFirstExecution(\DateTime $firstExecution)
+    {
+        $this->firstExecution = $firstExecution;
+        $this->lastExecution = null;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getLastExecution()
     {
         return $this->lastExecution;

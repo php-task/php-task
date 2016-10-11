@@ -98,6 +98,17 @@ class TaskBuilderTest extends \PHPUnit_Framework_TestCase
         $task->setInterval(CronExpression::factory('0 * * * *'), $firstExecution, $lastExecution)->shouldBeCalled();
     }
 
+    public function testExecuteAt()
+    {
+        $task = $this->prophesize(TaskInterface::class);
+        $taskBuilder = new TaskBuilder($task->reveal());
+
+        $executionDate = new \DateTime('+1 day');
+        $this->assertEquals($taskBuilder, $taskBuilder->executeAt($executionDate));
+
+        $task->setFirstExecution($executionDate)->shouldBeCalled();
+    }
+
     public function testGetTask()
     {
         $task = $this->prophesize(TaskInterface::class);

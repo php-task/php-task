@@ -54,6 +54,15 @@ interface TaskInterface
     public function getFirstExecution();
 
     /**
+     * Set first-execution.
+     *
+     * @param \DateTime $firstExecution
+     *
+     * @return $this
+     */
+    public function setFirstExecution(\DateTime $firstExecution);
+
+    /**
      * Returns first-execution date-time.
      *
      * @return \DateTime
