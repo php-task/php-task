@@ -9,7 +9,9 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Task;
+namespace Task\Builder;
+
+use Task\TaskInterface;
 
 /**
  * Interface for task builder.
@@ -76,6 +78,15 @@ interface TaskBuilderInterface
      * @return $this
      */
     public function cron($cronExpression, \DateTime $start = null, \DateTime $end = null);
+
+    /**
+     * Set execution-date.
+     *
+     * @param \DateTime $executionDate
+     *
+     * @return $this
+     */
+    public function executeAt(\DateTime $executionDate);
 
     /**
      * Schedules task with given scheduler.

@@ -13,8 +13,9 @@ namespace Task\Storage\ArrayStorage;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Task\Execution\TaskExecution;
 use Task\Execution\TaskExecutionInterface;
-use Task\Execution\TaskExecutionRepositoryInterface;
+use Task\Storage\TaskExecutionRepositoryInterface;
 use Task\TaskInterface;
 use Task\TaskStatus;
 
@@ -29,17 +30,25 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
     private $taskExecutionCollection;
 
     /**
-     * @param array $taskExecutions
+     * @param Collection $taskExecutions
      */
-    public function __construct(array $taskExecutions = [])
+    public function __construct(Collection $taskExecutions = null)
     {
-        $this->taskExecutionCollection = new ArrayCollection($taskExecutions);
+        $this->taskExecutionCollection = $taskExecutions ?: new ArrayCollection();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function store(TaskExecutionInterface $execution)
+    public function create(TaskInterface $task, \DateTime $scheduleTime)
+    {
+        return new TaskExecution($task, $task->getHandlerClass(), $scheduleTime, $task->getWorkload());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function persist(TaskExecutionInterface $execution)
     {
         $this->taskExecutionCollection->add($execution);
 
@@ -49,10 +58,8 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function save(TaskExecutionInterface $execution)
+    public function flush()
     {
-        $this->taskExecutionCollection->add($execution);
-
         return $this;
     }
 
@@ -64,7 +71,8 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
         $filtered = $this->taskExecutionCollection->filter(
             function (TaskExecutionInterface $execution) use ($task, $scheduleTime) {
                 return $execution->getTask()->getUuid() === $task->getUuid()
-                && $execution->getScheduleTime() === $scheduleTime;
+                    && $execution->getScheduleTime() === $scheduleTime
+                    && $execution->getStatus() === TaskStatus::PLANNED;
             }
         );
 
@@ -78,9 +86,9 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findAll($limit = null)
+    public function findAll($page = 1, $pageSize = null)
     {
-        return $this->taskExecutionCollection->slice(0, $limit);
+        return array_values($this->taskExecutionCollection->slice(($page - 1) * $pageSize, $pageSize));
     }
 
     /**

@@ -9,9 +9,10 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Task;
+namespace Task\Builder;
 
 use Cron\CronExpression;
+use Task\TaskInterface;
 
 /**
  * Builder for tasks.
@@ -84,6 +85,16 @@ class TaskBuilder implements TaskBuilderInterface
     public function cron($cronExpression, \DateTime $firstExecution = null, \DateTime $lastExecution = null)
     {
         $this->task->setInterval(CronExpression::factory($cronExpression), $firstExecution, $lastExecution);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function executeAt(\DateTime $executionDate)
+    {
+        $this->task->setFirstExecution($executionDate);
 
         return $this;
     }

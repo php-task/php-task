@@ -9,8 +9,9 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Task\Execution;
+namespace Task\Storage;
 
+use Task\Execution\TaskExecutionInterface;
 use Task\TaskInterface;
 
 /**
@@ -19,22 +20,30 @@ use Task\TaskInterface;
 interface TaskExecutionRepositoryInterface
 {
     /**
-     * Store task-execution.
+     * Create task-execution.
      *
-     * @param TaskExecutionInterface $execution
+     * @param TaskInterface $task
+     * @param \DateTime $scheduleTime
      *
-     * @return $this
+     * @return TaskExecutionInterface
      */
-    public function store(TaskExecutionInterface $execution);
+    public function create(TaskInterface $task, \DateTime $scheduleTime);
 
     /**
-     * Save task-execution.
+     * Persist task-execution.
      *
      * @param TaskExecutionInterface $execution
      *
      * @return $this
      */
-    public function save(TaskExecutionInterface $execution);
+    public function persist(TaskExecutionInterface $execution);
+
+    /**
+     * Flush storage.
+     *
+     * @return $this
+     */
+    public function flush();
 
     /**
      * Used to check whether a specific task has been scheduled at a specific time.
@@ -49,11 +58,12 @@ interface TaskExecutionRepositoryInterface
     /**
      * Returns all task-executions.
      *
-     * @param int|null $limit
+     * @param int $page
+     * @param int $pageSize
      *
      * @return TaskExecutionInterface[]
      */
-    public function findAll($limit = null);
+    public function findAll($page = 1, $pageSize = null);
 
     /**
      * Returns scheduled task-executions.

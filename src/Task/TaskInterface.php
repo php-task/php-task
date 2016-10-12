@@ -54,6 +54,15 @@ interface TaskInterface
     public function getFirstExecution();
 
     /**
+     * Set first-execution.
+     *
+     * @param \DateTime $firstExecution
+     *
+     * @return $this
+     */
+    public function setFirstExecution(\DateTime $firstExecution);
+
+    /**
      * Returns first-execution date-time.
      *
      * @return \DateTime
@@ -66,6 +75,8 @@ interface TaskInterface
      * @param CronExpression $interval
      * @param \DateTime $firstExecution null means for "now"
      * @param \DateTime $lastExecution null means forever
+     *
+     * @return $this
      */
     public function setInterval(CronExpression $interval, \DateTime $firstExecution = null, \DateTime $lastExecution = null);
 }

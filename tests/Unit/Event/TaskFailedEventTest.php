@@ -8,15 +8,13 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Unit\Event;
+namespace Task\Tests\Unit\Event;
 
 use Task\Event\TaskFailedEvent;
 use Task\TaskInterface;
 
 /**
- * Test for class TaskFailedEvent.
- *
- * @author Johannes Wachter <@wachterjohannes>
+ * Tests for class TaskFailedEvent.
  */
 class TaskFailedEventTest extends \PHPUnit_Framework_TestCase
 {

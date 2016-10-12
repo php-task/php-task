@@ -11,13 +11,13 @@
 
 namespace Task\Scheduler;
 
-use Task\TaskBuilderInterface;
+use Task\Builder\TaskBuilderInterface;
 use Task\TaskInterface;
 
 /**
  * Interface for task-scheduler.
  */
-interface SchedulerInterface
+interface TaskSchedulerInterface
 {
     /**
      * Returns new task-builder.
