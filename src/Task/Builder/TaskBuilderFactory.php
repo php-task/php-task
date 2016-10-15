@@ -11,6 +11,7 @@
 
 namespace Task\Builder;
 
+use Task\Scheduler\TaskSchedulerInterface;
 use Task\TaskInterface;
 
 /**
@@ -21,8 +22,8 @@ class TaskBuilderFactory implements TaskBuilderFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function createTaskBuilder(TaskInterface $task)
+    public function createTaskBuilder(TaskInterface $task, TaskSchedulerInterface $taskScheduler)
     {
-        return new TaskBuilder($task);
+        return new TaskBuilder($task, $taskScheduler);
     }
 }

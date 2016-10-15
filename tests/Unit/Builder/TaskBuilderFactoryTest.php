@@ -13,6 +13,7 @@ namespace Task\Tests\Unit\Builder;
 
 use Task\Builder\TaskBuilderFactory;
 use Task\Builder\TaskBuilderInterface;
+use Task\Scheduler\TaskSchedulerInterface;
 use Task\TaskInterface;
 
 /**
@@ -23,9 +24,13 @@ class TaskBuilderFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreate()
     {
         $task = $this->prophesize(TaskInterface::class);
+        $taskScheduler = $this->prophesize(TaskSchedulerInterface::class);
 
         $factory = new TaskBuilderFactory();
 
-        $this->assertInstanceOf(TaskBuilderInterface::class, $factory->createTaskBuilder($task->reveal()));
+        $this->assertInstanceOf(
+            TaskBuilderInterface::class,
+            $factory->createTaskBuilder($task->reveal(), $taskScheduler->reveal())
+        );
     }
 }

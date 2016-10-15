@@ -13,6 +13,7 @@ namespace Task\Tests\Unit\Builder;
 
 use Cron\CronExpression;
 use Task\Builder\TaskBuilder;
+use Task\Scheduler\TaskSchedulerInterface;
 use Task\TaskInterface;
 
 /**
@@ -23,7 +24,8 @@ class TaskBuilderTest extends \PHPUnit_Framework_TestCase
     public function testHourly()
     {
         $task = $this->prophesize(TaskInterface::class);
-        $taskBuilder = new TaskBuilder($task->reveal());
+        $taskScheduler = $this->prophesize(TaskSchedulerInterface::class);
+        $taskBuilder = new TaskBuilder($task->reveal(), $taskScheduler->reveal());
 
         $firstExecution = new \DateTime('-1 day');
         $lastExecution = new \DateTime('+1 day');
@@ -36,7 +38,8 @@ class TaskBuilderTest extends \PHPUnit_Framework_TestCase
     public function testDaily()
     {
         $task = $this->prophesize(TaskInterface::class);
-        $taskBuilder = new TaskBuilder($task->reveal());
+        $taskScheduler = $this->prophesize(TaskSchedulerInterface::class);
+        $taskBuilder = new TaskBuilder($task->reveal(), $taskScheduler->reveal());
 
         $firstExecution = new \DateTime('-1 day');
         $lastExecution = new \DateTime('+1 day');
@@ -49,7 +52,8 @@ class TaskBuilderTest extends \PHPUnit_Framework_TestCase
     public function testWeekly()
     {
         $task = $this->prophesize(TaskInterface::class);
-        $taskBuilder = new TaskBuilder($task->reveal());
+        $taskScheduler = $this->prophesize(TaskSchedulerInterface::class);
+        $taskBuilder = new TaskBuilder($task->reveal(), $taskScheduler->reveal());
 
         $firstExecution = new \DateTime('-1 day');
         $lastExecution = new \DateTime('+1 day');
@@ -62,7 +66,8 @@ class TaskBuilderTest extends \PHPUnit_Framework_TestCase
     public function testMonthly()
     {
         $task = $this->prophesize(TaskInterface::class);
-        $taskBuilder = new TaskBuilder($task->reveal());
+        $taskScheduler = $this->prophesize(TaskSchedulerInterface::class);
+        $taskBuilder = new TaskBuilder($task->reveal(), $taskScheduler->reveal());
 
         $firstExecution = new \DateTime('-1 day');
         $lastExecution = new \DateTime('+1 day');
@@ -75,7 +80,8 @@ class TaskBuilderTest extends \PHPUnit_Framework_TestCase
     public function testYearly()
     {
         $task = $this->prophesize(TaskInterface::class);
-        $taskBuilder = new TaskBuilder($task->reveal());
+        $taskScheduler = $this->prophesize(TaskSchedulerInterface::class);
+        $taskBuilder = new TaskBuilder($task->reveal(), $taskScheduler->reveal());
 
         $firstExecution = new \DateTime('-1 day');
         $lastExecution = new \DateTime('+1 day');
@@ -88,7 +94,8 @@ class TaskBuilderTest extends \PHPUnit_Framework_TestCase
     public function testCron()
     {
         $task = $this->prophesize(TaskInterface::class);
-        $taskBuilder = new TaskBuilder($task->reveal());
+        $taskScheduler = $this->prophesize(TaskSchedulerInterface::class);
+        $taskBuilder = new TaskBuilder($task->reveal(), $taskScheduler->reveal());
 
         $firstExecution = new \DateTime('-1 day');
         $lastExecution = new \DateTime('+1 day');
@@ -101,7 +108,8 @@ class TaskBuilderTest extends \PHPUnit_Framework_TestCase
     public function testExecuteAt()
     {
         $task = $this->prophesize(TaskInterface::class);
-        $taskBuilder = new TaskBuilder($task->reveal());
+        $taskScheduler = $this->prophesize(TaskSchedulerInterface::class);
+        $taskBuilder = new TaskBuilder($task->reveal(), $taskScheduler->reveal());
 
         $executionDate = new \DateTime('+1 day');
         $this->assertEquals($taskBuilder, $taskBuilder->executeAt($executionDate));
@@ -109,11 +117,14 @@ class TaskBuilderTest extends \PHPUnit_Framework_TestCase
         $task->setFirstExecution($executionDate)->shouldBeCalled();
     }
 
-    public function testGetTask()
+    public function testSchedule()
     {
         $task = $this->prophesize(TaskInterface::class);
-        $taskBuilder = new TaskBuilder($task->reveal());
+        $taskScheduler = $this->prophesize(TaskSchedulerInterface::class);
+        $taskBuilder = new TaskBuilder($task->reveal(), $taskScheduler->reveal());
 
-        $this->assertEquals($task->reveal(), $taskBuilder->getTask());
+        $this->assertEquals($task->reveal(), $taskBuilder->schedule());
+
+        $taskScheduler->addTask($task->reveal())->shouldBeCalled();
     }
 }
