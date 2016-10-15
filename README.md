@@ -21,7 +21,7 @@ and many features more.
 ## Installation
 
 ```bash
-composer require php-task/php-task @dev
+composer require php-task/php-task 1.0.x-dev
 ```
 
 ## Contribution
