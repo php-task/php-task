@@ -11,6 +11,7 @@
 
 namespace Task\Builder;
 
+use Task\Scheduler\TaskSchedulerInterface;
 use Task\TaskInterface;
 
 /**
@@ -22,8 +23,9 @@ interface TaskBuilderFactoryInterface
      * Returns new task-builder.
      *
      * @param TaskInterface $task
+     * @param TaskSchedulerInterface $taskScheduler
      *
      * @return TaskBuilderInterface
      */
-    public function createTaskBuilder(TaskInterface $task);
+    public function createTaskBuilder(TaskInterface $task, TaskSchedulerInterface $taskScheduler);
 }

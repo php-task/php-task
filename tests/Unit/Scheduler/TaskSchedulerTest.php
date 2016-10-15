@@ -80,7 +80,7 @@ class TaskSchedulerTest extends \PHPUnit_Framework_TestCase
         $workload = 'Test 1';
         $taskBuilder = $this->prophesize(TaskBuilderInterface::class);
         $this->taskRepository->create(TestHandler::class, $workload)->willReturn($task->reveal());
-        $this->factory->createTaskBuilder($task->reveal())->willReturn($taskBuilder->reveal());
+        $this->factory->createTaskBuilder($task->reveal(), $this->taskScheduler)->willReturn($taskBuilder->reveal());
 
         $result = $this->taskScheduler->createTask(TestHandler::class, $workload);
         $this->assertEquals($taskBuilder->reveal(), $result);

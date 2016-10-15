@@ -12,6 +12,7 @@
 namespace Task\Builder;
 
 use Cron\CronExpression;
+use Task\Scheduler\TaskSchedulerInterface;
 use Task\TaskInterface;
 
 /**
@@ -24,9 +25,19 @@ class TaskBuilder implements TaskBuilderInterface
      */
     private $task;
 
-    public function __construct(TaskInterface $task)
+    /**
+     * @var TaskSchedulerInterface
+     */
+    private $taskScheduler;
+
+    /**
+     * @param TaskInterface $task
+     * @param TaskSchedulerInterface $taskScheduler
+     */
+    public function __construct(TaskInterface $task, TaskSchedulerInterface $taskScheduler)
     {
         $this->task = $task;
+        $this->taskScheduler = $taskScheduler;
     }
 
     /**
@@ -102,8 +113,10 @@ class TaskBuilder implements TaskBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function getTask()
+    public function schedule()
     {
+        $this->taskScheduler->addTask($this->task);
+
         return $this->task;
     }
 }

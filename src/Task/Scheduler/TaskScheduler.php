@@ -69,7 +69,7 @@ class TaskScheduler implements TaskSchedulerInterface
      */
     public function createTask($handlerClass, $workload = null)
     {
-        return $this->factory->createTaskBuilder($this->taskRepository->create($handlerClass, $workload));
+        return $this->factory->createTaskBuilder($this->taskRepository->create($handlerClass, $workload), $this);
     }
 
     /**

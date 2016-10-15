@@ -89,9 +89,9 @@ interface TaskBuilderInterface
     public function executeAt(\DateTime $executionDate);
 
     /**
-     * Schedules task with given scheduler.
+     * Schedules built task and returns it.
      *
      * @return TaskInterface
      */
-    public function getTask();
+    public function schedule();
 }
