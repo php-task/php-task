@@ -1,5 +1,23 @@
 # Change Log
 
+## [0.3.0](https://github.com/php-task/php-task/tree/0.3.0) (2016-10-15)
+[Full Changelog](https://github.com/php-task/php-task/compare/0.2.1...0.3.0)
+
+**Closed issues:**
+
+- Reorganize architecture [\#14](https://github.com/php-task/php-task/issues/14)
+- Use FQCN to assign tasks to handlers [\#13](https://github.com/php-task/php-task/issues/13)
+- Use more descriptive class names [\#12](https://github.com/php-task/php-task/issues/12)
+- Rename "frequent" task to "recurring" task [\#11](https://github.com/php-task/php-task/issues/11)
+- Combine task and frequent task and remove the daily... tasks [\#9](https://github.com/php-task/php-task/issues/9)
+- Move is-completed and result into execution [\#8](https://github.com/php-task/php-task/issues/8)
+
+**Merged pull requests:**
+
+- Reintroduce schedule function in task-builder [\#18](https://github.com/php-task/php-task/pull/18) ([wachterjohannes](https://github.com/wachterjohannes))
+- Added unit-tests [\#17](https://github.com/php-task/php-task/pull/17) ([wachterjohannes](https://github.com/wachterjohannes))
+- Improved architecture of library [\#15](https://github.com/php-task/php-task/pull/15) ([wachterjohannes](https://github.com/wachterjohannes))
+
 ## [0.2.1](https://github.com/php-task/php-task/tree/0.2.1) (2016-03-30)
 [Full Changelog](https://github.com/php-task/php-task/compare/0.2.0...0.2.1)
 
