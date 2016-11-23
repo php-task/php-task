@@ -69,6 +69,16 @@ class ArrayTaskRepository implements TaskRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function remove(TaskInterface $task)
+    {
+        $this->taskCollection->removeElement($task);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function flush()
     {
         return $this;

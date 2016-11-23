@@ -39,6 +39,15 @@ interface TaskExecutionRepositoryInterface
     public function persist(TaskExecutionInterface $execution);
 
     /**
+     * Remove task-execution.
+     *
+     * @param TaskExecutionInterface $execution
+     *
+     * @return $this
+     */
+    public function remove(TaskExecutionInterface $execution);
+
+    /**
      * Flush storage.
      *
      * @return $this
@@ -54,6 +63,15 @@ interface TaskExecutionRepositoryInterface
      * @return TaskExecutionInterface
      */
     public function findByStartTime(TaskInterface $task, \DateTime $scheduleTime);
+
+    /**
+     * Find executions of given task.
+     *
+     * @param TaskInterface $task
+     *
+     * @return TaskExecutionInterface[]
+     */
+    public function findByTask(TaskInterface $task);
 
     /**
      * Returns all task-executions.

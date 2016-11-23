@@ -65,6 +65,21 @@ class ArrayTaskRepositoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testRemove()
+    {
+        $collection = $this->prophesize(Collection::class);
+        $repository = new ArrayTaskRepository($collection->reveal());
+
+        $task = $this->prophesize(TaskInterface::class);
+
+        $collection->removeElement($task->reveal())->shouldBeCalled();
+
+        $this->assertEquals(
+            $repository,
+            $repository->remove($task->reveal())
+        );
+    }
+
     public function testFlush()
     {
         $collection = $this->prophesize(Collection::class);

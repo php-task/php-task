@@ -45,6 +45,13 @@ interface TaskRepositoryInterface
     public function persist(TaskInterface $task);
 
     /**
+     * Persist task.
+     *
+     * @param TaskInterface $task
+     */
+    public function remove(TaskInterface $task);
+
+    /**
      * Flush storage.
      *
      * @return $this

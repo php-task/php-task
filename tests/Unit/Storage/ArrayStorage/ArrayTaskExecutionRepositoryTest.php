@@ -40,6 +40,21 @@ class ArrayTaskExecutionRepositoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testRemove()
+    {
+        $taskExecutionCollection = $this->prophesize(Collection::class);
+        $taskExecutionRepository = new ArrayTaskExecutionRepository($taskExecutionCollection->reveal());
+
+        $execution = $this->prophesize(TaskExecutionInterface::class);
+
+        $taskExecutionCollection->removeElement($execution->reveal())->shouldBeCalled();
+
+        $this->assertEquals(
+            $taskExecutionRepository,
+            $taskExecutionRepository->remove($execution->reveal())
+        );
+    }
+
     public function testFlush()
     {
         $taskExecutionCollection = $this->prophesize(Collection::class);
@@ -66,6 +81,22 @@ class ArrayTaskExecutionRepositoryTest extends \PHPUnit_Framework_TestCase
         $repository = new ArrayTaskExecutionRepository(new ArrayCollection($executions));
 
         $this->assertEquals($executions[1], $repository->findByStartTime($task, $executions[1]->getScheduleTime()));
+    }
+
+    public function testFindByTask()
+    {
+        $task1 = new Task(\stdClass::class, 'Test 1', '123-123-123');
+        $task2 = new Task(\stdClass::class, 'Test 1');
+        $executions = [
+            new TaskExecution($task1, \stdClass::class, new \DateTime('+1 day'), 'Test 1'),
+            new TaskExecution($task2, \stdClass::class, new \DateTime('1 day ago'), 'Test 1'),
+            new TaskExecution($task1, \stdClass::class, new \DateTime('1 hour ago'), 'Test 1'),
+        ];
+
+        $repository = new ArrayTaskExecutionRepository(new ArrayCollection($executions));
+
+        $this->assertEquals([$executions[0], $executions[2]], $repository->findByTask($task1));
+        $this->assertEquals([$executions[1]], $repository->findByTask($task2));
     }
 
     public function testFindByStartTimeNoResult()
