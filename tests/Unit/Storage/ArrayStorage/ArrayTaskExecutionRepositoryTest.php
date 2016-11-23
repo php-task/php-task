@@ -40,6 +40,21 @@ class ArrayTaskExecutionRepositoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testRemove()
+    {
+        $taskExecutionCollection = $this->prophesize(Collection::class);
+        $taskExecutionRepository = new ArrayTaskExecutionRepository($taskExecutionCollection->reveal());
+
+        $execution = $this->prophesize(TaskExecutionInterface::class);
+
+        $taskExecutionCollection->removeElement($execution->reveal())->shouldBeCalled();
+
+        $this->assertEquals(
+            $taskExecutionRepository,
+            $taskExecutionRepository->remove($execution->reveal())
+        );
+    }
+
     public function testFlush()
     {
         $taskExecutionCollection = $this->prophesize(Collection::class);
@@ -68,7 +83,7 @@ class ArrayTaskExecutionRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($executions[1], $repository->findByStartTime($task, $executions[1]->getScheduleTime()));
     }
 
-    public function test()
+    public function testFindByTask()
     {
         $task1 = new Task(\stdClass::class, 'Test 1', '123-123-123');
         $task2 = new Task(\stdClass::class, 'Test 1');

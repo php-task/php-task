@@ -58,6 +58,16 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function remove(TaskExecutionInterface $execution)
+    {
+        $this->taskExecutionCollection->removeElement($execution);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function flush()
     {
         return $this;
@@ -88,11 +98,11 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
      */
     public function findByTask(TaskInterface $task)
     {
-        return $this->taskExecutionCollection->filter(
+        return array_values($this->taskExecutionCollection->filter(
             function (TaskExecutionInterface $execution) use ($task) {
                 return $execution->getTask()->getUuid() === $task->getUuid();
             }
-        );
+        )->toArray());
     }
 
     /**

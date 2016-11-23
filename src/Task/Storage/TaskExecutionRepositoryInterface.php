@@ -39,6 +39,15 @@ interface TaskExecutionRepositoryInterface
     public function persist(TaskExecutionInterface $execution);
 
     /**
+     * Remove task-execution.
+     *
+     * @param TaskExecutionInterface $execution
+     *
+     * @return $this
+     */
+    public function remove(TaskExecutionInterface $execution);
+
+    /**
      * Flush storage.
      *
      * @return $this
