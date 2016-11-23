@@ -56,6 +56,15 @@ interface TaskExecutionRepositoryInterface
     public function findByStartTime(TaskInterface $task, \DateTime $scheduleTime);
 
     /**
+     * Find executions of given task.
+     *
+     * @param TaskInterface $task
+     *
+     * @return TaskExecutionInterface[]
+     */
+    public function findByTask(TaskInterface $task);
+
+    /**
      * Returns all task-executions.
      *
      * @param int $page

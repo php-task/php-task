@@ -86,6 +86,18 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function findByTask(TaskInterface $task)
+    {
+        return $this->taskExecutionCollection->filter(
+            function (TaskExecutionInterface $execution) use ($task) {
+                return $execution->getTask()->getUuid() === $task->getUuid();
+            }
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findAll($page = 1, $pageSize = null)
     {
         return array_values($this->taskExecutionCollection->slice(($page - 1) * $pageSize, $pageSize));
