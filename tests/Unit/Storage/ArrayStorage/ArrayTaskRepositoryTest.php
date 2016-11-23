@@ -14,7 +14,6 @@ namespace Task\Tests\Unit\Storage\ArrayStorage;
 use Cron\CronExpression;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Prophecy\Argument;
 use Task\Storage\ArrayStorage\ArrayTaskRepository;
 use Task\Task;
 use Task\TaskInterface;
@@ -50,7 +49,7 @@ class ArrayTaskRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($repository->findByUuid('123-123-123'));
     }
 
-    public function testPersist()
+    public function testSave()
     {
         $collection = $this->prophesize(Collection::class);
         $repository = new ArrayTaskRepository($collection->reveal());
@@ -61,7 +60,7 @@ class ArrayTaskRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $repository,
-            $repository->persist($task->reveal())
+            $repository->save($task->reveal())
         );
     }
 
@@ -78,16 +77,6 @@ class ArrayTaskRepositoryTest extends \PHPUnit_Framework_TestCase
             $repository,
             $repository->remove($task->reveal())
         );
-    }
-
-    public function testFlush()
-    {
-        $collection = $this->prophesize(Collection::class);
-        $repository = new ArrayTaskRepository($collection->reveal());
-
-        $collection->add(Argument::any())->shouldNotBeCalled();
-
-        $this->assertEquals($repository, $repository->flush());
     }
 
     public function testFindAll()

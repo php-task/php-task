@@ -79,11 +79,8 @@ class TaskScheduler implements TaskSchedulerInterface
     {
         $this->eventDispatcher->dispatch(Events::TASK_CREATE, new TaskEvent($task));
 
-        $this->taskRepository->persist($task);
-        $this->taskRepository->flush();
-
+        $this->taskRepository->save($task);
         $this->scheduleTask($task);
-        $this->taskExecutionRepository->flush();
 
         return $this;
     }
@@ -97,8 +94,6 @@ class TaskScheduler implements TaskSchedulerInterface
         foreach ($tasks as $task) {
             $this->scheduleTask($task);
         }
-
-        $this->taskExecutionRepository->flush();
     }
 
     /**
@@ -119,7 +114,7 @@ class TaskScheduler implements TaskSchedulerInterface
                 new TaskExecutionEvent($task, $execution)
             );
 
-            $this->taskExecutionRepository->persist($execution);
+            $this->taskExecutionRepository->save($execution);
         }
     }
 }

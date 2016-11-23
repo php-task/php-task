@@ -59,7 +59,7 @@ class ArrayTaskRepository implements TaskRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function persist(TaskInterface $task)
+    public function save(TaskInterface $task)
     {
         $this->taskCollection->add($task);
 

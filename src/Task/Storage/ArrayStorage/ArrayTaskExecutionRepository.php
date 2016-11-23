@@ -48,7 +48,7 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function persist(TaskExecutionInterface $execution)
+    public function save(TaskExecutionInterface $execution)
     {
         $this->taskExecutionCollection->add($execution);
 

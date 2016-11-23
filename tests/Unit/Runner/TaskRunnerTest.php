@@ -76,8 +76,6 @@ class TaskRunnerTest extends \PHPUnit_Framework_TestCase
         $this->initializeDispatcher($this->eventDispatcher, $executions[0]);
         $this->initializeDispatcher($this->eventDispatcher, $executions[1]);
 
-        $this->taskExecutionRepository->flush()->shouldBeCalledTimes(1);
-
         $this->taskRunner->runTasks();
 
         $this->assertLessThanOrEqual(new \DateTime(), $executions[0]->getStartTime());
@@ -110,8 +108,6 @@ class TaskRunnerTest extends \PHPUnit_Framework_TestCase
 
         $this->initializeDispatcher($this->eventDispatcher, $executions[0], Events::TASK_FAILED);
         $this->initializeDispatcher($this->eventDispatcher, $executions[1]);
-
-        $this->taskExecutionRepository->flush()->shouldBeCalled();
 
         $this->taskRunner->runTasks();
 
