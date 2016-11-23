@@ -13,7 +13,6 @@ namespace Task\Tests\Unit\Storage\ArrayStorage;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Prophecy\Argument;
 use Task\Execution\TaskExecution;
 use Task\Execution\TaskExecutionInterface;
 use Task\Storage\ArrayStorage\ArrayTaskExecutionRepository;
@@ -25,7 +24,7 @@ use Task\TaskStatus;
  */
 class ArrayTaskExecutionRepositoryTest extends \PHPUnit_Framework_TestCase
 {
-    public function testPersist()
+    public function testSave()
     {
         $taskExecutionCollection = $this->prophesize(Collection::class);
         $taskExecutionRepository = new ArrayTaskExecutionRepository($taskExecutionCollection->reveal());
@@ -36,7 +35,7 @@ class ArrayTaskExecutionRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $taskExecutionRepository,
-            $taskExecutionRepository->persist($execution->reveal())
+            $taskExecutionRepository->save($execution->reveal())
         );
     }
 
@@ -53,16 +52,6 @@ class ArrayTaskExecutionRepositoryTest extends \PHPUnit_Framework_TestCase
             $taskExecutionRepository,
             $taskExecutionRepository->remove($execution->reveal())
         );
-    }
-
-    public function testFlush()
-    {
-        $taskExecutionCollection = $this->prophesize(Collection::class);
-        $taskExecutionRepository = new ArrayTaskExecutionRepository($taskExecutionCollection->reveal());
-
-        $taskExecutionCollection->add(Argument::any())->shouldNotBeCalled();
-
-        $this->assertEquals($taskExecutionRepository, $taskExecutionRepository->flush());
     }
 
     public function testFindByStartTime()

@@ -30,13 +30,13 @@ interface TaskExecutionRepositoryInterface
     public function create(TaskInterface $task, \DateTime $scheduleTime);
 
     /**
-     * Persist task-execution.
+     * Save task-execution.
      *
      * @param TaskExecutionInterface $execution
      *
      * @return $this
      */
-    public function persist(TaskExecutionInterface $execution);
+    public function save(TaskExecutionInterface $execution);
 
     /**
      * Remove task-execution.
@@ -46,13 +46,6 @@ interface TaskExecutionRepositoryInterface
      * @return $this
      */
     public function remove(TaskExecutionInterface $execution);
-
-    /**
-     * Flush storage.
-     *
-     * @return $this
-     */
-    public function flush();
 
     /**
      * Used to check whether a specific task has been scheduled at a specific time.

@@ -99,7 +99,5 @@ class TaskRunner implements TaskRunnerInterface
                 new TaskExecutionEvent($execution->getTask(), $execution)
             );
         }
-
-        $this->taskExecutionRepository->flush();
     }
 }

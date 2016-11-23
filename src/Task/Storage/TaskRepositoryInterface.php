@@ -38,25 +38,18 @@ interface TaskRepositoryInterface
     public function create($handlerClass, $workload = null);
 
     /**
-     * Persist task.
+     * Save task.
      *
      * @param TaskInterface $task
      */
-    public function persist(TaskInterface $task);
+    public function save(TaskInterface $task);
 
     /**
-     * Persist task.
+     * Remove task.
      *
      * @param TaskInterface $task
      */
     public function remove(TaskInterface $task);
-
-    /**
-     * Flush storage.
-     *
-     * @return $this
-     */
-    public function flush();
 
     /**
      * Returns all tasks.

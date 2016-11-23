@@ -111,13 +111,11 @@ class TaskSchedulerTest extends \PHPUnit_Framework_TestCase
             )
         )->shouldBeCalled();
 
-        $this->taskRepository->persist($task->reveal())->shouldBeCalled();
-        $this->taskRepository->flush()->shouldBeCalledTimes(1);
+        $this->taskRepository->save($task->reveal())->shouldBeCalled();
 
         $this->taskExecutionRepository->findByStartTime($task, Argument::type(\DateTime::class))->willReturn(null);
         $this->taskExecutionRepository->create($task, Argument::type(\DateTime::class))->willReturn($execution);
-        $this->taskExecutionRepository->persist($execution->reveal())->shouldBeCalledTimes(1);
-        $this->taskExecutionRepository->flush()->shouldBeCalledTimes(1);
+        $this->taskExecutionRepository->save($execution->reveal())->shouldBeCalledTimes(1);
 
         $this->taskScheduler->addTask($task->reveal());
     }
@@ -145,13 +143,12 @@ class TaskSchedulerTest extends \PHPUnit_Framework_TestCase
         $this->taskExecutionRepository->create($tasks[1], $expression2->getNextRunDate())->willReturn(
             $execution1->reveal()
         );
-        $this->taskExecutionRepository->persist($execution1)->shouldBeCalled();
-        $this->taskExecutionRepository->flush()->shouldBeCalledTimes(1);
+        $this->taskExecutionRepository->save($execution1)->shouldBeCalled();
 
         $execution2 = $this->prophesize(TaskExecutionInterface::class);
         $execution2->setStatus(TaskStatus::PLANNED)->shouldBeCalled();
         $this->taskExecutionRepository->create($tasks[2], $date)->willReturn($execution2->reveal());
-        $this->taskExecutionRepository->persist($execution2)->shouldBeCalled();
+        $this->taskExecutionRepository->save($execution2)->shouldBeCalled();
 
         $this->eventDispatcher->dispatch(
             Events::TASK_EXECUTION_CREATE,
