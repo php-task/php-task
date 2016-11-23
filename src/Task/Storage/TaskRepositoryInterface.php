@@ -19,6 +19,15 @@ use Task\TaskInterface;
 interface TaskRepositoryInterface
 {
     /**
+     * Find task for given uuid.
+     *
+     * @param string $uuid
+     *
+     * @return TaskInterface
+     */
+    public function findByUuid($uuid);
+
+    /**
      * Create task.
      *
      * @param string $handlerClass

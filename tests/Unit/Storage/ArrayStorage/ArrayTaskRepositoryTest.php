@@ -24,6 +24,32 @@ use Task\TaskInterface;
  */
 class ArrayTaskRepositoryTest extends \PHPUnit_Framework_TestCase
 {
+    public function testFindByUuid()
+    {
+        $tasks = [
+            new Task(\stdClass::class, 'Test 1', '123-123-123'),
+            new Task(\stdClass::class, 'Test 2'),
+            new Task(\stdClass::class, 'Test 3'),
+        ];
+
+        $repository = new ArrayTaskRepository(new ArrayCollection($tasks));
+
+        $this->assertEquals($tasks[0], $repository->findByUuid('123-123-123'));
+    }
+
+    public function testFindByUuidNotExisting()
+    {
+        $tasks = [
+            new Task(\stdClass::class, 'Test 1'),
+            new Task(\stdClass::class, 'Test 2'),
+            new Task(\stdClass::class, 'Test 3'),
+        ];
+
+        $repository = new ArrayTaskRepository(new ArrayCollection($tasks));
+
+        $this->assertNull($repository->findByUuid('123-123-123'));
+    }
+
     public function testPersist()
     {
         $collection = $this->prophesize(Collection::class);
