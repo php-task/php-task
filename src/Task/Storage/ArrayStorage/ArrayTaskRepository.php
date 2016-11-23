@@ -38,6 +38,19 @@ class ArrayTaskRepository implements TaskRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function findByUuid($uuid)
+    {
+        /** @var TaskInterface $task */
+        foreach ($this->taskCollection as $task) {
+            if ($task->getUuid() === $uuid) {
+                return $task;
+            }
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function create($handlerClass, $workload = null)
     {
         return new Task($handlerClass, $workload);
