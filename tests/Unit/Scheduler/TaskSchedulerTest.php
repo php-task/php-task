@@ -113,7 +113,7 @@ class TaskSchedulerTest extends \PHPUnit_Framework_TestCase
 
         $this->taskRepository->save($task->reveal())->shouldBeCalled();
 
-        $this->taskExecutionRepository->findByStartTime($task, Argument::type(\DateTime::class))->willReturn(null);
+        $this->taskExecutionRepository->findPending($task)->willReturn(null);
         $this->taskExecutionRepository->create($task, Argument::type(\DateTime::class))->willReturn($execution);
         $this->taskExecutionRepository->save($execution->reveal())->shouldBeCalledTimes(1);
 
@@ -131,12 +131,12 @@ class TaskSchedulerTest extends \PHPUnit_Framework_TestCase
         $this->taskRepository->findEndBeforeNow()->willReturn($tasks);
 
         // already scheduled
-        $this->taskExecutionRepository->findByStartTime($tasks[0], $expression1->getNextRunDate())->willReturn(
+        $this->taskExecutionRepository->findPending($tasks[0])->willReturn(
             $this->prophesize(TaskExecutionInterface::class)->reveal()
         );
 
-        $this->taskExecutionRepository->findByStartTime($tasks[1], $expression2->getNextRunDate())->willReturn(null);
-        $this->taskExecutionRepository->findByStartTime($tasks[2], $date)->willReturn(null);
+        $this->taskExecutionRepository->findPending($tasks[1])->willReturn(null);
+        $this->taskExecutionRepository->findPending($tasks[2])->willReturn(null);
 
         $execution1 = $this->prophesize(TaskExecutionInterface::class);
         $execution1->setStatus(TaskStatus::PLANNED)->shouldBeCalled();

@@ -69,7 +69,7 @@ class ArrayTaskExecutionRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $repository = new ArrayTaskExecutionRepository(new ArrayCollection($executions));
 
-        $this->assertEquals($executions[1], $repository->findByStartTime($task, $executions[1]->getScheduleTime()));
+        $this->assertEquals($executions[0], $repository->findPending($task));
     }
 
     public function testFindByTask()
@@ -88,7 +88,7 @@ class ArrayTaskExecutionRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([$executions[1]], $repository->findByTask($task2));
     }
 
-    public function testFindByStartTimeNoResult()
+    public function testFindPending()
     {
         $task = new Task(\stdClass::class, 'Test 1', '123-123-123');
         $executions = [
@@ -97,9 +97,51 @@ class ArrayTaskExecutionRepositoryTest extends \PHPUnit_Framework_TestCase
             new TaskExecution($task, \stdClass::class, new \DateTime('+1 hour'), 'Test 1'),
         ];
 
+        $executions[0]->setStatus(TaskStatus::COMPLETED);
+        $executions[1]->setStatus(TaskStatus::FAILED);
+        $executions[2]->setStatus(TaskStatus::COMPLETED);
+
         $repository = new ArrayTaskExecutionRepository(new ArrayCollection($executions));
 
-        $this->assertNull($repository->findByStartTime($task, new \DateTime()));
+        $this->assertNull($repository->findPending($task));
+    }
+
+    public function testFindPendingPlanned()
+    {
+        $task = new Task(\stdClass::class, 'Test 1', '123-123-123');
+        $executions = [
+            new TaskExecution($task, \stdClass::class, new \DateTime('+1 day'), 'Test 1'),
+            new TaskExecution($task, \stdClass::class, new \DateTime('+1 minute'), 'Test 1'),
+            new TaskExecution($task, \stdClass::class, new \DateTime('+1 hour'), 'Test 1'),
+        ];
+
+        foreach ($executions as $execution) {
+            $execution->setStatus(TaskStatus::COMPLETED);
+        }
+        $executions[2]->setStatus(TaskStatus::PLANNED);
+
+        $repository = new ArrayTaskExecutionRepository(new ArrayCollection($executions));
+
+        $this->assertEquals($executions[2], $repository->findPending($task));
+    }
+
+    public function testFindPendingStarted()
+    {
+        $task = new Task(\stdClass::class, 'Test 1', '123-123-123');
+        $executions = [
+            new TaskExecution($task, \stdClass::class, new \DateTime('+1 day'), 'Test 1'),
+            new TaskExecution($task, \stdClass::class, new \DateTime('+1 minute'), 'Test 1'),
+            new TaskExecution($task, \stdClass::class, new \DateTime('+1 hour'), 'Test 1'),
+        ];
+
+        foreach ($executions as $execution) {
+            $execution->setStatus(TaskStatus::COMPLETED);
+        }
+        $executions[2]->setStatus(TaskStatus::RUNNING);
+
+        $repository = new ArrayTaskExecutionRepository(new ArrayCollection($executions));
+
+        $this->assertEquals($executions[2], $repository->findPending($task));
     }
 
     public function testFindAll()
@@ -153,7 +195,7 @@ class ArrayTaskExecutionRepositoryTest extends \PHPUnit_Framework_TestCase
             (new TaskExecution($task, \stdClass::class, new \DateTime('+1 minute'), 'Test 1'))
                 ->setStatus(TaskStatus::FAILED),
             (new TaskExecution($task, \stdClass::class, new \DateTime('1 hour ago'), 'Test 1'))
-                ->setStatus(TaskStatus::COMPLETE),
+                ->setStatus(TaskStatus::COMPLETED),
         ];
 
         $repository = new ArrayTaskExecutionRepository(new ArrayCollection($executions));

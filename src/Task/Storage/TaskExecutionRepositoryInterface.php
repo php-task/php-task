@@ -51,11 +51,10 @@ interface TaskExecutionRepositoryInterface
      * Used to check whether a specific task has been scheduled at a specific time.
      *
      * @param TaskInterface $task
-     * @param \DateTime $scheduleTime
      *
      * @return TaskExecutionInterface
      */
-    public function findByStartTime(TaskInterface $task, \DateTime $scheduleTime);
+    public function findPending(TaskInterface $task);
 
     /**
      * Find executions of given task.
