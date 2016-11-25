@@ -94,8 +94,8 @@ class TaskExecutionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNull($execution->getStatus());
 
-        $execution->setStatus(TaskStatus::COMPLETE);
-        $this->assertEquals(TaskStatus::COMPLETE, $execution->getStatus());
+        $execution->setStatus(TaskStatus::COMPLETED);
+        $this->assertEquals(TaskStatus::COMPLETED, $execution->getStatus());
     }
 
     public function testWorkload()

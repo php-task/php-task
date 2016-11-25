@@ -65,6 +65,8 @@ class TaskRunner implements TaskRunnerInterface
 
             $start = microtime(true);
             $execution->setStartTime(new \DateTime());
+            $execution->setStatus(TaskStatus::RUNNING);
+            $this->taskExecutionRepository->save($execution);
 
             try {
                 $this->eventDispatcher->dispatch(
@@ -74,7 +76,7 @@ class TaskRunner implements TaskRunnerInterface
 
                 $result = $handler->handle($execution->getWorkload());
 
-                $execution->setStatus(TaskStatus::COMPLETE);
+                $execution->setStatus(TaskStatus::COMPLETED);
                 $execution->setResult($result);
 
                 $this->eventDispatcher->dispatch(
@@ -98,6 +100,7 @@ class TaskRunner implements TaskRunnerInterface
                 Events::TASK_FINISHED,
                 new TaskExecutionEvent($execution->getTask(), $execution)
             );
+            $this->taskExecutionRepository->save($execution);
         }
     }
 }

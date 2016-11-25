@@ -76,13 +76,12 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByStartTime(TaskInterface $task, \DateTime $scheduleTime)
+    public function findPending(TaskInterface $task)
     {
         $filtered = $this->taskExecutionCollection->filter(
-            function (TaskExecutionInterface $execution) use ($task, $scheduleTime) {
+            function (TaskExecutionInterface $execution) use ($task) {
                 return $execution->getTask()->getUuid() === $task->getUuid()
-                    && $execution->getScheduleTime() === $scheduleTime
-                    && $execution->getStatus() === TaskStatus::PLANNED;
+                    && in_array($execution->getStatus(), [TaskStatus::PLANNED, TaskStatus::RUNNING]);
             }
         );
 

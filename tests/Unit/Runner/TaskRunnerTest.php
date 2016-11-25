@@ -66,9 +66,12 @@ class TaskRunnerTest extends \PHPUnit_Framework_TestCase
     {
         $task = $this->createTask();
         $executions = [
-            $this->createTaskExecution($task, new \DateTime(), 'Test 1'),
-            $this->createTaskExecution($task, new \DateTime(), 'Test 2'),
+            $this->createTaskExecution($task, new \DateTime(), 'Test 1')->setStatus(TaskStatus::PLANNED),
+            $this->createTaskExecution($task, new \DateTime(), 'Test 2')->setStatus(TaskStatus::PLANNED),
         ];
+
+        $this->taskExecutionRepository->save($executions[0])->willReturnArgument(0)->shouldBeCalledTimes(2);
+        $this->taskExecutionRepository->save($executions[1])->willReturnArgument(0)->shouldBeCalledTimes(2);
 
         $this->taskExecutionRepository->findScheduled()->willReturn($executions);
         $this->taskHandlerFactory->create(TestHandler::class)->willReturn(new TestHandler());
@@ -87,17 +90,20 @@ class TaskRunnerTest extends \PHPUnit_Framework_TestCase
         $this->assertGreaterThan(0, $executions[1]->getDuration());
         $this->assertEquals(strrev('Test 1'), $executions[0]->getResult());
         $this->assertEquals(strrev('Test 2'), $executions[1]->getResult());
-        $this->assertEquals(TaskStatus::COMPLETE, $executions[0]->getStatus());
-        $this->assertEquals(TaskStatus::COMPLETE, $executions[1]->getStatus());
+        $this->assertEquals(TaskStatus::COMPLETED, $executions[0]->getStatus());
+        $this->assertEquals(TaskStatus::COMPLETED, $executions[1]->getStatus());
     }
 
     public function testRunTasksFailed()
     {
         $task = $this->createTask();
         $executions = [
-            $this->createTaskExecution($task, new \DateTime(), 'Test 1'),
-            $this->createTaskExecution($task, new \DateTime(), 'Test 2'),
+            $this->createTaskExecution($task, new \DateTime(), 'Test 1')->setStatus(TaskStatus::PLANNED),
+            $this->createTaskExecution($task, new \DateTime(), 'Test 2')->setStatus(TaskStatus::PLANNED),
         ];
+
+        $this->taskExecutionRepository->save($executions[0])->willReturnArgument(0)->shouldBeCalledTimes(2);
+        $this->taskExecutionRepository->save($executions[1])->willReturnArgument(0)->shouldBeCalledTimes(2);
 
         $handler = $this->prophesize(TaskHandlerInterface::class);
         $handler->handle('Test 1')->willThrow(new \Exception());
@@ -123,7 +129,7 @@ class TaskRunnerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(strrev('Test 2'), $executions[1]->getResult());
         $this->assertNull($executions[1]->getException());
         $this->assertEquals(TaskStatus::FAILED, $executions[0]->getStatus());
-        $this->assertEquals(TaskStatus::COMPLETE, $executions[1]->getStatus());
+        $this->assertEquals(TaskStatus::COMPLETED, $executions[1]->getStatus());
     }
 
     private function initializeDispatcher($eventDispatcher, $execution, $event = Events::TASK_PASSED)

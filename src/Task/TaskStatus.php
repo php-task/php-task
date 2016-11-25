@@ -17,8 +17,8 @@ namespace Task;
 final class TaskStatus
 {
     const PLANNED = 'planned';
-    const STARTED = 'started';
-    const COMPLETE = 'completed';
+    const RUNNING = 'running';
+    const COMPLETED = 'completed';
     const FAILED = 'failed';
 
     /**

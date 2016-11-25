@@ -103,18 +103,19 @@ class TaskScheduler implements TaskSchedulerInterface
      */
     protected function scheduleTask(TaskInterface $task)
     {
-        $scheduleTime = $task->getInterval() ? $task->getInterval()->getNextRunDate() : $task->getFirstExecution();
-
-        if (null === $this->taskExecutionRepository->findByStartTime($task, $scheduleTime)) {
-            $execution = $this->taskExecutionRepository->create($task, $scheduleTime);
-            $execution->setStatus(TaskStatus::PLANNED);
-
-            $this->eventDispatcher->dispatch(
-                Events::TASK_EXECUTION_CREATE,
-                new TaskExecutionEvent($task, $execution)
-            );
-
-            $this->taskExecutionRepository->save($execution);
+        if (null !== $this->taskExecutionRepository->findPending($task)) {
+            return;
         }
+
+        $scheduleTime = $task->getInterval() ? $task->getInterval()->getNextRunDate() : $task->getFirstExecution();
+        $execution = $this->taskExecutionRepository->create($task, $scheduleTime);
+        $execution->setStatus(TaskStatus::PLANNED);
+
+        $this->eventDispatcher->dispatch(
+            Events::TASK_EXECUTION_CREATE,
+            new TaskExecutionEvent($task, $execution)
+        );
+
+        $this->taskExecutionRepository->save($execution);
     }
 }
