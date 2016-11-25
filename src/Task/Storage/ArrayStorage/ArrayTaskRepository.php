@@ -61,6 +61,10 @@ class ArrayTaskRepository implements TaskRepositoryInterface
      */
     public function save(TaskInterface $task)
     {
+        if ($this->taskCollection->contains($task)) {
+            return $this;
+        }
+
         $this->taskCollection->add($task);
 
         return $this;

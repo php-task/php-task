@@ -50,6 +50,10 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
      */
     public function save(TaskExecutionInterface $execution)
     {
+        if ($this->taskExecutionCollection->contains($execution)) {
+            return $this;
+        }
+
         $this->taskExecutionCollection->add($execution);
 
         return $this;
