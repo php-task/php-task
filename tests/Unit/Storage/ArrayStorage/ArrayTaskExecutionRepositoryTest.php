@@ -31,7 +31,24 @@ class ArrayTaskExecutionRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $execution = $this->prophesize(TaskExecutionInterface::class);
 
+        $taskExecutionCollection->contains($execution->reveal())->willReturn(false);
         $taskExecutionCollection->add($execution->reveal())->shouldBeCalled();
+
+        $this->assertEquals(
+            $taskExecutionRepository,
+            $taskExecutionRepository->save($execution->reveal())
+        );
+    }
+
+    public function testSaveExisting()
+    {
+        $taskExecutionCollection = $this->prophesize(Collection::class);
+        $taskExecutionRepository = new ArrayTaskExecutionRepository($taskExecutionCollection->reveal());
+
+        $execution = $this->prophesize(TaskExecutionInterface::class);
+
+        $taskExecutionCollection->contains($execution->reveal())->willReturn(true);
+        $taskExecutionCollection->add($execution->reveal())->shouldNotBeCalled();
 
         $this->assertEquals(
             $taskExecutionRepository,

@@ -56,7 +56,24 @@ class ArrayTaskRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $task = $this->prophesize(TaskInterface::class);
 
+        $collection->contains($task->reveal())->willReturn(false);
         $collection->add($task->reveal())->shouldBeCalled();
+
+        $this->assertEquals(
+            $repository,
+            $repository->save($task->reveal())
+        );
+    }
+
+    public function testSaveExisting()
+    {
+        $collection = $this->prophesize(Collection::class);
+        $repository = new ArrayTaskRepository($collection->reveal());
+
+        $task = $this->prophesize(TaskInterface::class);
+
+        $collection->contains($task->reveal())->willReturn(true);
+        $collection->add($task->reveal())->shouldNotBeCalled();
 
         $this->assertEquals(
             $repository,
