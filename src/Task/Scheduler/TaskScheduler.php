@@ -103,7 +103,11 @@ class TaskScheduler implements TaskSchedulerInterface
      */
     protected function scheduleTask(TaskInterface $task)
     {
-        if (null !== $this->taskExecutionRepository->findPending($task)) {
+        if (null !== ($execution = $this->taskExecutionRepository->findPending($task))) {
+            return;
+        }
+
+        if ($task->getInterval() === null && 0 < count($this->taskExecutionRepository->findByTask($task))) {
             return;
         }
 

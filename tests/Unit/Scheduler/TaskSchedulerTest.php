@@ -113,6 +113,7 @@ class TaskSchedulerTest extends \PHPUnit_Framework_TestCase
 
         $this->taskRepository->save($task->reveal())->shouldBeCalled();
 
+        $this->taskExecutionRepository->findByTask($task)->willReturn([]);
         $this->taskExecutionRepository->findPending($task)->willReturn(null);
         $this->taskExecutionRepository->create($task, Argument::type(\DateTime::class))->willReturn($execution);
         $this->taskExecutionRepository->save($execution->reveal())->shouldBeCalledTimes(1);
@@ -129,6 +130,9 @@ class TaskSchedulerTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->taskRepository->findEndBeforeNow()->willReturn($tasks);
+
+        // single task
+        $this->taskExecutionRepository->findByTask($tasks[2])->willReturn([]);
 
         // already scheduled
         $this->taskExecutionRepository->findPending($tasks[0])->willReturn(
