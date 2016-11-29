@@ -66,6 +66,15 @@ interface TaskExecutionRepositoryInterface
     public function findByTask(TaskInterface $task);
 
     /**
+     * Find executions of given task.
+     *
+     * @param string $taskUuid
+     *
+     * @return TaskExecutionInterface[]
+     */
+    public function findByTaskUuid($taskUuid);
+
+    /**
      * Returns all task-executions.
      *
      * @param int $page
