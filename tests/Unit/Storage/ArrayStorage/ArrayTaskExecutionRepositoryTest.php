@@ -105,6 +105,22 @@ class ArrayTaskExecutionRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([$executions[1]], $repository->findByTask($task2));
     }
 
+    public function testFindByTaskUuid()
+    {
+        $task1 = new Task(\stdClass::class, 'Test 1', '123-123-123');
+        $task2 = new Task(\stdClass::class, 'Test 1');
+        $executions = [
+            new TaskExecution($task1, \stdClass::class, new \DateTime('+1 day'), 'Test 1'),
+            new TaskExecution($task2, \stdClass::class, new \DateTime('1 day ago'), 'Test 1'),
+            new TaskExecution($task1, \stdClass::class, new \DateTime('1 hour ago'), 'Test 1'),
+        ];
+
+        $repository = new ArrayTaskExecutionRepository(new ArrayCollection($executions));
+
+        $this->assertEquals([$executions[0], $executions[2]], $repository->findByTaskUuid($task1->getUuid()));
+        $this->assertEquals([$executions[1]], $repository->findByTask($task2));
+    }
+
     public function testFindPending()
     {
         $task = new Task(\stdClass::class, 'Test 1', '123-123-123');

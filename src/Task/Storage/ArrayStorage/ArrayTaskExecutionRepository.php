@@ -101,11 +101,21 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
      */
     public function findByTask(TaskInterface $task)
     {
-        return array_values($this->taskExecutionCollection->filter(
-            function (TaskExecutionInterface $execution) use ($task) {
-                return $execution->getTask()->getUuid() === $task->getUuid();
-            }
-        )->toArray());
+        return $this->findByTaskUuid($task->getUuid());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByTaskUuid($taskUuid)
+    {
+        return array_values(
+            $this->taskExecutionCollection->filter(
+                function (TaskExecutionInterface $execution) use ($taskUuid) {
+                    return $execution->getTask()->getUuid() === $taskUuid;
+                }
+            )->toArray()
+        );
     }
 
     /**
