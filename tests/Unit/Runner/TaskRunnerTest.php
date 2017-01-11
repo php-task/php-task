@@ -144,6 +144,14 @@ class TaskRunnerTest extends \PHPUnit_Framework_TestCase
         )->will(
             function () use ($eventDispatcher, $execution, $event) {
                 $eventDispatcher->dispatch(
+                    Events::TASK_AFTER,
+                    Argument::that(
+                        function (TaskExecutionEvent $event) use ($execution) {
+                            return $event->getTaskExecution() === $execution;
+                        }
+                    )
+                )->shouldBeCalled();
+                $eventDispatcher->dispatch(
                     $event,
                     Argument::that(
                         function (TaskExecutionEvent $event) use ($execution) {
@@ -176,7 +184,11 @@ class TaskRunnerTest extends \PHPUnit_Framework_TestCase
         $workload = 'Test-Workload',
         $handlerClass = TestHandler::class
     ) {
-        return new TaskExecution($task, $handlerClass, $scheduleTime, $workload);
+        $execution = new TaskExecution($task, $handlerClass, $scheduleTime, $workload);
+
+        $this->taskExecutionRepository->findByUuid($execution->getUuid())->willReturn($execution);
+
+        return $execution;
     }
 }
 

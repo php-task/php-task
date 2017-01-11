@@ -14,6 +14,7 @@ namespace Task\Runner;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Task\Event\Events;
 use Task\Event\TaskExecutionEvent;
+use Task\Execution\TaskExecutionInterface;
 use Task\Handler\TaskHandlerFactoryInterface;
 use Task\Storage\TaskExecutionRepositoryInterface;
 use Task\TaskStatus;
@@ -61,7 +62,9 @@ class TaskRunner implements TaskRunnerInterface
         $executions = $this->taskExecutionRepository->findScheduled();
 
         foreach ($executions as $execution) {
-            $handler = $this->taskHandlerFactory->create($execution->getHandlerClass());
+            // this find is neccesary if the storage because the storage could be
+            // invalid (clear in doctrine) after handling an execution.
+            $execution = $this->taskExecutionRepository->findByUuid($execution->getUuid());
 
             $start = microtime(true);
             $execution->setStartTime(new \DateTime());
@@ -69,13 +72,11 @@ class TaskRunner implements TaskRunnerInterface
             $this->taskExecutionRepository->save($execution);
 
             try {
-                $this->eventDispatcher->dispatch(
-                    Events::TASK_BEFORE,
-                    new TaskExecutionEvent($execution->getTask(), $execution)
-                );
+                $result = $this->handle($execution);
 
-                $result = $handler->handle($execution->getWorkload());
-
+                // this find is neccesary if the storage because the storage could be
+                // invalid (clear in doctrine) after handling an execution.
+                $execution = $this->taskExecutionRepository->findByUuid($execution->getUuid());
                 $execution->setStatus(TaskStatus::COMPLETED);
                 $execution->setResult($result);
 
@@ -84,6 +85,9 @@ class TaskRunner implements TaskRunnerInterface
                     new TaskExecutionEvent($execution->getTask(), $execution)
                 );
             } catch (\Exception $ex) {
+                // this find is neccesary if the storage because the storage could be
+                // invalid (clear in doctrine) after handling an execution.
+                $execution = $this->taskExecutionRepository->findByUuid($execution->getUuid());
                 $execution->setException($ex->__toString());
                 $execution->setStatus(TaskStatus::FAILED);
 
@@ -101,6 +105,36 @@ class TaskRunner implements TaskRunnerInterface
                 new TaskExecutionEvent($execution->getTask(), $execution)
             );
             $this->taskExecutionRepository->save($execution);
+        }
+    }
+
+    /**
+     * Handle given execution and fire before and after events.
+     *
+     * @param TaskExecutionInterface $execution
+     *
+     * @return \Serializable|string
+     *
+     * @throws \Exception
+     */
+    private function handle(TaskExecutionInterface $execution)
+    {
+        $handler = $this->taskHandlerFactory->create($execution->getHandlerClass());
+
+        $this->eventDispatcher->dispatch(
+            Events::TASK_BEFORE,
+            new TaskExecutionEvent($execution->getTask(), $execution)
+        );
+
+        try {
+            return $handler->handle($execution->getWorkload());
+        } catch (\Exception $exception) {
+            throw $exception;
+        } finally {
+            $this->eventDispatcher->dispatch(
+                Events::TASK_AFTER,
+                new TaskExecutionEvent($execution->getTask(), $execution)
+            );
         }
     }
 }

@@ -34,6 +34,11 @@ final class Events
     const TASK_BEFORE = 'tasks.before';
 
     /**
+     * Emitted when task will be started.
+     */
+    const TASK_AFTER = 'tasks.after';
+
+    /**
      * Emitted when after task finished.
      */
     const TASK_FINISHED = 'tasks.finished';
