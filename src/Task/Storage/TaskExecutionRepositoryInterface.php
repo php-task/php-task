@@ -57,6 +57,15 @@ interface TaskExecutionRepositoryInterface
     public function findPending(TaskInterface $task);
 
     /**
+     * Returns task-execution identified by uuid.
+     *
+     * @param string $uuid
+     *
+     * @return TaskExecutionInterface
+     */
+    public function findByUuid($uuid);
+
+    /**
      * Find executions of given task.
      *
      * @param TaskInterface $task
