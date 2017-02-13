@@ -1,5 +1,26 @@
 # Change Log
 
+## [1.0.0-RC1](https://github.com/php-task/php-task/tree/1.0.0-RC1) (2017-02-13)
+[Full Changelog](https://github.com/php-task/php-task/compare/0.3.0...1.0.0-RC1)
+
+**Fixed bugs:**
+
+- Refind execution after handle run and added task-after event [\#29](https://github.com/php-task/php-task/pull/29) ([wachterjohannes](https://github.com/wachterjohannes))
+
+**Closed issues:**
+
+- Set status to started [\#23](https://github.com/php-task/php-task/issues/23)
+
+**Merged pull requests:**
+
+- Updated composer to match symfony 3 [\#28](https://github.com/php-task/php-task/pull/28) ([wachterjohannes](https://github.com/wachterjohannes))
+- Added find-by-task-uuid function [\#27](https://github.com/php-task/php-task/pull/27) ([wachterjohannes](https://github.com/wachterjohannes))
+- Fixed save same entity in array-storage [\#26](https://github.com/php-task/php-task/pull/26) ([wachterjohannes](https://github.com/wachterjohannes))
+- Fixed status handling of executions [\#24](https://github.com/php-task/php-task/pull/24) ([wachterjohannes](https://github.com/wachterjohannes))
+- Removed flush of repositories [\#22](https://github.com/php-task/php-task/pull/22) ([wachterjohannes](https://github.com/wachterjohannes))
+- Added find-by-task and remove function [\#20](https://github.com/php-task/php-task/pull/20) ([wachterjohannes](https://github.com/wachterjohannes))
+- Added find-by-uuid to task-repository [\#19](https://github.com/php-task/php-task/pull/19) ([wachterjohannes](https://github.com/wachterjohannes))
+
 ## [0.3.0](https://github.com/php-task/php-task/tree/0.3.0) (2016-10-15)
 [Full Changelog](https://github.com/php-task/php-task/compare/0.2.1...0.3.0)
 
