@@ -1,8 +1,8 @@
 # php-task
 
-[![Build Status](https://travis-ci.org/php-task/php-task.svg?branch=master)](https://travis-ci.org/php-task/php-task)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/php-task/php-task/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/php-task/php-task/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/php-task/php-task/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/php-task/php-task/?branch=master)
+[![Build Status](https://travis-ci.org/php-task/php-task.svg)](https://travis-ci.org/php-task/php-task)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/php-task/php-task/badges/quality-score.png)](https://scrutinizer-ci.com/g/php-task/php-task/)
+[![Code Coverage](https://scrutinizer-ci.com/g/php-task/php-task/badges/coverage.png)](https://scrutinizer-ci.com/g/php-task/php-task/)
 
 php-task is a task-library for synchronous and asynchronous tasks.
 
@@ -21,12 +21,13 @@ and many features more.
 ## Installation
 
 ```bash
-composer require php-task/php-task 1.0.x-dev
+composer require php-task/php-task
 ```
 
+## Documentation
+
+See the official documentation on [http://php-task.readthedocs.io/en/latest/](http://php-task.readthedocs.io/en/latest/).
+
 ## Contribution
-
-__This project is under heavy development. Therefore we can not guarantee full backwards compatibility at the current stage.__
-
 
 Pull requests are welcome. Please see our [CONTRIBUTING](https://github.com/php-task/php-task/blob/master/CONTRIBUTING.md) guide.
