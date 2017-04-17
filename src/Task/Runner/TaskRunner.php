@@ -127,7 +127,7 @@ class TaskRunner implements TaskRunnerInterface
         );
 
         try {
-            return $handler->handle($execution->getWorkload());
+            return $handler->handle($execution->getWorkload(), $execution);
         } catch (\Exception $exception) {
             throw $exception;
         } finally {
