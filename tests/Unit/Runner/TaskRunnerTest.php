@@ -73,7 +73,24 @@ class TaskRunnerTest extends \PHPUnit_Framework_TestCase
         $this->taskExecutionRepository->save($executions[0])->willReturnArgument(0)->shouldBeCalledTimes(2);
         $this->taskExecutionRepository->save($executions[1])->willReturnArgument(0)->shouldBeCalledTimes(2);
 
-        $this->taskExecutionRepository->findScheduled()->willReturn($executions);
+        $taskExecutionRepository = $this->taskExecutionRepository;
+        $this->taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class))
+            ->will(
+                function () use ($executions, $taskExecutionRepository) {
+                    $taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class))
+                        ->will(
+                            function () use ($executions, $taskExecutionRepository) {
+                                $taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class))
+                                    ->willReturn(null);
+
+                                return $executions[1];
+                            }
+                        );
+
+                    return $executions[0];
+                }
+            );
+
         $this->taskHandlerFactory->create(TestHandler::class)->willReturn(new TestHandler());
 
         $this->initializeDispatcher($this->eventDispatcher, $executions[0]);
@@ -109,7 +126,24 @@ class TaskRunnerTest extends \PHPUnit_Framework_TestCase
         $handler->handle('Test 1')->willThrow(new \Exception());
         $handler->handle('Test 2')->willReturn(strrev('Test 2'));
 
-        $this->taskExecutionRepository->findScheduled()->willReturn($executions);
+        $taskExecutionRepository = $this->taskExecutionRepository;
+        $this->taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class))
+            ->will(
+                function () use ($executions, $taskExecutionRepository) {
+                    $taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class))
+                        ->will(
+                            function () use ($executions, $taskExecutionRepository) {
+                                $taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class))
+                                    ->willReturn(null);
+
+                                return $executions[1];
+                            }
+                        );
+
+                    return $executions[0];
+                }
+            );
+
         $this->taskHandlerFactory->create(TestHandler::class)->willReturn($handler->reveal());
 
         $this->initializeDispatcher($this->eventDispatcher, $executions[0], Events::TASK_FAILED);

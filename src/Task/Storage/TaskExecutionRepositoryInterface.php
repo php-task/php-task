@@ -94,11 +94,13 @@ interface TaskExecutionRepositoryInterface
     public function findAll($page = 1, $pageSize = null);
 
     /**
-     * Returns scheduled task-executions.
+     * Returns scheduled task-execution.
      *
-     * Scheduled-time in the past.
+     * Scheduled-time in the past relative to given date.
      *
-     * @return TaskExecutionInterface[]
+     * @param \DateTime|null $dateTime
+     *
+     * @return TaskExecutionInterface
      */
-    public function findScheduled();
+    public function findNextScheduled(\DateTime $dateTime = null);
 }

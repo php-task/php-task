@@ -85,7 +85,7 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
         $filtered = $this->taskExecutionCollection->filter(
             function (TaskExecutionInterface $execution) use ($task) {
                 return $execution->getTask()->getUuid() === $task->getUuid()
-                    && in_array($execution->getStatus(), [TaskStatus::PLANNED, TaskStatus::RUNNING]);
+                       && in_array($execution->getStatus(), [TaskStatus::PLANNED, TaskStatus::RUNNING]);
             }
         );
 
@@ -147,14 +147,15 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findScheduled()
+    public function findNextScheduled(\DateTime $dateTimeTime = null)
     {
-        $dateTime = new \DateTime();
+        $dateTimeTime = $dateTimeTime ?: new \DateTime();
 
         return $this->taskExecutionCollection->filter(
-            function (TaskExecutionInterface $execution) use ($dateTime) {
-                return $execution->getStatus() === TaskStatus::PLANNED && $execution->getScheduleTime() < $dateTime;
+            function (TaskExecutionInterface $execution) use ($dateTimeTime) {
+                return $execution->getStatus() === TaskStatus::PLANNED
+                       && $execution->getScheduleTime() < $dateTimeTime;
             }
-        );
+        )->first();
     }
 }
