@@ -151,11 +151,13 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
     {
         $dateTimeTime = $dateTimeTime ?: new \DateTime();
 
-        return $this->taskExecutionCollection->filter(
+        $result = $this->taskExecutionCollection->filter(
             function (TaskExecutionInterface $execution) use ($dateTimeTime) {
                 return $execution->getStatus() === TaskStatus::PLANNED
                        && $execution->getScheduleTime() < $dateTimeTime;
             }
         )->first();
+
+        return $result ?: null;
     }
 }

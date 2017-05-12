@@ -16,6 +16,7 @@ use Task\Event\Events;
 use Task\Event\TaskExecutionEvent;
 use Task\Execution\TaskExecutionInterface;
 use Task\Handler\TaskHandlerFactoryInterface;
+use Task\Lock\LockInterface;
 use Task\Storage\TaskExecutionRepositoryInterface;
 use Task\TaskStatus;
 
@@ -40,17 +41,25 @@ class TaskRunner implements TaskRunnerInterface
     private $eventDispatcher;
 
     /**
+     * @var LockInterface
+     */
+    private $lock;
+
+    /**
      * @param TaskExecutionRepositoryInterface $executionRepository
      * @param TaskHandlerFactoryInterface $taskHandlerFactory
+     * @param LockInterface $lock
      * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
         TaskExecutionRepositoryInterface $executionRepository,
         TaskHandlerFactoryInterface $taskHandlerFactory,
+        LockInterface $lock,
         EventDispatcherInterface $eventDispatcher
     ) {
         $this->taskExecutionRepository = $executionRepository;
         $this->taskHandlerFactory = $taskHandlerFactory;
+        $this->lock = $lock;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -62,6 +71,10 @@ class TaskRunner implements TaskRunnerInterface
         $runTime = new \DateTime();
 
         while ($execution = $this->taskExecutionRepository->findNextScheduled($runTime)) {
+            if ($this->lock->isAcquired($execution) || !$this->lock->acquire($execution)) {
+                continue;
+            }
+
             $start = microtime(true);
             $execution->setStartTime(new \DateTime());
             $execution->setStatus(TaskStatus::RUNNING);
@@ -74,6 +87,8 @@ class TaskRunner implements TaskRunnerInterface
             } finally {
                 $this->finalize($execution, $start);
             }
+
+            $this->lock->release($execution);
         }
     }
 
