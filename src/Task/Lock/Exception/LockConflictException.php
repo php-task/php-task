@@ -11,36 +11,34 @@
 
 namespace Task\Lock\Exception;
 
-use Task\Execution\TaskExecutionInterface;
-
 /**
  * Will be thrown when a conflict is detected:
- *  + Already acquired execution was acquired.
- *  + Not acquired execution was released.
- *  + Not acquired execution was refreshed.
+ *  + Already acquired key was acquired.
+ *  + Not acquired key was released.
+ *  + Not acquired key was refreshed.
  */
 class LockConflictException extends \Exception
 {
     /**
-     * @var TaskExecutionInterface
+     * @var string
      */
-    private $execution;
+    private $key;
 
     /**
-     * @param TaskExecutionInterface $execution
+     * @param string $key
      */
-    public function __construct(TaskExecutionInterface $execution)
+    public function __construct($key)
     {
-        $this->execution = $execution;
+        $this->key = $key;
     }
 
     /**
-     * Returns execution.
+     * Returns key.
      *
-     * @return TaskExecutionInterface
+     * @return string
      */
-    public function getExecution()
+    public function getKey()
     {
-        return $this->execution;
+        return $this->key;
     }
 }

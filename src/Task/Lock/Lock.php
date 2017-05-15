@@ -11,19 +11,13 @@
 
 namespace Task\Lock;
 
-use Task\Execution\TaskExecutionInterface;
 use Task\Lock\Exception\LockConflictException;
 
 /**
- * Manages locks for executions.
+ * Manages locks.
  */
 class Lock implements LockInterface
 {
-    /**
-     * @var StrategyInterface
-     */
-    private $strategy;
-
     /**
      * @var StorageInterface
      */
@@ -35,13 +29,11 @@ class Lock implements LockInterface
     private $ttl;
 
     /**
-     * @param StrategyInterface $strategy
      * @param StorageInterface $storage
      * @param int $ttl
      */
-    public function __construct(StrategyInterface $strategy, StorageInterface $storage, $ttl = 300)
+    public function __construct(StorageInterface $storage, $ttl = 300)
     {
-        $this->strategy = $strategy;
         $this->storage = $storage;
         $this->ttl = $ttl;
     }
@@ -49,70 +41,70 @@ class Lock implements LockInterface
     /**
      * {@inheritdoc}
      */
-    public function acquire(TaskExecutionInterface $execution)
+    public function acquire($key)
     {
-        $this->assertNotAcquired($execution);
+        $this->assertNotAcquired($key);
 
-        return $this->storage->save($this->strategy->getKey($execution), $this->ttl);
+        return $this->storage->save($key, $this->ttl);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function refresh(TaskExecutionInterface $execution)
+    public function refresh($key)
     {
-        $this->assertAcquired($execution);
+        $this->assertAcquired($key);
 
-        return $this->storage->save($this->strategy->getKey($execution), $this->ttl);
+        return $this->storage->save($key, $this->ttl);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function release(TaskExecutionInterface $execution)
+    public function release($key)
     {
-        $this->assertAcquired($execution);
+        $this->assertAcquired($key);
 
-        return $this->storage->delete($this->strategy->getKey($execution));
+        return $this->storage->delete($key);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function isAcquired(TaskExecutionInterface $execution)
+    public function isAcquired($key)
     {
-        return $this->storage->exists($this->strategy->getKey($execution));
+        return $this->storage->exists($key);
     }
 
     /**
-     * Throw exception if the given execution is not acquired.
+     * Throw exception if the given key is not acquired.
      *
-     * @param TaskExecutionInterface $execution
+     * @param string $key
      *
      * @throws LockConflictException
      */
-    private function assertAcquired(TaskExecutionInterface $execution)
+    private function assertAcquired($key)
     {
-        if ($this->isAcquired($execution)) {
+        if ($this->isAcquired($key)) {
             return;
         }
 
-        throw new LockConflictException($execution);
+        throw new LockConflictException($key);
     }
 
     /**
-     * Throw exception if the given execution is acquired.
+     * Throw exception if the given key is acquired.
      *
-     * @param TaskExecutionInterface $execution
+     * @param string $key
      *
      * @throws LockConflictException
      */
-    private function assertNotAcquired(TaskExecutionInterface $execution)
+    private function assertNotAcquired($key)
     {
-        if (!$this->isAcquired($execution)) {
+        if (!$this->isAcquired($key)) {
             return;
         }
 
-        throw new LockConflictException($execution);
+        throw new LockConflictException($key);
     }
 }

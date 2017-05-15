@@ -31,7 +31,7 @@ class FileLock implements StorageInterface
         $this->lockPath = $lockPath;
 
         if (!is_dir($this->lockPath)) {
-            mkdir($this->lockPath);
+            mkdir($this->lockPath, 0777, true);
         }
     }
 
@@ -85,6 +85,6 @@ class FileLock implements StorageInterface
      */
     private function getFileName($key)
     {
-        return $this->lockPath . DIRECTORY_SEPARATOR . preg_replace('/[^a-zA-Z]/', '_', $key) . '.lock';
+        return $this->lockPath . DIRECTORY_SEPARATOR . preg_replace('/[^a-zA-Z0-9]/', '_', $key) . '.lock';
     }
 }

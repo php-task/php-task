@@ -11,19 +11,12 @@
 
 namespace Task\Tests\Unit\Lock;
 
-use Task\Execution\TaskExecutionInterface;
 use Task\Lock\Lock;
 use Task\Lock\LockInterface;
 use Task\Lock\StorageInterface;
-use Task\Lock\StrategyInterface;
 
 class LockTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var StrategyInterface
-     */
-    private $strategy;
-
     /**
      * @var StorageInterface
      */
@@ -40,24 +33,15 @@ class LockTest extends \PHPUnit_Framework_TestCase
     private $lock;
 
     /**
-     * @var TaskExecutionInterface
-     */
-    private $execution;
-
-    /**
      * @var string
      */
     private $key = 'test-key';
 
     protected function setUp()
     {
-        $this->strategy = $this->prophesize(StrategyInterface::class);
         $this->storage = $this->prophesize(StorageInterface::class);
-        $this->execution = $this->prophesize(TaskExecutionInterface::class);
 
-        $this->lock = new Lock($this->strategy->reveal(), $this->storage->reveal(), $this->ttl);
-
-        $this->strategy->getKey($this->execution->reveal())->willReturn($this->key);
+        $this->lock = new Lock($this->storage->reveal(), $this->ttl);
     }
 
     public function testAcquire()
@@ -65,7 +49,7 @@ class LockTest extends \PHPUnit_Framework_TestCase
         $this->storage->exists($this->key)->willReturn(false);
         $this->storage->save($this->key, $this->ttl)->shouldBeCalled()->willReturn(true);
 
-        $this->assertTrue($this->lock->acquire($this->execution->reveal()));
+        $this->assertTrue($this->lock->acquire($this->key));
     }
 
     /**
@@ -76,7 +60,7 @@ class LockTest extends \PHPUnit_Framework_TestCase
         $this->storage->exists($this->key)->willReturn(true);
         $this->storage->save($this->key, $this->ttl)->shouldNotBeCalled();
 
-        $this->lock->acquire($this->execution->reveal());
+        $this->lock->acquire($this->key);
     }
 
     public function testRefresh()
@@ -84,7 +68,7 @@ class LockTest extends \PHPUnit_Framework_TestCase
         $this->storage->exists($this->key)->willReturn(true);
         $this->storage->save($this->key, $this->ttl)->shouldBeCalled()->willReturn(true);
 
-        $this->assertTrue($this->lock->refresh($this->execution->reveal()));
+        $this->assertTrue($this->lock->refresh($this->key));
     }
 
     /**
@@ -95,7 +79,7 @@ class LockTest extends \PHPUnit_Framework_TestCase
         $this->storage->exists($this->key)->willReturn(false);
         $this->storage->save($this->key, $this->ttl)->shouldNotBeCalled();
 
-        $this->assertTrue($this->lock->refresh($this->execution->reveal()));
+        $this->assertTrue($this->lock->refresh($this->key));
     }
 
     public function testRelease()
@@ -103,7 +87,7 @@ class LockTest extends \PHPUnit_Framework_TestCase
         $this->storage->exists($this->key)->willReturn(true);
         $this->storage->delete($this->key)->shouldBeCalled()->willReturn(true);
 
-        $this->assertTrue($this->lock->release($this->execution->reveal()));
+        $this->assertTrue($this->lock->release($this->key));
     }
 
     /**
@@ -114,6 +98,6 @@ class LockTest extends \PHPUnit_Framework_TestCase
         $this->storage->exists($this->key)->willReturn(false);
         $this->storage->delete($this->key)->shouldNotBeCalled();
 
-        $this->assertTrue($this->lock->release($this->execution->reveal()));
+        $this->assertTrue($this->lock->release($this->key));
     }
 }

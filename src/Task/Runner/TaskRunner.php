@@ -16,6 +16,8 @@ use Task\Event\Events;
 use Task\Event\TaskExecutionEvent;
 use Task\Execution\TaskExecutionInterface;
 use Task\Handler\TaskHandlerFactoryInterface;
+use Task\Handler\TaskHandlerInterface;
+use Task\Lock\LockingTaskHandlerInterface;
 use Task\Lock\LockInterface;
 use Task\Storage\TaskExecutionRepositoryInterface;
 use Task\TaskStatus;
@@ -71,40 +73,69 @@ class TaskRunner implements TaskRunnerInterface
         $runTime = new \DateTime();
 
         while ($execution = $this->taskExecutionRepository->findNextScheduled($runTime)) {
-            if ($this->lock->isAcquired($execution) || !$this->lock->acquire($execution)) {
+            $handler = $this->taskHandlerFactory->create($execution->getHandlerClass());
+            if ($handler instanceof LockingTaskHandlerInterface) {
+                $this->runLocked($handler, $execution);
+
                 continue;
             }
 
-            $start = microtime(true);
-            $execution->setStartTime(new \DateTime());
-            $execution->setStatus(TaskStatus::RUNNING);
-            $this->taskExecutionRepository->save($execution);
-
-            try {
-                $execution = $this->passed($execution, $this->handle($execution));
-            } catch (\Exception $exception) {
-                $execution = $this->failed($execution, $exception);
-            } finally {
-                $this->finalize($execution, $start);
-            }
-
-            $this->lock->release($execution);
+            $this->run($handler, $execution);
         }
+    }
+
+    /**
+     * Run execution with given handler.
+     *
+     * @param TaskHandlerInterface $handler
+     * @param TaskExecutionInterface $execution
+     */
+    public function run(TaskHandlerInterface $handler, TaskExecutionInterface $execution)
+    {
+        $start = microtime(true);
+        $execution->setStartTime(new \DateTime());
+        $execution->setStatus(TaskStatus::RUNNING);
+        $this->taskExecutionRepository->save($execution);
+
+        try {
+            $execution = $this->passed($execution, $this->handle($handler, $execution));
+        } catch (\Exception $exception) {
+            $execution = $this->failed($execution, $exception);
+        } finally {
+            $this->finalize($execution, $start);
+        }
+    }
+
+    /**
+     * Run execution with given handler and use locking component.
+     *
+     * @param LockingTaskHandlerInterface $handler
+     * @param TaskExecutionInterface $execution
+     */
+    public function runLocked(LockingTaskHandlerInterface $handler, TaskExecutionInterface $execution)
+    {
+        $key = $handler->getLockKey($execution->getWorkload());
+        if ($this->lock->isAcquired($key) || !$this->lock->acquire($key)) {
+            return;
+        }
+
+        $this->run($handler, $execution);
+
+        $this->lock->release($key);
     }
 
     /**
      * Handle given execution and fire before and after events.
      *
+     * @param TaskHandlerInterface $handler
      * @param TaskExecutionInterface $execution
      *
      * @return \Serializable|string
      *
      * @throws \Exception
      */
-    private function handle(TaskExecutionInterface $execution)
+    private function handle(TaskHandlerInterface $handler, TaskExecutionInterface $execution)
     {
-        $handler = $this->taskHandlerFactory->create($execution->getHandlerClass());
-
         $this->eventDispatcher->dispatch(
             Events::TASK_BEFORE,
             new TaskExecutionEvent($execution->getTask(), $execution)

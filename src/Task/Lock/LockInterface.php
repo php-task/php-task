@@ -11,7 +11,6 @@
 
 namespace Task\Lock;
 
-use Task\Execution\TaskExecutionInterface;
 use Task\Lock\Exception\LockConflictException;
 
 /**
@@ -20,46 +19,46 @@ use Task\Lock\Exception\LockConflictException;
 interface LockInterface
 {
     /**
-     * Acquires the lock of given execution.
+     * Acquires the lock of given key.
      * If the lock is already acquired an exception will be raised.
      *
-     * @param TaskExecutionInterface $execution
+     * @param string $key
      *
      * @return bool
      *
      * @throws LockConflictException
      */
-    public function acquire(TaskExecutionInterface $execution);
+    public function acquire($key);
 
     /**
-     * Increase the duration of an acquired lock for given execution.
+     * Increase the duration of an acquired lock for given key.
      * If the lock is not acquired an exception will be raised.
      *
-     * @param TaskExecutionInterface $execution
+     * @param string $key
      *
      * @return bool
      *
      * @throws LockConflictException
      */
-    public function refresh(TaskExecutionInterface $execution);
+    public function refresh($key);
 
     /**
-     * Release the lock for given execution.
+     * Release the lock for given key.
      *
-     * @param TaskExecutionInterface $execution
+     * @param string $key
      *
      * @return bool
      *
      * @throws LockConflictException
      */
-    public function release(TaskExecutionInterface $execution);
+    public function release($key);
 
     /**
-     * Returns whether or not the lock for given execution is acquired.
+     * Returns whether or not the lock for given key is acquired.
      *
-     * @param TaskExecutionInterface $execution
+     * @param string $key
      *
      * @return bool
      */
-    public function isAcquired(TaskExecutionInterface $execution);
+    public function isAcquired($key);
 }
