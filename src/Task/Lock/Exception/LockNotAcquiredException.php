@@ -16,4 +16,11 @@ namespace Task\Lock\Exception;
  */
 class LockNotAcquiredException extends LockConflictException
 {
+    /**
+     * @param string $key
+     */
+    public function __construct($key)
+    {
+        parent::__construct($key, sprintf('Lock for key "%s" is already not acquired.', $key));
+    }
 }

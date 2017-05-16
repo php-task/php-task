@@ -23,9 +23,12 @@ abstract class LockConflictException extends \Exception
 
     /**
      * @param string $key
+     * @param string $message
      */
-    public function __construct($key)
+    public function __construct($key, $message)
     {
+        parent::__construct($message);
+
         $this->key = $key;
     }
 
