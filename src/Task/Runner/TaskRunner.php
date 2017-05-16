@@ -75,7 +75,7 @@ class TaskRunner implements TaskRunnerInterface
         while ($execution = $this->taskExecutionRepository->findNextScheduled($runTime)) {
             $handler = $this->taskHandlerFactory->create($execution->getHandlerClass());
             if ($handler instanceof LockingTaskHandlerInterface) {
-                $this->runLocked($handler, $execution);
+                $this->runWithLock($handler, $execution);
 
                 continue;
             }
@@ -98,9 +98,9 @@ class TaskRunner implements TaskRunnerInterface
         $this->taskExecutionRepository->save($execution);
 
         try {
-            $execution = $this->passed($execution, $this->handle($handler, $execution));
+            $execution = $this->hasPassed($execution, $this->handle($handler, $execution));
         } catch (\Exception $exception) {
-            $execution = $this->failed($execution, $exception);
+            $execution = $this->hasFailed($execution, $exception);
         } finally {
             $this->finalize($execution, $start);
         }
@@ -112,7 +112,7 @@ class TaskRunner implements TaskRunnerInterface
      * @param LockingTaskHandlerInterface $handler
      * @param TaskExecutionInterface $execution
      */
-    public function runLocked(LockingTaskHandlerInterface $handler, TaskExecutionInterface $execution)
+    public function runWithLock(LockingTaskHandlerInterface $handler, TaskExecutionInterface $execution)
     {
         $key = $handler->getLockKey($execution->getWorkload());
         if ($this->lock->isAcquired($key) || !$this->lock->acquire($key)) {
@@ -161,7 +161,7 @@ class TaskRunner implements TaskRunnerInterface
      *
      * @return TaskExecutionInterface
      */
-    private function passed(TaskExecutionInterface $execution, $result)
+    private function hasPassed(TaskExecutionInterface $execution, $result)
     {
         // this find is necessary if the storage because the storage could be
         // invalid (clear in doctrine) after handling an execution.
@@ -185,7 +185,7 @@ class TaskRunner implements TaskRunnerInterface
      *
      * @return TaskExecutionInterface
      */
-    private function failed(TaskExecutionInterface $execution, \Exception $exception)
+    private function hasFailed(TaskExecutionInterface $execution, \Exception $exception)
     {
         // this find is necessary if the storage because the storage could be
         // invalid (clear in doctrine) after handling an execution.

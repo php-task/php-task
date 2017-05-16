@@ -14,10 +14,10 @@ namespace Task\Tests\Unit\Lock\Storage;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use org\bovigo\vfs\vfsStreamFile;
-use Task\Lock\Storage\FileLock;
-use Task\Lock\StorageInterface;
+use Task\Lock\LockStorageInterface;
+use Task\Lock\Storage\FileLockStorage;
 
-class FileLockTest extends \PHPUnit_Framework_TestCase
+class FileLockStorageTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var vfsStreamDirectory
@@ -25,7 +25,7 @@ class FileLockTest extends \PHPUnit_Framework_TestCase
     private $root;
 
     /**
-     * @var StorageInterface
+     * @var LockStorageInterface
      */
     private $storage;
 
@@ -33,7 +33,7 @@ class FileLockTest extends \PHPUnit_Framework_TestCase
     {
         $this->root = vfsStream::setup('tmp');
 
-        $this->storage = new FileLock($this->root->url());
+        $this->storage = new FileLockStorage($this->root->url());
     }
 
     public function testSave()

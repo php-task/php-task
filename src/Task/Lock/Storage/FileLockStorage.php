@@ -11,12 +11,12 @@
 
 namespace Task\Lock\Storage;
 
-use Task\Lock\StorageInterface;
+use Task\Lock\LockStorageInterface;
 
 /**
  * Save locks in the filesystem.
  */
-class FileLock implements StorageInterface
+class FileLockStorage implements LockStorageInterface
 {
     /**
      * @var string

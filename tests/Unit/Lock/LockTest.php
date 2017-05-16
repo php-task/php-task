@@ -13,12 +13,12 @@ namespace Task\Tests\Unit\Lock;
 
 use Task\Lock\Lock;
 use Task\Lock\LockInterface;
-use Task\Lock\StorageInterface;
+use Task\Lock\LockStorageInterface;
 
 class LockTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var StorageInterface
+     * @var LockStorageInterface
      */
     private $storage;
 
@@ -39,7 +39,7 @@ class LockTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storage = $this->prophesize(StorageInterface::class);
+        $this->storage = $this->prophesize(LockStorageInterface::class);
 
         $this->lock = new Lock($this->storage->reveal(), $this->ttl);
     }

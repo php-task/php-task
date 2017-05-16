@@ -11,7 +11,8 @@
 
 namespace Task\Lock;
 
-use Task\Lock\Exception\LockConflictException;
+use Task\Lock\Exception\LockAlreadyAcquiredException;
+use Task\Lock\Exception\LockNotAcquiredException;
 
 /**
  * Interface for locking-mechanism.
@@ -26,7 +27,7 @@ interface LockInterface
      *
      * @return bool
      *
-     * @throws LockConflictException
+     * @throws LockAlreadyAcquiredException
      */
     public function acquire($key);
 
@@ -38,7 +39,7 @@ interface LockInterface
      *
      * @return bool
      *
-     * @throws LockConflictException
+     * @throws LockNotAcquiredException
      */
     public function refresh($key);
 
@@ -49,7 +50,7 @@ interface LockInterface
      *
      * @return bool
      *
-     * @throws LockConflictException
+     * @throws LockNotAcquiredException
      */
     public function release($key);
 

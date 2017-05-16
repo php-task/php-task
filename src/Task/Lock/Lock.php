@@ -11,7 +11,8 @@
 
 namespace Task\Lock;
 
-use Task\Lock\Exception\LockConflictException;
+use Task\Lock\Exception\LockAlreadyAcquiredException;
+use Task\Lock\Exception\LockNotAcquiredException;
 
 /**
  * Manages locks.
@@ -19,7 +20,7 @@ use Task\Lock\Exception\LockConflictException;
 class Lock implements LockInterface
 {
     /**
-     * @var StorageInterface
+     * @var LockStorageInterface
      */
     private $storage;
 
@@ -29,10 +30,10 @@ class Lock implements LockInterface
     private $ttl;
 
     /**
-     * @param StorageInterface $storage
+     * @param LockStorageInterface $storage
      * @param int $ttl
      */
-    public function __construct(StorageInterface $storage, $ttl = 300)
+    public function __construct(LockStorageInterface $storage, $ttl = 300)
     {
         $this->storage = $storage;
         $this->ttl = $ttl;
@@ -81,7 +82,7 @@ class Lock implements LockInterface
      *
      * @param string $key
      *
-     * @throws LockConflictException
+     * @throws LockNotAcquiredException
      */
     private function assertAcquired($key)
     {
@@ -89,7 +90,7 @@ class Lock implements LockInterface
             return;
         }
 
-        throw new LockConflictException($key);
+        throw new LockNotAcquiredException($key);
     }
 
     /**
@@ -97,7 +98,7 @@ class Lock implements LockInterface
      *
      * @param string $key
      *
-     * @throws LockConflictException
+     * @throws LockAlreadyAcquiredException
      */
     private function assertNotAcquired($key)
     {
@@ -105,6 +106,6 @@ class Lock implements LockInterface
             return;
         }
 
-        throw new LockConflictException($key);
+        throw new LockAlreadyAcquiredException($key);
     }
 }

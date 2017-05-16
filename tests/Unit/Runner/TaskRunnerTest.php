@@ -18,7 +18,8 @@ use Task\Event\TaskExecutionEvent;
 use Task\Execution\TaskExecution;
 use Task\Handler\TaskHandlerFactoryInterface;
 use Task\Handler\TaskHandlerInterface;
-use Task\Lock\Exception\LockConflictException;
+use Task\Lock\Exception\LockAlreadyAcquiredException;
+use Task\Lock\Exception\LockNotAcquiredException;
 use Task\Lock\LockingTaskHandlerInterface;
 use Task\Lock\LockInterface;
 use Task\Runner\TaskRunner;
@@ -217,12 +218,12 @@ class TaskRunnerTest extends \PHPUnit_Framework_TestCase
 
         $lock = $this->lock;
         $this->lock->isAcquired('test-key')->willReturn(false);
-        $this->lock->release('test-key')->willThrow(new LockConflictException('test-key'));
+        $this->lock->release('test-key')->willThrow(new LockNotAcquiredException('test-key'));
         $this->lock->acquire('test-key')->shouldBeCalled()->will(
             function () use ($lock) {
                 $lock->isAcquired('test-key')->willReturn(true);
                 $lock->release('test-key')->shouldBeCalledTimes(1)->willReturn(true);
-                $lock->acquire('test-key')->willThrow(new LockConflictException('test-key'));
+                $lock->acquire('test-key')->willThrow(new LockAlreadyAcquiredException('test-key'));
 
                 return true;
             }
@@ -246,8 +247,8 @@ class TaskRunnerTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->lock->isAcquired('test-key')->willReturn(true);
-        $this->lock->release('test-key')->shouldNotBeCalled()->willThrow(new LockConflictException($execution));
-        $this->lock->acquire('test-key')->shouldNotBeCalled()->willThrow(new LockConflictException($execution));
+        $this->lock->release('test-key')->shouldNotBeCalled();
+        $this->lock->acquire('test-key')->shouldNotBeCalled();
 
         $handler = $this->prophesize(LockingTaskHandlerInterface::class);
         $handler->handle('Test')->shouldNotBeCalled();

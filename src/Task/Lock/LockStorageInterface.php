@@ -14,7 +14,7 @@ namespace Task\Lock;
 /**
  * Interface for lock storage.
  */
-interface StorageInterface
+interface LockStorageInterface
 {
     /**
      * Stores the lock.

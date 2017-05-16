@@ -12,12 +12,9 @@
 namespace Task\Lock\Exception;
 
 /**
- * Will be thrown when a conflict is detected:
- *  + Already acquired key was acquired.
- *  + Not acquired key was released.
- *  + Not acquired key was refreshed.
+ * Base exception for lock-conflicts.
  */
-class LockConflictException extends \Exception
+abstract class LockConflictException extends \Exception
 {
     /**
      * @var string
