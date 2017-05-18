@@ -20,6 +20,7 @@ final class TaskStatus
     const RUNNING = 'running';
     const COMPLETED = 'completed';
     const FAILED = 'failed';
+    const ABORTED = 'aborted';
 
     /**
      * Private constructor.

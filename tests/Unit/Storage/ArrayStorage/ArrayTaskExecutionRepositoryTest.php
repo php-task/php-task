@@ -233,7 +233,7 @@ class ArrayTaskExecutionRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($executions[2], $result[0]);
     }
 
-    public function testFindScheduled()
+    public function testFindNextScheduled()
     {
         $task = new Task(\stdClass::class, 'Test 1', '123-123-123');
         $executions = [
@@ -247,9 +247,7 @@ class ArrayTaskExecutionRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $repository = new ArrayTaskExecutionRepository(new ArrayCollection($executions));
 
-        $result = $repository->findScheduled();
-        $this->assertCount(1, $result);
-
-        $this->assertEquals($executions[0], $result[0]);
+        $result = $repository->findNextScheduled();
+        $this->assertEquals($executions[0], $result);
     }
 }

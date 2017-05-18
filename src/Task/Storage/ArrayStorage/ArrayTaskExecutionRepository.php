@@ -147,14 +147,18 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findScheduled()
+    public function findNextScheduled(\DateTime $dateTime = null, array $skippedExecutions = [])
     {
-        $dateTime = new \DateTime();
+        $dateTime = $dateTime ?: new \DateTime();
 
-        return $this->taskExecutionCollection->filter(
-            function (TaskExecutionInterface $execution) use ($dateTime) {
-                return $execution->getStatus() === TaskStatus::PLANNED && $execution->getScheduleTime() < $dateTime;
+        $result = $this->taskExecutionCollection->filter(
+            function (TaskExecutionInterface $execution) use ($dateTime, $skippedExecutions) {
+                return $execution->getStatus() === TaskStatus::PLANNED
+                    && $execution->getScheduleTime() < $dateTime
+                    && !in_array($execution->getUuid(), $skippedExecutions);
             }
-        );
+        )->first();
+
+        return $result ?: null;
     }
 }
