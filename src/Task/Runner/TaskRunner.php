@@ -82,15 +82,20 @@ class TaskRunner implements TaskRunnerInterface
     {
         $runTime = new \DateTime();
 
-        while ($execution = $this->taskExecutionRepository->findNextScheduled($runTime)) {
+        $skippedExecutions = [];
+        while ($execution = $this->taskExecutionRepository->findNextScheduled($runTime, $skippedExecutions)) {
             $handler = $this->taskHandlerFactory->create($execution->getHandlerClass());
-            if ($handler instanceof LockingTaskHandlerInterface) {
-                $this->runWithLock($handler, $execution);
+            if (!$handler instanceof LockingTaskHandlerInterface) {
+                $this->run($handler, $execution);
 
                 continue;
             }
 
-            $this->run($handler, $execution);
+            if ($this->runWithLock($handler, $execution)) {
+                continue;
+            }
+
+            $skippedExecutions[] = $execution->getUuid();
         }
     }
 
@@ -121,6 +126,8 @@ class TaskRunner implements TaskRunnerInterface
      *
      * @param LockingTaskHandlerInterface $handler
      * @param TaskExecutionInterface $execution
+     *
+     * @return bool
      */
     public function runWithLock(LockingTaskHandlerInterface $handler, TaskExecutionInterface $execution)
     {
@@ -128,12 +135,12 @@ class TaskRunner implements TaskRunnerInterface
         if ($this->lock->isAcquired($key) || !$this->lock->acquire($key)) {
             $this->logger->warning(sprintf('Execution "%s" is locked and skipped.', $execution->getUuid()));
 
-            return;
+            return false;
         }
 
         $this->run($handler, $execution);
 
-        $this->lock->release($key);
+        return $this->lock->release($key);
     }
 
     /**

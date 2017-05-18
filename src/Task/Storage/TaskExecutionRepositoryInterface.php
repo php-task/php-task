@@ -99,8 +99,9 @@ interface TaskExecutionRepositoryInterface
      * Scheduled-time in the past relative to given date.
      *
      * @param \DateTime|null $dateTime
+     * @param array $skippedExecutions
      *
      * @return TaskExecutionInterface
      */
-    public function findNextScheduled(\DateTime $dateTime = null);
+    public function findNextScheduled(\DateTime $dateTime = null, array $skippedExecutions = []);
 }

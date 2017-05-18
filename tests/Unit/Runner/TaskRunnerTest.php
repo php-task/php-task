@@ -85,13 +85,13 @@ class TaskRunnerTest extends \PHPUnit_Framework_TestCase
         $this->taskExecutionRepository->save($executions[1])->willReturnArgument(0)->shouldBeCalledTimes(2);
 
         $taskExecutionRepository = $this->taskExecutionRepository;
-        $this->taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class))
+        $this->taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class), [])
             ->will(
                 function () use ($executions, $taskExecutionRepository) {
-                    $taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class))
+                    $taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class), [])
                         ->will(
                             function () use ($executions, $taskExecutionRepository) {
-                                $taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class))
+                                $taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class), [])
                                     ->willReturn(null);
 
                                 return $executions[1];
@@ -146,13 +146,13 @@ class TaskRunnerTest extends \PHPUnit_Framework_TestCase
         $handler->handle('Test 2')->willReturn(strrev('Test 2'));
 
         $taskExecutionRepository = $this->taskExecutionRepository;
-        $this->taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class))
+        $this->taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class), [])
             ->will(
                 function () use ($executions, $taskExecutionRepository) {
-                    $taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class))
+                    $taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class), [])
                         ->will(
                             function () use ($executions, $taskExecutionRepository) {
-                                $taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class))
+                                $taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class), [])
                                     ->willReturn(null);
 
                                 return $executions[1];
@@ -208,9 +208,11 @@ class TaskRunnerTest extends \PHPUnit_Framework_TestCase
         $this->initializeDispatcher($this->eventDispatcher, $execution);
 
         $taskExecutionRepository = $this->taskExecutionRepository;
-        $this->taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class))->will(
+        $this->taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class), [])
+            ->will(
                 function () use ($execution, $taskExecutionRepository) {
-                    $taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class))->willReturn(null);
+                    $taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class), [])
+                        ->willReturn(null);
 
                     return $execution;
                 }
@@ -238,9 +240,11 @@ class TaskRunnerTest extends \PHPUnit_Framework_TestCase
         $execution = $this->createTaskExecution($task, new \DateTime(), 'Test')->setStatus(TaskStatus::PLANNED);
 
         $taskExecutionRepository = $this->taskExecutionRepository;
-        $this->taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class))->will(
+        $this->taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class), [])
+            ->will(
                 function () use ($execution, $taskExecutionRepository) {
-                    $taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class))->willReturn(null);
+                    $taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class), [$execution->getUuid()])
+                        ->willReturn(null);
 
                     return $execution;
                 }
