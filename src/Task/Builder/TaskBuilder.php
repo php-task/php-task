@@ -23,12 +23,12 @@ class TaskBuilder implements TaskBuilderInterface
     /**
      * @var TaskInterface
      */
-    private $task;
+    protected $task;
 
     /**
      * @var TaskSchedulerInterface
      */
-    private $taskScheduler;
+    protected $taskScheduler;
 
     /**
      * @param TaskInterface $task

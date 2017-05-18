@@ -11,6 +11,8 @@
 
 namespace Task\Runner;
 
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Task\Event\Events;
 use Task\Event\TaskExecutionEvent;
@@ -48,21 +50,29 @@ class TaskRunner implements TaskRunnerInterface
     private $lock;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param TaskExecutionRepositoryInterface $executionRepository
      * @param TaskHandlerFactoryInterface $taskHandlerFactory
      * @param LockInterface $lock
      * @param EventDispatcherInterface $eventDispatcher
+     * @param LoggerInterface $logger
      */
     public function __construct(
         TaskExecutionRepositoryInterface $executionRepository,
         TaskHandlerFactoryInterface $taskHandlerFactory,
         LockInterface $lock,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        LoggerInterface $logger = null
     ) {
         $this->taskExecutionRepository = $executionRepository;
         $this->taskHandlerFactory = $taskHandlerFactory;
         $this->lock = $lock;
         $this->eventDispatcher = $eventDispatcher;
+        $this->logger = $logger ?: new NullLogger();
     }
 
     /**
@@ -116,6 +126,8 @@ class TaskRunner implements TaskRunnerInterface
     {
         $key = $handler->getLockKey($execution->getWorkload());
         if ($this->lock->isAcquired($key) || !$this->lock->acquire($key)) {
+            $this->logger->warning(sprintf('Execution "%s" is locked and skipped.', $execution->getUuid()));
+
             return;
         }
 
