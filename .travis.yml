@@ -8,7 +8,6 @@ matrix:
       env:
         - CODE_COVERAGE=true
     - php: 7.0
-    - php: hhvm
 
 install:
    - composer self-update
