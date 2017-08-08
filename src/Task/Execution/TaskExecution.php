@@ -13,6 +13,7 @@ namespace Task\Execution;
 
 use Ramsey\Uuid\Uuid;
 use Task\TaskInterface;
+use Task\TaskStatus;
 
 /**
  * Single task-execution.
@@ -241,5 +242,15 @@ class TaskExecution implements TaskExecutionInterface
         $this->exception = $exception;
 
         return $this;
+    }
+
+    public function __clone()
+    {
+        $this->uuid = Uuid::uuid4()->toString();
+        $this->status = TaskStatus::PLANNED;
+        $this->startTime = null;
+        $this->endTime = null;
+        $this->exception = null;
+        $this->result = null;
     }
 }

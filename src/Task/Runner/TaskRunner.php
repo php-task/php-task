@@ -114,6 +114,11 @@ class TaskRunner implements TaskRunnerInterface
 
         try {
             $execution = $this->hasPassed($execution, $this->handle($handler, $execution));
+        } catch (RetryException $exception) {
+            $execution = $this->taskExecutionRepository->findByUuid($execution->getUuid());
+            $this->taskExecutionRepository->save(clone $execution);
+
+            $execution = $this->hasFailed($execution, $exception->getInnerException());
         } catch (\Exception $exception) {
             $execution = $this->hasFailed($execution, $exception);
         } finally {
