@@ -11,16 +11,10 @@
 
 namespace Task\Runner;
 
-use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Task\Event\Events;
 use Task\Event\TaskExecutionEvent;
 use Task\Execution\TaskExecutionInterface;
-use Task\Handler\TaskHandlerFactoryInterface;
-use Task\Handler\TaskHandlerInterface;
-use Task\Lock\LockingTaskHandlerInterface;
-use Task\Lock\LockInterface;
 use Task\Storage\TaskExecutionRepositoryInterface;
 use Task\TaskStatus;
 
@@ -35,9 +29,14 @@ class TaskRunner implements TaskRunnerInterface
     private $taskExecutionRepository;
 
     /**
-     * @var TaskHandlerFactoryInterface
+     * @var ExecutionFinderInterface
      */
-    private $taskHandlerFactory;
+    private $executionFinder;
+
+    /**
+     * @var ExecutorInterface
+     */
+    private $executor;
 
     /**
      * @var EventDispatcherInterface
@@ -45,34 +44,21 @@ class TaskRunner implements TaskRunnerInterface
     private $eventDispatcher;
 
     /**
-     * @var LockInterface
-     */
-    private $lock;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @param TaskExecutionRepositoryInterface $executionRepository
-     * @param TaskHandlerFactoryInterface $taskHandlerFactory
-     * @param LockInterface $lock
+     * @param TaskExecutionRepositoryInterface $taskExecutionRepository
+     * @param ExecutionFinderInterface $executionFinder
+     * @param ExecutorInterface $executor
      * @param EventDispatcherInterface $eventDispatcher
-     * @param LoggerInterface $logger
      */
     public function __construct(
-        TaskExecutionRepositoryInterface $executionRepository,
-        TaskHandlerFactoryInterface $taskHandlerFactory,
-        LockInterface $lock,
-        EventDispatcherInterface $eventDispatcher,
-        LoggerInterface $logger = null
+        TaskExecutionRepositoryInterface $taskExecutionRepository,
+        ExecutionFinderInterface $executionFinder,
+        ExecutorInterface $executor,
+        EventDispatcherInterface $eventDispatcher
     ) {
-        $this->taskExecutionRepository = $executionRepository;
-        $this->taskHandlerFactory = $taskHandlerFactory;
-        $this->lock = $lock;
+        $this->taskExecutionRepository = $taskExecutionRepository;
+        $this->executionFinder = $executionFinder;
+        $this->executor = $executor;
         $this->eventDispatcher = $eventDispatcher;
-        $this->logger = $logger ?: new NullLogger();
     }
 
     /**
@@ -80,32 +66,17 @@ class TaskRunner implements TaskRunnerInterface
      */
     public function runTasks()
     {
-        $runTime = new \DateTime();
-
-        $skippedExecutions = [];
-        while ($execution = $this->taskExecutionRepository->findNextScheduled($runTime, $skippedExecutions)) {
-            $handler = $this->taskHandlerFactory->create($execution->getHandlerClass());
-            if (!$handler instanceof LockingTaskHandlerInterface) {
-                $this->run($handler, $execution);
-
-                continue;
-            }
-
-            if ($this->runWithLock($handler, $execution)) {
-                continue;
-            }
-
-            $skippedExecutions[] = $execution->getUuid();
+        foreach ($this->executionFinder->find() as $execution) {
+            $this->run($execution);
         }
     }
 
     /**
      * Run execution with given handler.
      *
-     * @param TaskHandlerInterface $handler
      * @param TaskExecutionInterface $execution
      */
-    public function run(TaskHandlerInterface $handler, TaskExecutionInterface $execution)
+    private function run(TaskExecutionInterface $execution)
     {
         $start = microtime(true);
         $execution->setStartTime(new \DateTime());
@@ -113,7 +84,7 @@ class TaskRunner implements TaskRunnerInterface
         $this->taskExecutionRepository->save($execution);
 
         try {
-            $execution = $this->hasPassed($execution, $this->handle($handler, $execution));
+            $execution = $this->hasPassed($execution, $this->handle($execution));
         } catch (\Exception $exception) {
             $execution = $this->hasFailed($execution, $exception);
         } finally {
@@ -122,38 +93,15 @@ class TaskRunner implements TaskRunnerInterface
     }
 
     /**
-     * Run execution with given handler and use locking component.
-     *
-     * @param LockingTaskHandlerInterface $handler
-     * @param TaskExecutionInterface $execution
-     *
-     * @return bool
-     */
-    public function runWithLock(LockingTaskHandlerInterface $handler, TaskExecutionInterface $execution)
-    {
-        $key = $handler->getLockKey($execution->getWorkload());
-        if ($this->lock->isAcquired($key) || !$this->lock->acquire($key)) {
-            $this->logger->warning(sprintf('Execution "%s" is locked and skipped.', $execution->getUuid()));
-
-            return false;
-        }
-
-        $this->run($handler, $execution);
-
-        return $this->lock->release($key);
-    }
-
-    /**
      * Handle given execution and fire before and after events.
      *
-     * @param TaskHandlerInterface $handler
      * @param TaskExecutionInterface $execution
      *
      * @return \Serializable|string
      *
      * @throws \Exception
      */
-    private function handle(TaskHandlerInterface $handler, TaskExecutionInterface $execution)
+    private function handle(TaskExecutionInterface $execution)
     {
         $this->eventDispatcher->dispatch(
             Events::TASK_BEFORE,
@@ -161,9 +109,7 @@ class TaskRunner implements TaskRunnerInterface
         );
 
         try {
-            return $handler->handle($execution->getWorkload());
-        } catch (\Exception $exception) {
-            throw $exception;
+            return $this->executor->execute($execution);
         } finally {
             $this->eventDispatcher->dispatch(
                 Events::TASK_AFTER,

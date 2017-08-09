@@ -12,9 +12,10 @@ matrix:
 install:
    - composer self-update
    - composer update
+   - composer info
 
 script:
-   - phpunit -c phpunit.xml.dist --coverage-clover=coverage.clover
+   - vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover=coverage.clover
 
 after_script:
   - if [[ $CODE_COVERAGE == 'true' ]]; then wget https://scrutinizer-ci.com/ocular.phar ; fi
@@ -23,4 +24,3 @@ after_script:
 cache:
   directories:
   - "$HOME/.composer/cache"
-  - vendor

@@ -16,12 +16,9 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Task\Event\Events;
 use Task\Event\TaskExecutionEvent;
 use Task\Execution\TaskExecution;
-use Task\Handler\TaskHandlerFactoryInterface;
 use Task\Handler\TaskHandlerInterface;
-use Task\Lock\Exception\LockAlreadyAcquiredException;
-use Task\Lock\Exception\LockNotAcquiredException;
-use Task\Lock\LockingTaskHandlerInterface;
-use Task\Lock\LockInterface;
+use Task\Runner\ExecutionFinderInterface;
+use Task\Runner\ExecutorInterface;
 use Task\Runner\TaskRunner;
 use Task\Runner\TaskRunnerInterface;
 use Task\Storage\TaskExecutionRepositoryInterface;
@@ -39,14 +36,14 @@ class TaskRunnerTest extends \PHPUnit_Framework_TestCase
     private $taskExecutionRepository;
 
     /**
-     * @var TaskHandlerFactoryInterface
+     * @var ExecutionFinderInterface
      */
-    private $taskHandlerFactory;
+    private $executionFinder;
 
     /**
-     * @var LockInterface
+     * @var ExecutorInterface
      */
-    private $lock;
+    private $executor;
 
     /**
      * @var EventDispatcherInterface
@@ -61,14 +58,14 @@ class TaskRunnerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->taskExecutionRepository = $this->prophesize(TaskExecutionRepositoryInterface::class);
-        $this->taskHandlerFactory = $this->prophesize(TaskHandlerFactoryInterface::class);
-        $this->lock = $this->prophesize(LockInterface::class);
+        $this->executionFinder = $this->prophesize(ExecutionFinderInterface::class);
+        $this->executor = $this->prophesize(ExecutorInterface::class);
         $this->eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
 
         $this->taskRunner = new TaskRunner(
             $this->taskExecutionRepository->reveal(),
-            $this->taskHandlerFactory->reveal(),
-            $this->lock->reveal(),
+            $this->executionFinder->reveal(),
+            $this->executor->reveal(),
             $this->eventDispatcher->reveal()
         );
     }
@@ -84,36 +81,13 @@ class TaskRunnerTest extends \PHPUnit_Framework_TestCase
         $this->taskExecutionRepository->save($executions[0])->willReturnArgument(0)->shouldBeCalledTimes(2);
         $this->taskExecutionRepository->save($executions[1])->willReturnArgument(0)->shouldBeCalledTimes(2);
 
-        $taskExecutionRepository = $this->taskExecutionRepository;
-        $this->taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class), [])
-            ->will(
-                function () use ($executions, $taskExecutionRepository) {
-                    $taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class), [])
-                        ->will(
-                            function () use ($executions, $taskExecutionRepository) {
-                                $taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class), [])
-                                    ->willReturn(null);
+        $this->executor->execute($executions[0])->willReturn(strrev('Test 1'));
+        $this->executor->execute($executions[1])->willReturn(strrev('Test 2'));
 
-                                return $executions[1];
-                            }
-                        );
-
-                    return $executions[0];
-                }
-            );
-
-        $this->taskHandlerFactory->create(TestHandler::class)->willReturn(new TestHandler());
+        $this->executionFinder->find()->willReturn($executions);
 
         $this->initializeDispatcher($this->eventDispatcher, $executions[0]);
         $this->initializeDispatcher($this->eventDispatcher, $executions[1]);
-
-        $this->lock->isAcquired($executions[0])->willReturn(false);
-        $this->lock->acquire($executions[0])->willReturn(true);
-        $this->lock->release($executions[0])->willReturn(true);
-
-        $this->lock->isAcquired($executions[1])->willReturn(false);
-        $this->lock->acquire($executions[1])->willReturn(true);
-        $this->lock->release($executions[1])->willReturn(true);
 
         $this->taskRunner->runTasks();
 
@@ -141,40 +115,13 @@ class TaskRunnerTest extends \PHPUnit_Framework_TestCase
         $this->taskExecutionRepository->save($executions[0])->willReturnArgument(0)->shouldBeCalledTimes(2);
         $this->taskExecutionRepository->save($executions[1])->willReturnArgument(0)->shouldBeCalledTimes(2);
 
-        $handler = $this->prophesize(TaskHandlerInterface::class);
-        $handler->handle('Test 1')->willThrow(new \Exception());
-        $handler->handle('Test 2')->willReturn(strrev('Test 2'));
+        $this->executor->execute($executions[0])->willThrow(new \Exception());
+        $this->executor->execute($executions[1])->willReturn(strrev('Test 2'));
 
-        $taskExecutionRepository = $this->taskExecutionRepository;
-        $this->taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class), [])
-            ->will(
-                function () use ($executions, $taskExecutionRepository) {
-                    $taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class), [])
-                        ->will(
-                            function () use ($executions, $taskExecutionRepository) {
-                                $taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class), [])
-                                    ->willReturn(null);
-
-                                return $executions[1];
-                            }
-                        );
-
-                    return $executions[0];
-                }
-            );
-
-        $this->taskHandlerFactory->create(TestHandler::class)->willReturn($handler->reveal());
+        $this->executionFinder->find()->willReturn($executions);
 
         $this->initializeDispatcher($this->eventDispatcher, $executions[0], Events::TASK_FAILED);
         $this->initializeDispatcher($this->eventDispatcher, $executions[1]);
-
-        $this->lock->isAcquired($executions[0])->willReturn(false);
-        $this->lock->acquire($executions[0])->willReturn(true);
-        $this->lock->release($executions[0])->willReturn(true);
-
-        $this->lock->isAcquired($executions[1])->willReturn(false);
-        $this->lock->acquire($executions[1])->willReturn(true);
-        $this->lock->release($executions[1])->willReturn(true);
 
         $this->taskRunner->runTasks();
 
@@ -191,77 +138,6 @@ class TaskRunnerTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($executions[1]->getException());
         $this->assertEquals(TaskStatus::FAILED, $executions[0]->getStatus());
         $this->assertEquals(TaskStatus::COMPLETED, $executions[1]->getStatus());
-    }
-
-    public function testRunTasksNotLocked()
-    {
-        $task = $this->createTask();
-        $execution = $this->createTaskExecution($task, new \DateTime(), 'Test')->setStatus(TaskStatus::PLANNED);
-
-        $this->taskExecutionRepository->save($execution)->willReturnArgument(0)->shouldBeCalledTimes(2);
-
-        $handler = $this->prophesize(LockingTaskHandlerInterface::class);
-        $handler->handle('Test')->shouldBeCalled();
-        $handler->getLockKey('Test')->willReturn('test-key');
-        $this->taskHandlerFactory->create(TestHandler::class)->willReturn($handler->reveal());
-
-        $this->initializeDispatcher($this->eventDispatcher, $execution);
-
-        $taskExecutionRepository = $this->taskExecutionRepository;
-        $this->taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class), [])
-            ->will(
-                function () use ($execution, $taskExecutionRepository) {
-                    $taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class), [])
-                        ->willReturn(null);
-
-                    return $execution;
-                }
-            );
-
-        $lock = $this->lock;
-        $this->lock->isAcquired('test-key')->willReturn(false);
-        $this->lock->release('test-key')->willThrow(new LockNotAcquiredException('test-key'));
-        $this->lock->acquire('test-key')->shouldBeCalled()->will(
-            function () use ($lock) {
-                $lock->isAcquired('test-key')->willReturn(true);
-                $lock->release('test-key')->shouldBeCalledTimes(1)->willReturn(true);
-                $lock->acquire('test-key')->willThrow(new LockAlreadyAcquiredException('test-key'));
-
-                return true;
-            }
-        );
-
-        $this->taskRunner->runTasks();
-    }
-
-    public function testRunTasksLocked()
-    {
-        $task = $this->createTask();
-        $execution = $this->createTaskExecution($task, new \DateTime(), 'Test')->setStatus(TaskStatus::PLANNED);
-
-        $taskExecutionRepository = $this->taskExecutionRepository;
-        $this->taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class), [])
-            ->will(
-                function () use ($execution, $taskExecutionRepository) {
-                    $taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class), [$execution->getUuid()])
-                        ->willReturn(null);
-
-                    return $execution;
-                }
-            );
-
-        $this->lock->isAcquired('test-key')->willReturn(true);
-        $this->lock->release('test-key')->shouldNotBeCalled();
-        $this->lock->acquire('test-key')->shouldNotBeCalled();
-
-        $handler = $this->prophesize(LockingTaskHandlerInterface::class);
-        $handler->handle('Test')->shouldNotBeCalled();
-        $handler->getLockKey('Test')->willReturn('test-key');
-        $this->taskHandlerFactory->create(TestHandler::class)->willReturn($handler->reveal());
-
-        $this->taskExecutionRepository->save($execution)->willReturnArgument(0)->shouldNotBeCalled();
-
-        $this->taskRunner->runTasks();
     }
 
     private function initializeDispatcher($eventDispatcher, $execution, $event = Events::TASK_PASSED)
