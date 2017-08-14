@@ -15,9 +15,9 @@ use Task\Execution\TaskExecutionInterface;
 use Task\Handler\TaskHandlerFactoryInterface;
 
 /**
- * Executes handler inline.
+ * Executes handler inside current process.
  */
-class InlineExecutor implements ExecutorInterface
+class InsideProcessExecutor implements ExecutorInterface
 {
     /**
      * @var TaskHandlerFactoryInterface

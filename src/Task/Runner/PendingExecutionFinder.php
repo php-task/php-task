@@ -73,6 +73,7 @@ class PendingExecutionFinder implements ExecutionFinderInterface
             $handler = $this->taskHandlerFactory->create($execution->getHandlerClass());
             if (!$handler instanceof LockingTaskHandlerInterface) {
                 yield $execution;
+
                 continue;
             }
 

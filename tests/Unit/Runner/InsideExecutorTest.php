@@ -14,9 +14,9 @@ namespace Unit\Runner;
 use Task\Execution\TaskExecutionInterface;
 use Task\Handler\TaskHandlerFactoryInterface;
 use Task\Handler\TaskHandlerInterface;
-use Task\Runner\InlineExecutor;
+use Task\Runner\InsideProcessExecutor;
 
-class InlineExecutorTest extends \PHPUnit_Framework_TestCase
+class InsideExecutorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var TaskHandlerFactoryInterface
@@ -24,15 +24,15 @@ class InlineExecutorTest extends \PHPUnit_Framework_TestCase
     private $handlerFactory;
 
     /**
-     * @var InlineExecutor
+     * @var InsideProcessExecutor
      */
-    private $inlineExecutor;
+    private $executor;
 
     protected function setUp()
     {
         $this->handlerFactory = $this->prophesize(TaskHandlerFactoryInterface::class);
 
-        $this->inlineExecutor = new InlineExecutor($this->handlerFactory->reveal());
+        $this->executor = new InsideProcessExecutor($this->handlerFactory->reveal());
     }
 
     public function testExecute()
@@ -46,7 +46,7 @@ class InlineExecutorTest extends \PHPUnit_Framework_TestCase
 
         $this->handlerFactory->create('AppBundle\\Handler\\TestHandler')->willReturn($handler->reveal());
 
-        $result = $this->inlineExecutor->execute($executions->reveal());
+        $result = $this->executor->execute($executions->reveal());
 
         $this->assertEquals(strrev('test workload'), $result);
     }
@@ -64,6 +64,6 @@ class InlineExecutorTest extends \PHPUnit_Framework_TestCase
 
         $this->handlerFactory->create('AppBundle\\Handler\\TestHandler')->willReturn($handler->reveal());
 
-        $this->inlineExecutor->execute($executions->reveal());
+        $this->executor->execute($executions->reveal());
     }
 }
