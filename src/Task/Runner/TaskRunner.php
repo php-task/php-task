@@ -15,6 +15,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Task\Event\Events;
 use Task\Event\TaskExecutionEvent;
 use Task\Execution\TaskExecutionInterface;
+use Task\Executor\ExecutorInterface;
 use Task\Storage\TaskExecutionRepositoryInterface;
 use Task\TaskStatus;
 

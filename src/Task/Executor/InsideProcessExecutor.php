@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Task\Runner;
+namespace Task\Executor;
 
 use Task\Execution\TaskExecutionInterface;
 use Task\Handler\TaskHandlerFactoryInterface;

@@ -12,9 +12,9 @@
 namespace Unit\Runner;
 
 use Task\Execution\TaskExecutionInterface;
+use Task\Executor\InsideProcessExecutor;
 use Task\Handler\TaskHandlerFactoryInterface;
 use Task\Handler\TaskHandlerInterface;
-use Task\Runner\InsideProcessExecutor;
 
 class InsideExecutorTest extends \PHPUnit_Framework_TestCase
 {
