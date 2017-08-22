@@ -121,7 +121,7 @@ class TaskRunner implements TaskRunnerInterface
         try {
             return $this->executor->execute($execution);
         } catch (RetryException $exception) {
-            // this find is necessary if the storage because the storage could be
+            // this find is necessary because the storage could be
             // invalid (clear in doctrine) after handling an execution.
             $execution = $this->taskExecutionRepository->findByUuid($execution->getUuid());
 
@@ -158,7 +158,7 @@ class TaskRunner implements TaskRunnerInterface
      */
     private function hasPassed(TaskExecutionInterface $execution, $result)
     {
-        // this find is necessary if the storage because the storage could be
+        // this find is necessary because the storage could be
         // invalid (clear in doctrine) after handling an execution.
         $execution = $this->taskExecutionRepository->findByUuid($execution->getUuid());
         $execution->setStatus(TaskStatus::COMPLETED);
@@ -182,7 +182,7 @@ class TaskRunner implements TaskRunnerInterface
      */
     private function hasFailed(TaskExecutionInterface $execution, \Exception $exception)
     {
-        // this find is necessary if the storage because the storage could be
+        // this find is necessary because the storage could be
         // invalid (clear in doctrine) after handling an execution.
         $execution = $this->taskExecutionRepository->findByUuid($execution->getUuid());
         $execution->setException($exception->__toString());
@@ -204,7 +204,7 @@ class TaskRunner implements TaskRunnerInterface
      */
     private function finalize(TaskExecutionInterface $execution, $start)
     {
-        // this find is necessary if the storage because the storage could be
+        // this find is necessary because the storage could be
         // invalid (clear in doctrine) after handling an execution.
         $execution = $this->taskExecutionRepository->findByUuid($execution->getUuid());
 
