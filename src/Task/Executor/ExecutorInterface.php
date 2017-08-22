@@ -24,6 +24,9 @@ interface ExecutorInterface
      * @param TaskExecutionInterface $execution
      *
      * @return mixed
+     *
+     * @throws RetryException indicates that the current run should by retried
+     * @throws FailedException indicates that the current run was failed
      */
     public function execute(TaskExecutionInterface $execution);
 }
