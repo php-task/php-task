@@ -16,6 +16,7 @@ use Task\Event\Events;
 use Task\Event\TaskExecutionEvent;
 use Task\Execution\TaskExecutionInterface;
 use Task\Executor\ExecutorInterface;
+use Task\Executor\RetryException;
 use Task\Storage\TaskExecutionRepositoryInterface;
 use Task\TaskStatus;
 
@@ -68,7 +69,11 @@ class TaskRunner implements TaskRunnerInterface
     public function runTasks()
     {
         foreach ($this->executionFinder->find() as $execution) {
-            $this->run($execution);
+            try {
+                $this->run($execution);
+            } catch (ExitException $exception) {
+                return;
+            }
         }
     }
 
@@ -76,6 +81,8 @@ class TaskRunner implements TaskRunnerInterface
      * Run execution with given handler.
      *
      * @param TaskExecutionInterface $execution
+     *
+     * @throws ExitException
      */
     private function run(TaskExecutionInterface $execution)
     {
@@ -86,6 +93,8 @@ class TaskRunner implements TaskRunnerInterface
 
         try {
             $execution = $this->hasPassed($execution, $this->handle($execution));
+        } catch (ExitException $exception) {
+            throw $exception;
         } catch (\Exception $exception) {
             $execution = $this->hasFailed($execution, $exception);
         } finally {
@@ -111,6 +120,26 @@ class TaskRunner implements TaskRunnerInterface
 
         try {
             return $this->executor->execute($execution);
+        } catch (RetryException $exception) {
+            // this find is necessary if the storage because the storage could be
+            // invalid (clear in doctrine) after handling an execution.
+            $execution = $this->taskExecutionRepository->findByUuid($execution->getUuid());
+
+            if ($execution->getAttempts() === $exception->getMaximumAttempts()) {
+                throw $exception->getPrevious();
+            }
+
+            $execution->reset();
+            $execution->incrementAttempts();
+
+            $this->eventDispatcher->dispatch(
+                Events::TASK_RETRIED,
+                new TaskExecutionEvent($execution->getTask(), $execution)
+            );
+
+            $this->taskExecutionRepository->save($execution);
+
+            throw new ExitException();
         } finally {
             $this->eventDispatcher->dispatch(
                 Events::TASK_AFTER,
@@ -175,8 +204,14 @@ class TaskRunner implements TaskRunnerInterface
      */
     private function finalize(TaskExecutionInterface $execution, $start)
     {
-        $execution->setEndTime(new \DateTime());
-        $execution->setDuration(microtime(true) - $start);
+        // this find is necessary if the storage because the storage could be
+        // invalid (clear in doctrine) after handling an execution.
+        $execution = $this->taskExecutionRepository->findByUuid($execution->getUuid());
+
+        if ($execution->getStatus() !== TaskStatus::PLANNED) {
+            $execution->setEndTime(new \DateTime());
+            $execution->setDuration(microtime(true) - $start);
+        }
 
         $this->eventDispatcher->dispatch(
             Events::TASK_FINISHED,

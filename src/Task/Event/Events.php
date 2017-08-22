@@ -54,6 +54,11 @@ final class Events
     const TASK_FAILED = 'tasks.failed';
 
     /**
+     * Emitted when task will be retried.
+     */
+    const TASK_RETRIED = 'tasks.retried';
+
+    /**
      * Private constructor.
      */
     private function __construct()

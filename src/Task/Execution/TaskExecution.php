@@ -13,6 +13,7 @@ namespace Task\Execution;
 
 use Ramsey\Uuid\Uuid;
 use Task\TaskInterface;
+use Task\TaskStatus;
 
 /**
  * Single task-execution.
@@ -73,6 +74,11 @@ class TaskExecution implements TaskExecutionInterface
      * @var string
      */
     protected $exception;
+
+    /**
+     * @var int
+     */
+    protected $attempts = 1;
 
     /**
      * @param TaskInterface $task
@@ -239,6 +245,38 @@ class TaskExecution implements TaskExecutionInterface
     public function setException($exception)
     {
         $this->exception = $exception;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAttempts()
+    {
+        return $this->attempts;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function reset()
+    {
+        $this->startTime = null;
+        $this->endTime = null;
+        $this->result = null;
+        $this->exception = null;
+        $this->status = TaskStatus::PLANNED;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function incrementAttempts()
+    {
+        ++$this->attempts;
 
         return $this;
     }

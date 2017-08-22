@@ -39,6 +39,16 @@ class InsideProcessExecutor implements ExecutorInterface
     {
         $handler = $this->handlerFactory->create($execution->getHandlerClass());
 
-        return $handler->handle($execution->getWorkload());
+        try {
+            return $handler->handle($execution->getWorkload());
+        } catch (FailedException $exception) {
+            throw $exception->getPrevious();
+        } catch (\Exception $exception) {
+            if (!$handler instanceof RetryTaskHandlerInterface) {
+                throw $exception;
+            }
+
+            throw new RetryException($handler->getMaximumAttempts(), $exception);
+        }
     }
 }

@@ -148,4 +148,25 @@ interface TaskExecutionInterface
      * @return $this
      */
     public function setDuration($duration);
+
+    /**
+     * Returns amount of attempts to pass this execution.
+     *
+     * @return int
+     */
+    public function getAttempts();
+
+    /**
+     * Reset execution to retry after failed run.
+     *
+     * @return $this
+     */
+    public function reset();
+
+    /**
+     * Increments amount of attempts to pass this execution.
+     *
+     * @return $this
+     */
+    public function incrementAttempts();
 }

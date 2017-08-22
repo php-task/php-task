@@ -17,6 +17,7 @@ use Task\Event\Events;
 use Task\Event\TaskExecutionEvent;
 use Task\Execution\TaskExecution;
 use Task\Executor\ExecutorInterface;
+use Task\Executor\RetryException;
 use Task\Handler\TaskHandlerInterface;
 use Task\Runner\ExecutionFinderInterface;
 use Task\Runner\TaskRunner;
@@ -138,6 +139,58 @@ class TaskRunnerTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($executions[1]->getException());
         $this->assertEquals(TaskStatus::FAILED, $executions[0]->getStatus());
         $this->assertEquals(TaskStatus::COMPLETED, $executions[1]->getStatus());
+    }
+
+    public function testRunTasksRetry()
+    {
+        $task = $this->createTask();
+        $executions = [
+            $this->createTaskExecution($task, new \DateTime(), 'Test 1')->setStatus(TaskStatus::PLANNED),
+        ];
+
+        $this->taskExecutionRepository->save($executions[0])->willReturnArgument(0)->shouldBeCalled();
+
+        $this->executor->execute($executions[0])->willThrow(new RetryException(3, new \InvalidArgumentException()));
+
+        $this->executionFinder->find()->willReturn($executions);
+
+        $this->initializeDispatcher($this->eventDispatcher, $executions[0], Events::TASK_RETRIED);
+
+        $this->taskRunner->runTasks();
+
+        $this->assertNull($executions[0]->getStartTime());
+        $this->assertNull($executions[0]->getEndTime());
+        $this->assertNull($executions[0]->getDuration());
+        $this->assertNull($executions[0]->getResult());
+        $this->assertEquals(TaskStatus::PLANNED, $executions[0]->getStatus());
+        $this->assertEquals(2, $executions[0]->getAttempts());
+    }
+
+    public function testRunTasksRetryMaximumAttemptsReached()
+    {
+        $task = $this->createTask();
+        $executions = [
+            $this->createTaskExecution($task, new \DateTime(), 'Test 1')
+                ->setStatus(TaskStatus::PLANNED)
+                ->incrementAttempts(),
+        ];
+
+        $this->taskExecutionRepository->save($executions[0])->willReturnArgument(0)->shouldBeCalled();
+
+        $this->executor->execute($executions[0])->willThrow(new RetryException(2, new \InvalidArgumentException()));
+
+        $this->executionFinder->find()->willReturn($executions);
+
+        $this->initializeDispatcher($this->eventDispatcher, $executions[0], Events::TASK_FAILED);
+
+        $this->taskRunner->runTasks();
+
+        $this->assertNotNull($executions[0]->getStartTime());
+        $this->assertNotNull($executions[0]->getEndTime());
+        $this->assertNotNull($executions[0]->getDuration());
+        $this->assertNull($executions[0]->getResult());
+        $this->assertEquals(TaskStatus::FAILED, $executions[0]->getStatus());
+        $this->assertEquals(2, $executions[0]->getAttempts());
     }
 
     private function initializeDispatcher($eventDispatcher, $execution, $event = Events::TASK_PASSED)
