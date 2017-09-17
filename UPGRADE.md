@@ -1,6 +1,6 @@
 # UPGRAGE
 
-## dev-develop
+## 1.2.0
 
 ### Interface of TaskExecutionRepository
 
