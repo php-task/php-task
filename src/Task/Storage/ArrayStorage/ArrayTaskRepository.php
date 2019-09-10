@@ -106,7 +106,7 @@ class ArrayTaskRepository implements TaskRepositoryInterface
         return array_values(
             $this->taskCollection->filter(
                 function (TaskInterface $task) use ($now) {
-                    return $task->getLastExecution() === null || $task->getLastExecution() > $now;
+                    return null === $task->getLastExecution() || $task->getLastExecution() > $now;
                 }
             )->toArray()
         );

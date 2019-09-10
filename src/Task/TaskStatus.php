@@ -17,9 +17,13 @@ namespace Task;
 final class TaskStatus
 {
     const PLANNED = 'planned';
+
     const RUNNING = 'running';
+
     const COMPLETED = 'completed';
+
     const ABORTED = 'aborted';
+
     const FAILED = 'failed';
 
     /**

@@ -107,7 +107,7 @@ class TaskScheduler implements TaskSchedulerInterface
             return;
         }
 
-        if ($task->getInterval() === null && 0 < count($this->taskExecutionRepository->findByTask($task))) {
+        if (null === $task->getInterval() && 0 < count($this->taskExecutionRepository->findByTask($task))) {
             return;
         }
 

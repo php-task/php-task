@@ -208,7 +208,7 @@ class TaskRunner implements TaskRunnerInterface
         // invalid (clear in doctrine) after handling an execution.
         $execution = $this->taskExecutionRepository->findByUuid($execution->getUuid());
 
-        if ($execution->getStatus() !== TaskStatus::PLANNED) {
+        if (TaskStatus::PLANNED !== $execution->getStatus()) {
             $execution->setEndTime(new \DateTime());
             $execution->setDuration(microtime(true) - $start);
         }

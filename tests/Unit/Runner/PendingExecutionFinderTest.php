@@ -24,6 +24,7 @@ use Task\Storage\TaskExecutionRepositoryInterface;
 class PendingExecutionFinderTest extends \PHPUnit_Framework_TestCase
 {
     const HANDLER = 'AppBundle\\Handler\\TestHandler';
+
     const LOCKING_HANDLER = 'AppBundle\\Handler\\LockingTestHandler';
 
     /**

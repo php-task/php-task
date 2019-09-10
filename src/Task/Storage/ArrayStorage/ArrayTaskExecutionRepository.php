@@ -89,7 +89,7 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
             }
         );
 
-        if ($filtered->count() === 0) {
+        if (0 === $filtered->count()) {
             return;
         }
 
@@ -107,7 +107,7 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
             }
         );
 
-        if ($filtered->count() === 0) {
+        if (0 === $filtered->count()) {
             return;
         }
 
@@ -153,7 +153,7 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
 
         $result = $this->taskExecutionCollection->filter(
             function (TaskExecutionInterface $execution) use ($dateTime, $skippedExecutions) {
-                return $execution->getStatus() === TaskStatus::PLANNED
+                return TaskStatus::PLANNED === $execution->getStatus()
                     && $execution->getScheduleTime() < $dateTime
                     && !in_array($execution->getUuid(), $skippedExecutions);
             }
