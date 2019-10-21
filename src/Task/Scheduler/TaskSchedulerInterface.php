@@ -23,7 +23,7 @@ interface TaskSchedulerInterface
      * Returns new task-builder.
      *
      * @param $handlerClass
-     * @param string|\Serializable $workload
+     * @param string|\Serializable|string[] $workload
      *
      * @return TaskBuilderInterface
      */
@@ -43,3 +43,4 @@ interface TaskSchedulerInterface
      */
     public function scheduleTasks();
 }
+
