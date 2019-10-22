@@ -27,4 +27,3 @@ interface TaskHandlerFactoryInterface
      */
     public function create($className);
 }
-

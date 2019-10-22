@@ -21,9 +21,9 @@ interface TaskHandlerInterface
     /**
      * Handles given workload and returns result.
      *
-     * @param string|\Serializable|string[] $workload
+     * @param string|\Serializable|mixed[] $workload
      *
-     * @return string|\Serializable|string[]
+     * @return string|\Serializable|mixed[]
      */
     public function handle($workload);
 }
