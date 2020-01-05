@@ -17,6 +17,7 @@ use Task\Event\TaskExecutionEvent;
 use Task\Execution\TaskExecutionInterface;
 use Task\Executor\ExecutorInterface;
 use Task\Executor\RetryException;
+use Task\Legacy\LegacyEventDispatcher;
 use Task\Storage\TaskExecutionRepositoryInterface;
 use Task\TaskStatus;
 
@@ -41,16 +42,10 @@ class TaskRunner implements TaskRunnerInterface
     private $executor;
 
     /**
-     * @var EventDispatcherInterface
+     * @var LegacyEventDispatcher
      */
     private $eventDispatcher;
 
-    /**
-     * @param TaskExecutionRepositoryInterface $taskExecutionRepository
-     * @param ExecutionFinderInterface $executionFinder
-     * @param ExecutorInterface $executor
-     * @param EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(
         TaskExecutionRepositoryInterface $taskExecutionRepository,
         ExecutionFinderInterface $executionFinder,
@@ -60,7 +55,7 @@ class TaskRunner implements TaskRunnerInterface
         $this->taskExecutionRepository = $taskExecutionRepository;
         $this->executionFinder = $executionFinder;
         $this->executor = $executor;
-        $this->eventDispatcher = $eventDispatcher;
+        $this->eventDispatcher = new LegacyEventDispatcher($eventDispatcher);
     }
 
     /**

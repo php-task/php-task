@@ -16,6 +16,7 @@ use Task\Builder\TaskBuilderFactoryInterface;
 use Task\Event\Events;
 use Task\Event\TaskEvent;
 use Task\Event\TaskExecutionEvent;
+use Task\Legacy\LegacyEventDispatcher;
 use Task\Storage\TaskExecutionRepositoryInterface;
 use Task\Storage\TaskRepositoryInterface;
 use Task\TaskInterface;
@@ -46,12 +47,6 @@ class TaskScheduler implements TaskSchedulerInterface
      */
     private $eventDispatcher;
 
-    /**
-     * @param TaskBuilderFactoryInterface $factory
-     * @param TaskRepositoryInterface $taskRepository
-     * @param TaskExecutionRepositoryInterface $taskExecutionRepository
-     * @param EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(
         TaskBuilderFactoryInterface $factory,
         TaskRepositoryInterface $taskRepository,
@@ -61,7 +56,7 @@ class TaskScheduler implements TaskSchedulerInterface
         $this->factory = $factory;
         $this->taskRepository = $taskRepository;
         $this->taskExecutionRepository = $taskExecutionRepository;
-        $this->eventDispatcher = $eventDispatcher;
+        $this->eventDispatcher = new LegacyEventDispatcher($eventDispatcher);
     }
 
     /**
