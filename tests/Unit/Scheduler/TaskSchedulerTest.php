@@ -98,8 +98,12 @@ class TaskSchedulerTest extends \PHPUnit_Framework_TestCase
         $this->dispatch(
             Events::TASK_CREATE,
             Argument::that(
-                function (TaskEvent $event) use ($task) {
-                    return $event->getTask() === $task->reveal();
+                function ($event) use ($task) {
+                    if ($event instanceof TaskEvent) {
+                        return $event->getTask() === $task->reveal();
+                    } else {
+                        return false;
+                    }
                 }
             )
         );
@@ -107,8 +111,12 @@ class TaskSchedulerTest extends \PHPUnit_Framework_TestCase
         $this->dispatch(
             Events::TASK_EXECUTION_CREATE,
             Argument::that(
-                function (TaskExecutionEvent $event) use ($task, $execution) {
-                    return $event->getTask() === $task->reveal() && $event->getTaskExecution() === $execution->reveal();
+                function ($event) use ($task, $execution) {
+                    if ($event instanceof TaskExecutionEvent) {
+                        return $event->getTask() === $task->reveal() && $event->getTaskExecution() === $execution->reveal();
+                    } else {
+                        return false;
+                    }
                 }
             )
         );
