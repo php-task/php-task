@@ -101,9 +101,9 @@ class TaskSchedulerTest extends \PHPUnit_Framework_TestCase
                 function ($event) use ($task) {
                     if ($event instanceof TaskEvent) {
                         return $event->getTask() === $task->reveal();
-                    } else {
-                        return false;
                     }
+
+                    return false;
                 }
             )
         );
@@ -114,9 +114,9 @@ class TaskSchedulerTest extends \PHPUnit_Framework_TestCase
                 function ($event) use ($task, $execution) {
                     if ($event instanceof TaskExecutionEvent) {
                         return $event->getTask() === $task->reveal() && $event->getTaskExecution() === $execution->reveal();
-                    } else {
-                        return false;
                     }
+
+                    return false;
                 }
             )
         );

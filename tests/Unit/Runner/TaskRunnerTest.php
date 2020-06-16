@@ -196,83 +196,44 @@ class TaskRunnerTest extends \PHPUnit_Framework_TestCase
 
     private function initializeDispatcher($eventDispatcher, $execution, $event = Events::TASK_PASSED)
     {
-        if (class_exists(LegacyEventDispatcherProxy::class)) {
-            $eventDispatcher->dispatch(
-                Argument::that(
-                    function (TaskExecutionEvent $event) use ($execution) {
-                        return $event->getTaskExecution() === $execution;
-                    }
-                ),
-                Events::TASK_BEFORE
-            )->will(
-                function () use ($eventDispatcher, $execution, $event) {
-                    $eventDispatcher->dispatch(
-                        Argument::that(
-                            function (TaskExecutionEvent $event) use ($execution) {
-                                return $event->getTaskExecution() === $execution;
-                            }
-                        ),
-                        Events::TASK_AFTER
-                    )->shouldBeCalled()->willReturnArgument(0);
-                    $eventDispatcher->dispatch(
-                        Argument::that(
-                            function (TaskExecutionEvent $event) use ($execution) {
-                                return $event->getTaskExecution() === $execution;
-                            }
-                        ),
-                        $event
-                    )->shouldBeCalled()->willReturnArgument(0);
-                    $eventDispatcher->dispatch(
-                        Argument::that(
-                            function (TaskExecutionEvent $event) use ($execution) {
-                                return $event->getTaskExecution() === $execution;
-                            }
-                        ),
-                        Events::TASK_FINISHED
-                    )->shouldBeCalled()->willReturnArgument(0);
-
-                    return new \stdClass();
+        $testCase = $this;
+        $this->dispatch(
+            Events::TASK_BEFORE,
+            Argument::that(
+                function (TaskExecutionEvent $event) use ($execution) {
+                    return $event->getTaskExecution() === $execution;
                 }
-            );
-        } else {
-            $eventDispatcher->dispatch(
-                Events::TASK_BEFORE,
-                Argument::that(
-                    function (TaskExecutionEvent $event) use ($execution) {
-                        return $event->getTaskExecution() === $execution;
-                    }
-                )
-            )->will(
-                function () use ($eventDispatcher, $execution, $event) {
-                    $eventDispatcher->dispatch(
-                        Events::TASK_AFTER,
-                        Argument::that(
-                            function (TaskExecutionEvent $event) use ($execution) {
-                                return $event->getTaskExecution() === $execution;
-                            }
-                        )
-                    )->shouldBeCalled()->willReturnArgument(0);
-                    $eventDispatcher->dispatch(
-                        $event,
-                        Argument::that(
-                            function (TaskExecutionEvent $event) use ($execution) {
-                                return $event->getTaskExecution() === $execution;
-                            }
-                        )
-                    )->shouldBeCalled()->willReturnArgument(0);
-                    $eventDispatcher->dispatch(
-                        Events::TASK_FINISHED,
-                        Argument::that(
-                            function (TaskExecutionEvent $event) use ($execution) {
-                                return $event->getTaskExecution() === $execution;
-                            }
-                        )
-                    )->shouldBeCalled()->willReturnArgument(0);
+            )
+        )->will(
+            function () use ($testCase, $eventDispatcher, $execution, $event) {
+                $testCase->dispatch(
+                    Events::TASK_AFTER,
+                    Argument::that(
+                        function (TaskExecutionEvent $event) use ($execution) {
+                            return $event->getTaskExecution() === $execution;
+                        }
+                    )
+                );
+                $testCase->dispatch(
+                    $event,
+                    Argument::that(
+                        function (TaskExecutionEvent $event) use ($execution) {
+                            return $event->getTaskExecution() === $execution;
+                        }
+                    )
+                );
+                $testCase->dispatch(
+                    Events::TASK_FINISHED,
+                    Argument::that(
+                        function (TaskExecutionEvent $event) use ($execution) {
+                            return $event->getTaskExecution() === $execution;
+                        }
+                    )
+                );
 
-                    return new \stdClass();
-                }
-            );
-        }
+                return new \stdClass();
+            }
+        );
     }
 
     private function createTask()
@@ -293,6 +254,15 @@ class TaskRunnerTest extends \PHPUnit_Framework_TestCase
         $this->taskExecutionRepository->findByUuid($execution->getUuid())->willReturn($execution);
 
         return $execution;
+    }
+
+    private function dispatch($eventName, $event)
+    {
+        if (class_exists(LegacyEventDispatcherProxy::class)) {
+            return $this->eventDispatcher->dispatch($event, $eventName)->shouldBeCalled()->willReturnArgument(0);
+        } else {
+            return $this->eventDispatcher->dispatch($eventName, $event)->shouldBeCalled()->willReturnArgument(0);
+        }
     }
 }
 
