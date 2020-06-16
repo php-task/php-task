@@ -12,6 +12,7 @@
 namespace Task\Runner;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
 use Task\Event\Events;
 use Task\Event\TaskExecutionEvent;
 use Task\Execution\TaskExecutionInterface;
@@ -45,12 +46,6 @@ class TaskRunner implements TaskRunnerInterface
      */
     private $eventDispatcher;
 
-    /**
-     * @param TaskExecutionRepositoryInterface $taskExecutionRepository
-     * @param ExecutionFinderInterface $executionFinder
-     * @param ExecutorInterface $executor
-     * @param EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(
         TaskExecutionRepositoryInterface $taskExecutionRepository,
         ExecutionFinderInterface $executionFinder,
@@ -113,7 +108,7 @@ class TaskRunner implements TaskRunnerInterface
      */
     private function handle(TaskExecutionInterface $execution)
     {
-        $this->eventDispatcher->dispatch(
+        $this->dispatch(
             Events::TASK_BEFORE,
             new TaskExecutionEvent($execution->getTask(), $execution)
         );
@@ -132,7 +127,7 @@ class TaskRunner implements TaskRunnerInterface
             $execution->reset();
             $execution->incrementAttempts();
 
-            $this->eventDispatcher->dispatch(
+            $this->dispatch(
                 Events::TASK_RETRIED,
                 new TaskExecutionEvent($execution->getTask(), $execution)
             );
@@ -141,7 +136,7 @@ class TaskRunner implements TaskRunnerInterface
 
             throw new ExitException();
         } finally {
-            $this->eventDispatcher->dispatch(
+            $this->dispatch(
                 Events::TASK_AFTER,
                 new TaskExecutionEvent($execution->getTask(), $execution)
             );
@@ -164,7 +159,7 @@ class TaskRunner implements TaskRunnerInterface
         $execution->setStatus(TaskStatus::COMPLETED);
         $execution->setResult($result);
 
-        $this->eventDispatcher->dispatch(
+        $this->dispatch(
             Events::TASK_PASSED,
             new TaskExecutionEvent($execution->getTask(), $execution)
         );
@@ -176,7 +171,7 @@ class TaskRunner implements TaskRunnerInterface
      * The given task failed the run.
      *
      * @param TaskExecutionInterface $execution
-     * @param \Exception $exception
+     * @param \Throwable $exception
      *
      * @return TaskExecutionInterface
      */
@@ -188,7 +183,7 @@ class TaskRunner implements TaskRunnerInterface
         $execution->setException($exception->__toString());
         $execution->setStatus(TaskStatus::FAILED);
 
-        $this->eventDispatcher->dispatch(
+        $this->dispatch(
             Events::TASK_FAILED,
             new TaskExecutionEvent($execution->getTask(), $execution)
         );
@@ -213,11 +208,20 @@ class TaskRunner implements TaskRunnerInterface
             $execution->setDuration(microtime(true) - $start);
         }
 
-        $this->eventDispatcher->dispatch(
+        $this->dispatch(
             Events::TASK_FINISHED,
             new TaskExecutionEvent($execution->getTask(), $execution)
         );
 
         $this->taskExecutionRepository->save($execution);
+    }
+
+    private function dispatch($eventName, $event)
+    {
+        if (class_exists(LegacyEventDispatcherProxy::class)) {
+            return $this->eventDispatcher->dispatch($event, $eventName);
+        } else {
+            return $this->eventDispatcher->dispatch($eventName, $event);
+        }
     }
 }

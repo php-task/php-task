@@ -12,6 +12,7 @@
 namespace Task\Scheduler;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
 use Task\Builder\TaskBuilderFactoryInterface;
 use Task\Event\Events;
 use Task\Event\TaskEvent;
@@ -46,12 +47,6 @@ class TaskScheduler implements TaskSchedulerInterface
      */
     private $eventDispatcher;
 
-    /**
-     * @param TaskBuilderFactoryInterface $factory
-     * @param TaskRepositoryInterface $taskRepository
-     * @param TaskExecutionRepositoryInterface $taskExecutionRepository
-     * @param EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(
         TaskBuilderFactoryInterface $factory,
         TaskRepositoryInterface $taskRepository,
@@ -77,7 +72,7 @@ class TaskScheduler implements TaskSchedulerInterface
      */
     public function addTask(TaskInterface $task)
     {
-        $this->eventDispatcher->dispatch(Events::TASK_CREATE, new TaskEvent($task));
+        $this->dispatch(Events::TASK_CREATE, new TaskEvent($task));
 
         $this->taskRepository->save($task);
         $this->scheduleTask($task);
@@ -115,11 +110,20 @@ class TaskScheduler implements TaskSchedulerInterface
         $execution = $this->taskExecutionRepository->create($task, $scheduleTime);
         $execution->setStatus(TaskStatus::PLANNED);
 
-        $this->eventDispatcher->dispatch(
+        $this->dispatch(
             Events::TASK_EXECUTION_CREATE,
             new TaskExecutionEvent($task, $execution)
         );
 
         $this->taskExecutionRepository->save($execution);
+    }
+
+    private function dispatch($eventName, $event)
+    {
+        if (class_exists(LegacyEventDispatcherProxy::class)) {
+            return $this->eventDispatcher->dispatch($event, $eventName);
+        } else {
+            return $this->eventDispatcher->dispatch($eventName, $event);
+        }
     }
 }

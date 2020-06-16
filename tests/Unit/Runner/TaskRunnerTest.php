@@ -13,6 +13,7 @@ namespace Task\Tests\Unit\Runner;
 
 use Prophecy\Argument;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
 use Task\Event\Events;
 use Task\Event\TaskExecutionEvent;
 use Task\Execution\TaskExecution;
@@ -195,7 +196,8 @@ class TaskRunnerTest extends \PHPUnit_Framework_TestCase
 
     private function initializeDispatcher($eventDispatcher, $execution, $event = Events::TASK_PASSED)
     {
-        $eventDispatcher->dispatch(
+        $testCase = $this;
+        $this->dispatch(
             Events::TASK_BEFORE,
             Argument::that(
                 function (TaskExecutionEvent $event) use ($execution) {
@@ -203,31 +205,33 @@ class TaskRunnerTest extends \PHPUnit_Framework_TestCase
                 }
             )
         )->will(
-            function () use ($eventDispatcher, $execution, $event) {
-                $eventDispatcher->dispatch(
+            function () use ($testCase, $eventDispatcher, $execution, $event) {
+                $testCase->dispatch(
                     Events::TASK_AFTER,
                     Argument::that(
                         function (TaskExecutionEvent $event) use ($execution) {
                             return $event->getTaskExecution() === $execution;
                         }
                     )
-                )->shouldBeCalled();
-                $eventDispatcher->dispatch(
+                );
+                $testCase->dispatch(
                     $event,
                     Argument::that(
                         function (TaskExecutionEvent $event) use ($execution) {
                             return $event->getTaskExecution() === $execution;
                         }
                     )
-                )->shouldBeCalled();
-                $eventDispatcher->dispatch(
+                );
+                $testCase->dispatch(
                     Events::TASK_FINISHED,
                     Argument::that(
                         function (TaskExecutionEvent $event) use ($execution) {
                             return $event->getTaskExecution() === $execution;
                         }
                     )
-                )->shouldBeCalled();
+                );
+
+                return new \stdClass();
             }
         );
     }
@@ -250,6 +254,15 @@ class TaskRunnerTest extends \PHPUnit_Framework_TestCase
         $this->taskExecutionRepository->findByUuid($execution->getUuid())->willReturn($execution);
 
         return $execution;
+    }
+
+    private function dispatch($eventName, $event)
+    {
+        if (class_exists(LegacyEventDispatcherProxy::class)) {
+            return $this->eventDispatcher->dispatch($event, $eventName)->shouldBeCalled()->willReturnArgument(0);
+        } else {
+            return $this->eventDispatcher->dispatch($eventName, $event)->shouldBeCalled()->willReturnArgument(0);
+        }
     }
 }
 

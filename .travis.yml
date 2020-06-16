@@ -15,6 +15,10 @@ matrix:
       env:
         - COMPOSER_FLAGS="--prefer-lowest --prefer-dist --no-interaction"
     - php: 7.1
+    - php: 7.4
+      env:
+        - COMPOSER_FLAGS="--prefer-lowest --prefer-dist --no-interaction"
+    - php: 7.4
       env:
         - CODE_COVERAGE=true
 
