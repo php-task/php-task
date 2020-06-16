@@ -196,38 +196,40 @@ class TaskRunnerTest extends \PHPUnit_Framework_TestCase
     private function initializeDispatcher($eventDispatcher, $execution, $event = Events::TASK_PASSED)
     {
         $eventDispatcher->dispatch(
-            Events::TASK_BEFORE,
             Argument::that(
                 function (TaskExecutionEvent $event) use ($execution) {
                     return $event->getTaskExecution() === $execution;
                 }
-            )
+            ),
+            Events::TASK_BEFORE
         )->will(
             function () use ($eventDispatcher, $execution, $event) {
                 $eventDispatcher->dispatch(
-                    Events::TASK_AFTER,
                     Argument::that(
                         function (TaskExecutionEvent $event) use ($execution) {
                             return $event->getTaskExecution() === $execution;
                         }
-                    )
-                )->shouldBeCalled();
+                    ),
+                    Events::TASK_AFTER
+                )->shouldBeCalled()->willReturnArgument(0);
                 $eventDispatcher->dispatch(
-                    $event,
                     Argument::that(
                         function (TaskExecutionEvent $event) use ($execution) {
                             return $event->getTaskExecution() === $execution;
                         }
-                    )
-                )->shouldBeCalled();
+                    ),
+                    $event
+                )->shouldBeCalled()->willReturnArgument(0);
                 $eventDispatcher->dispatch(
-                    Events::TASK_FINISHED,
                     Argument::that(
                         function (TaskExecutionEvent $event) use ($execution) {
                             return $event->getTaskExecution() === $execution;
                         }
-                    )
-                )->shouldBeCalled();
+                    ),
+                    Events::TASK_FINISHED
+                )->shouldBeCalled()->willReturnArgument(0);
+
+                return new \stdClass();
             }
         );
     }

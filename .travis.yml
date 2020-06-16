@@ -17,6 +17,12 @@ matrix:
     - php: 7.1
       env:
         - CODE_COVERAGE=true
+    - php: 7.4
+      env:
+        - COMPOSER_FLAGS="--prefer-lowest --prefer-dist --no-interaction"
+    - php: 7.4
+      env:
+        - CODE_COVERAGE=true
 
 install:
    - composer self-update

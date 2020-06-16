@@ -11,17 +11,12 @@
 
 namespace Task\Event;
 
-if (!class_exists('Symfony\Component\EventDispatcher\Event')) {
-    class_alias('Symfony\Contracts\EventDispatcher\Event', 'Symfony\Component\EventDispatcher\Event');
-}
-
-use Symfony\Component\EventDispatcher\Event;
 use Task\TaskInterface;
 
 /**
  * Task Events are triggered by the Scheduler during scheduling and run process.
  */
-class TaskEvent extends Event
+class TaskEvent extends BaseEvent
 {
     /**
      * @var TaskInterface

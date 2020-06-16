@@ -12,12 +12,12 @@
 namespace Task\Runner;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
 use Task\Event\Events;
 use Task\Event\TaskExecutionEvent;
 use Task\Execution\TaskExecutionInterface;
 use Task\Executor\ExecutorInterface;
 use Task\Executor\RetryException;
-use Task\Legacy\LegacyEventDispatcher;
 use Task\Storage\TaskExecutionRepositoryInterface;
 use Task\TaskStatus;
 
@@ -42,7 +42,7 @@ class TaskRunner implements TaskRunnerInterface
     private $executor;
 
     /**
-     * @var LegacyEventDispatcher
+     * @var EventDispatcherInterface
      */
     private $eventDispatcher;
 
@@ -55,7 +55,7 @@ class TaskRunner implements TaskRunnerInterface
         $this->taskExecutionRepository = $taskExecutionRepository;
         $this->executionFinder = $executionFinder;
         $this->executor = $executor;
-        $this->eventDispatcher = new LegacyEventDispatcher($eventDispatcher);
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -92,6 +92,8 @@ class TaskRunner implements TaskRunnerInterface
             throw $exception;
         } catch (\Exception $exception) {
             $execution = $this->hasFailed($execution, $exception);
+        } catch (\Throwable $exception) {
+            $execution = $this->hasFailed($execution, $exception);
         } finally {
             $this->finalize($execution, $start);
         }
@@ -108,7 +110,7 @@ class TaskRunner implements TaskRunnerInterface
      */
     private function handle(TaskExecutionInterface $execution)
     {
-        $this->eventDispatcher->dispatch(
+        $this->dispatch(
             Events::TASK_BEFORE,
             new TaskExecutionEvent($execution->getTask(), $execution)
         );
@@ -127,7 +129,7 @@ class TaskRunner implements TaskRunnerInterface
             $execution->reset();
             $execution->incrementAttempts();
 
-            $this->eventDispatcher->dispatch(
+            $this->dispatch(
                 Events::TASK_RETRIED,
                 new TaskExecutionEvent($execution->getTask(), $execution)
             );
@@ -136,7 +138,7 @@ class TaskRunner implements TaskRunnerInterface
 
             throw new ExitException();
         } finally {
-            $this->eventDispatcher->dispatch(
+            $this->dispatch(
                 Events::TASK_AFTER,
                 new TaskExecutionEvent($execution->getTask(), $execution)
             );
@@ -159,7 +161,7 @@ class TaskRunner implements TaskRunnerInterface
         $execution->setStatus(TaskStatus::COMPLETED);
         $execution->setResult($result);
 
-        $this->eventDispatcher->dispatch(
+        $this->dispatch(
             Events::TASK_PASSED,
             new TaskExecutionEvent($execution->getTask(), $execution)
         );
@@ -171,11 +173,11 @@ class TaskRunner implements TaskRunnerInterface
      * The given task failed the run.
      *
      * @param TaskExecutionInterface $execution
-     * @param \Exception $exception
+     * @param \Throwable $exception
      *
      * @return TaskExecutionInterface
      */
-    private function hasFailed(TaskExecutionInterface $execution, \Exception $exception)
+    private function hasFailed(TaskExecutionInterface $execution, \Throwable $exception)
     {
         // this find is necessary because the storage could be
         // invalid (clear in doctrine) after handling an execution.
@@ -183,7 +185,7 @@ class TaskRunner implements TaskRunnerInterface
         $execution->setException($exception->__toString());
         $execution->setStatus(TaskStatus::FAILED);
 
-        $this->eventDispatcher->dispatch(
+        $this->dispatch(
             Events::TASK_FAILED,
             new TaskExecutionEvent($execution->getTask(), $execution)
         );
@@ -208,11 +210,20 @@ class TaskRunner implements TaskRunnerInterface
             $execution->setDuration(microtime(true) - $start);
         }
 
-        $this->eventDispatcher->dispatch(
+        $this->dispatch(
             Events::TASK_FINISHED,
             new TaskExecutionEvent($execution->getTask(), $execution)
         );
 
         $this->taskExecutionRepository->save($execution);
+    }
+
+    private function dispatch($eventName, $event)
+    {
+        if (class_exists(LegacyEventDispatcherProxy::class)) {
+            return $this->eventDispatcher->dispatch($event, $eventName);
+        } else {
+            return $this->eventDispatcher->dispatch($eventName, $event);
+        }
     }
 }
