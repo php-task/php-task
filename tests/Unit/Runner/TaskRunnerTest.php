@@ -13,6 +13,7 @@ namespace Task\Tests\Unit\Runner;
 
 use Prophecy\Argument;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
 use Task\Event\Events;
 use Task\Event\TaskExecutionEvent;
 use Task\Execution\TaskExecution;
@@ -195,43 +196,83 @@ class TaskRunnerTest extends \PHPUnit_Framework_TestCase
 
     private function initializeDispatcher($eventDispatcher, $execution, $event = Events::TASK_PASSED)
     {
-        $eventDispatcher->dispatch(
-            Argument::that(
-                function (TaskExecutionEvent $event) use ($execution) {
-                    return $event->getTaskExecution() === $execution;
-                }
-            ),
-            Events::TASK_BEFORE
-        )->will(
-            function () use ($eventDispatcher, $execution, $event) {
-                $eventDispatcher->dispatch(
-                    Argument::that(
-                        function (TaskExecutionEvent $event) use ($execution) {
-                            return $event->getTaskExecution() === $execution;
-                        }
-                    ),
-                    Events::TASK_AFTER
-                )->shouldBeCalled()->willReturnArgument(0);
-                $eventDispatcher->dispatch(
-                    Argument::that(
-                        function (TaskExecutionEvent $event) use ($execution) {
-                            return $event->getTaskExecution() === $execution;
-                        }
-                    ),
-                    $event
-                )->shouldBeCalled()->willReturnArgument(0);
-                $eventDispatcher->dispatch(
-                    Argument::that(
-                        function (TaskExecutionEvent $event) use ($execution) {
-                            return $event->getTaskExecution() === $execution;
-                        }
-                    ),
-                    Events::TASK_FINISHED
-                )->shouldBeCalled()->willReturnArgument(0);
+        if (class_exists(LegacyEventDispatcherProxy::class)) {
+            $eventDispatcher->dispatch(
+                Argument::that(
+                    function (TaskExecutionEvent $event) use ($execution) {
+                        return $event->getTaskExecution() === $execution;
+                    }
+                ),
+                Events::TASK_BEFORE
+            )->will(
+                function () use ($eventDispatcher, $execution, $event) {
+                    $eventDispatcher->dispatch(
+                        Argument::that(
+                            function (TaskExecutionEvent $event) use ($execution) {
+                                return $event->getTaskExecution() === $execution;
+                            }
+                        ),
+                        Events::TASK_AFTER
+                    )->shouldBeCalled()->willReturnArgument(0);
+                    $eventDispatcher->dispatch(
+                        Argument::that(
+                            function (TaskExecutionEvent $event) use ($execution) {
+                                return $event->getTaskExecution() === $execution;
+                            }
+                        ),
+                        $event
+                    )->shouldBeCalled()->willReturnArgument(0);
+                    $eventDispatcher->dispatch(
+                        Argument::that(
+                            function (TaskExecutionEvent $event) use ($execution) {
+                                return $event->getTaskExecution() === $execution;
+                            }
+                        ),
+                        Events::TASK_FINISHED
+                    )->shouldBeCalled()->willReturnArgument(0);
 
-                return new \stdClass();
-            }
-        );
+                    return new \stdClass();
+                }
+            );
+        } else {
+            $eventDispatcher->dispatch(
+                Events::TASK_BEFORE,
+                Argument::that(
+                    function (TaskExecutionEvent $event) use ($execution) {
+                        return $event->getTaskExecution() === $execution;
+                    }
+                )
+            )->will(
+                function () use ($eventDispatcher, $execution, $event) {
+                    $eventDispatcher->dispatch(
+                        Events::TASK_AFTER,
+                        Argument::that(
+                            function (TaskExecutionEvent $event) use ($execution) {
+                                return $event->getTaskExecution() === $execution;
+                            }
+                        )
+                    )->shouldBeCalled()->willReturnArgument(0);
+                    $eventDispatcher->dispatch(
+                        $event,
+                        Argument::that(
+                            function (TaskExecutionEvent $event) use ($execution) {
+                                return $event->getTaskExecution() === $execution;
+                            }
+                        )
+                    )->shouldBeCalled()->willReturnArgument(0);
+                    $eventDispatcher->dispatch(
+                        Events::TASK_FINISHED,
+                        Argument::that(
+                            function (TaskExecutionEvent $event) use ($execution) {
+                                return $event->getTaskExecution() === $execution;
+                            }
+                        )
+                    )->shouldBeCalled()->willReturnArgument(0);
+
+                    return new \stdClass();
+                }
+            );
+        }
     }
 
     private function createTask()

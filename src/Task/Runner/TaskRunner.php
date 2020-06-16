@@ -92,8 +92,6 @@ class TaskRunner implements TaskRunnerInterface
             throw $exception;
         } catch (\Exception $exception) {
             $execution = $this->hasFailed($execution, $exception);
-        } catch (\Throwable $exception) {
-            $execution = $this->hasFailed($execution, $exception);
         } finally {
             $this->finalize($execution, $start);
         }
@@ -177,7 +175,7 @@ class TaskRunner implements TaskRunnerInterface
      *
      * @return TaskExecutionInterface
      */
-    private function hasFailed(TaskExecutionInterface $execution, \Throwable $exception)
+    private function hasFailed(TaskExecutionInterface $execution, \Exception $exception)
     {
         // this find is necessary because the storage could be
         // invalid (clear in doctrine) after handling an execution.
