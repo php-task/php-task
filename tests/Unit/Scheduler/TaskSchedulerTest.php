@@ -106,12 +106,11 @@ class TaskSchedulerTest extends \PHPUnit_Framework_TestCase
 
         $this->dispatch(
             Events::TASK_EXECUTION_CREATE,
-            Argument::any()
-//            Argument::that(
-//                function (TaskExecutionEvent $event) use ($task, $execution) {
-//                    return $event->getTask() === $task->reveal() && $event->getTaskExecution() === $execution->reveal();
-//                }
-//            )
+            Argument::that(
+                function (TaskExecutionEvent $event) use ($task, $execution) {
+                    return $event->getTask() === $task->reveal() && $event->getTaskExecution() === $execution->reveal();
+                }
+            )
         );
 
         $this->taskRepository->save($task->reveal())->shouldBeCalled();
