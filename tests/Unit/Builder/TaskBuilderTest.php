@@ -12,6 +12,7 @@
 namespace Task\Tests\Unit\Builder;
 
 use Cron\CronExpression;
+use PHPUnit\Framework\TestCase;
 use Task\Builder\TaskBuilder;
 use Task\Scheduler\TaskSchedulerInterface;
 use Task\TaskInterface;
@@ -19,7 +20,7 @@ use Task\TaskInterface;
 /**
  * Tests for TaskBuilder.
  */
-class TaskBuilderTest extends \PHPUnit_Framework_TestCase
+class TaskBuilderTest extends TestCase
 {
     public function testHourly()
     {

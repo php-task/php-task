@@ -11,11 +11,13 @@
 
 namespace Task\Tests\Unit\Lock;
 
+use PHPUnit\Framework\TestCase;
+use Task\Lock\Exception\LockConflictException;
 use Task\Lock\Lock;
 use Task\Lock\LockInterface;
 use Task\Lock\LockStorageInterface;
 
-class LockTest extends \PHPUnit_Framework_TestCase
+class LockTest extends TestCase
 {
     /**
      * @var LockStorageInterface
@@ -52,11 +54,10 @@ class LockTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->lock->acquire($this->key));
     }
 
-    /**
-     * @expectedException \Task\Lock\Exception\LockConflictException
-     */
     public function testAcquireAlreadyAcquired()
     {
+        $this->expectException(LockConflictException::class);
+
         $this->storage->exists($this->key)->willReturn(true);
         $this->storage->save($this->key, $this->ttl)->shouldNotBeCalled();
 
@@ -71,11 +72,10 @@ class LockTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->lock->refresh($this->key));
     }
 
-    /**
-     * @expectedException \Task\Lock\Exception\LockConflictException
-     */
     public function testRefreshNotAcquired()
     {
+        $this->expectException(LockConflictException::class);
+
         $this->storage->exists($this->key)->willReturn(false);
         $this->storage->save($this->key, $this->ttl)->shouldNotBeCalled();
 
@@ -90,11 +90,10 @@ class LockTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->lock->release($this->key));
     }
 
-    /**
-     * @expectedException \Task\Lock\Exception\LockConflictException
-     */
     public function testReleaseNotAcquired()
     {
+        $this->expectException(LockConflictException::class);
+
         $this->storage->exists($this->key)->willReturn(false);
         $this->storage->delete($this->key)->shouldNotBeCalled();
 

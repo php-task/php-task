@@ -11,6 +11,7 @@
 
 namespace Unit\Runner;
 
+use PHPUnit\Framework\TestCase;
 use Task\Execution\TaskExecutionInterface;
 use Task\Executor\FailedException;
 use Task\Executor\InsideProcessExecutor;
@@ -19,7 +20,7 @@ use Task\Executor\RetryTaskHandlerInterface;
 use Task\Handler\TaskHandlerFactoryInterface;
 use Task\Handler\TaskHandlerInterface;
 
-class InsideProcessExecutorTest extends \PHPUnit_Framework_TestCase
+class InsideProcessExecutorTest extends TestCase
 {
     /**
      * @var TaskHandlerFactoryInterface
@@ -56,7 +57,7 @@ class InsideProcessExecutorTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteException()
     {
-        $this->setExpectedException(\InvalidArgumentException::class, 'test message');
+        $this->expectException(\InvalidArgumentException::class, 'test message');
 
         $executions = $this->prophesize(TaskExecutionInterface::class);
         $executions->getHandlerClass()->willReturn('AppBundle\\Handler\\TestHandler');
@@ -98,7 +99,7 @@ class InsideProcessExecutorTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteFailedException()
     {
-        $this->setExpectedException(\InvalidArgumentException::class, 'test message');
+        $this->expectException(\InvalidArgumentException::class, 'test message');
 
         $execution = $this->prophesize(TaskExecutionInterface::class);
         $execution->getHandlerClass()->willReturn('AppBundle\\Handler\\TestHandler');

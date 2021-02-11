@@ -11,6 +11,7 @@
 
 namespace Task\Tests\Unit\Event;
 
+use PHPUnit\Framework\TestCase;
 use Task\Event\TaskExecutionEvent;
 use Task\Execution\TaskExecutionInterface;
 use Task\TaskInterface;
@@ -18,7 +19,7 @@ use Task\TaskInterface;
 /**
  * Test for class TaskExecutionEvent.
  */
-class TaskExecutionEventTest extends \PHPUnit_Framework_TestCase
+class TaskExecutionEventTest extends TestCase
 {
     public function testGetTask()
     {
