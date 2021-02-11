@@ -21,6 +21,7 @@ matrix:
     - php: 7.4
       env:
         - CODE_COVERAGE=true
+    - php: 8.0
 
 install:
    - composer self-update

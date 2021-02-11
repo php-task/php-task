@@ -10,9 +10,9 @@
         }
     ],
     "require": {
-        "php": "^5.6 || ^7.0",
-        "doctrine/common": "^2.6",
-        "ramsey/uuid": "^3.1",
+        "php": "^5.6 || ^7.0 || ^8.0",
+        "doctrine/collections": "^1.0",
+        "ramsey/uuid": "^3.1 || ^4.0",
         "symfony/event-dispatcher": "^2.6 || ^3.4 || ^4.0 || ^5.0",
         "dragonmantank/cron-expression": "^1.1 || ^2.0 || ^3.0"
     },
