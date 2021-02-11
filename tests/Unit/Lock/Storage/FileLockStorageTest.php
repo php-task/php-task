@@ -14,10 +14,11 @@ namespace Task\Tests\Unit\Lock\Storage;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use org\bovigo\vfs\vfsStreamFile;
+use PHPUnit\Framework\TestCase;
 use Task\Lock\LockStorageInterface;
 use Task\Lock\Storage\FileLockStorage;
 
-class FileLockStorageTest extends \PHPUnit_Framework_TestCase
+class FileLockStorageTest extends TestCase
 {
     /**
      * @var vfsStreamDirectory

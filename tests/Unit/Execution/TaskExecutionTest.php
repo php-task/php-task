@@ -11,6 +11,7 @@
 
 namespace Task\Tests\Unit\Execution;
 
+use PHPUnit\Framework\TestCase;
 use Task\Execution\TaskExecution;
 use Task\Task;
 use Task\TaskStatus;
@@ -18,7 +19,7 @@ use Task\TaskStatus;
 /**
  * Tests for TaskExecution.
  */
-class TaskExecutionTest extends \PHPUnit_Framework_TestCase
+class TaskExecutionTest extends TestCase
 {
     public function testUuid()
     {

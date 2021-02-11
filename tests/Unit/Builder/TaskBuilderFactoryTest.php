@@ -11,6 +11,7 @@
 
 namespace Task\Tests\Unit\Builder;
 
+use PHPUnit\Framework\TestCase;
 use Task\Builder\TaskBuilderFactory;
 use Task\Builder\TaskBuilderInterface;
 use Task\Scheduler\TaskSchedulerInterface;
@@ -19,7 +20,7 @@ use Task\TaskInterface;
 /**
  * Tests for TaskBuilder.
  */
-class TaskBuilderFactoryTest extends \PHPUnit_Framework_TestCase
+class TaskBuilderFactoryTest extends TestCase
 {
     public function testCreate()
     {

@@ -51,7 +51,7 @@ jobs:
                   composer-options: --prefer-dist --no-suggest
 
             - name: Execute test
-              run: vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover=coverage.clover
+              run: vendor/bin/simple-phpunit -c phpunit.xml.dist --coverage-clover=coverage.clover
 
             - name: Coverage
               if: ${{ matrix.coverage }}

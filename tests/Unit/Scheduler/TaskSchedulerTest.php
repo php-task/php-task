@@ -12,6 +12,7 @@
 namespace Task\Tests\Unit\Scheduler;
 
 use Cron\CronExpression;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
@@ -32,7 +33,7 @@ use Task\TaskStatus;
 /**
  * Tests for TaskScheduler.
  */
-class TaskSchedulerTest extends \PHPUnit_Framework_TestCase
+class TaskSchedulerTest extends TestCase
 {
     /**
      * @var TaskBuilderFactoryInterface

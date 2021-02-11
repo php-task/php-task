@@ -13,6 +13,7 @@ namespace Task\Tests\Unit\Storage\ArrayStorage;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use PHPUnit\Framework\TestCase;
 use Task\Execution\TaskExecution;
 use Task\Execution\TaskExecutionInterface;
 use Task\Storage\ArrayStorage\ArrayTaskExecutionRepository;
@@ -22,7 +23,7 @@ use Task\TaskStatus;
 /**
  * Tests for ArrayTaskExecutionRepository.
  */
-class ArrayTaskExecutionRepositoryTest extends \PHPUnit_Framework_TestCase
+class ArrayTaskExecutionRepositoryTest extends TestCase
 {
     public function testSave()
     {
