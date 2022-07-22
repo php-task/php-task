@@ -20,23 +20,19 @@ jobs:
             fail-fast: false
             matrix:
                 include:
-                    - php-version: '5.6'
-                      dependencies: 'lowest'
-                    - php-version: '5.6'
-                    - php-version: '7.0'
-                      dependencies: 'lowest'
-                    - php-version: '7.0'
-                      dependencies: 'lowest'
-                    - php-version: '7.1'
-                      dependencies: 'lowest'
-                    - php-version: '7.1'
-                    - php-version: '7.4'
-                      coverage: 'true'
                     - php-version: '8.0'
+                      dependencies: 'lowest'
+                    - php-version: '8.0'
+                    - php-version: '8.1'
+                      coverage: 'true'
 
         steps:
             - name: Checkout project
               uses: actions/checkout@v2
+              with:
+                  # Fetch 10 commits or Scrutinizer will throw ("Failed to retrieve commit parents. If you use a shallow git checkout, please checkout at least a depth of one."), see: RepositoryIntrospector at scrutinizer-ci/ocular GitHub repository
+                  # 10 commits is an arbitrary value that is more than 1 commit
+                  fetch-depth: 10
 
             - name: Install and configure PHP
               uses: shivammathur/setup-php@v2
@@ -45,7 +41,7 @@ jobs:
                   tools: 'composer:v2'
 
             - name: Install dependencies with Composer
-              uses: ramsey/composer-install@v1
+              uses: ramsey/composer-install@v2
               with:
                   dependency-versions: ${{ matrix.dependencies }}
                   composer-options: --prefer-dist --no-suggest
@@ -56,5 +52,5 @@ jobs:
             - name: Coverage
               if: ${{ matrix.coverage }}
               run: |
-                  wget https://scrutinizer-ci.com/ocular.phar
-                  php ocular.phar code-coverage:upload --access-token="230ec5e01daf5bb3e46ea304fb20348b52d80de73463ec08ee9c96fcd1349e35" --format=php-clover coverage.clover
+                  composer global require scrutinizer/ocular
+                  ~/.composer/vendor/bin/ocular code-coverage:upload --access-token="230ec5e01daf5bb3e46ea304fb20348b52d80de73463ec08ee9c96fcd1349e35" --format=php-clover coverage.clover

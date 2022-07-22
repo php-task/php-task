@@ -58,7 +58,7 @@ class PendingExecutionFinderTest extends TestCase
      */
     private $lockingHandler;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->taskExecutionRepository = $this->prophesize(TaskExecutionRepositoryInterface::class);
         $this->taskHandlerFactory = $this->prophesize(TaskHandlerFactoryInterface::class);

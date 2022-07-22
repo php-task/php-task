@@ -120,10 +120,6 @@ class TaskScheduler implements TaskSchedulerInterface
 
     private function dispatch($eventName, $event)
     {
-        if (class_exists(LegacyEventDispatcherProxy::class)) {
-            return $this->eventDispatcher->dispatch($event, $eventName);
-        } else {
-            return $this->eventDispatcher->dispatch($eventName, $event);
-        }
+        return $this->eventDispatcher->dispatch($event, $eventName);
     }
 }

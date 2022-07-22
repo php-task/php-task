@@ -32,7 +32,7 @@ class InsideProcessExecutorTest extends TestCase
      */
     private $executor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->handlerFactory = $this->prophesize(TaskHandlerFactoryInterface::class);
 

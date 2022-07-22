@@ -39,7 +39,7 @@ class LockTest extends TestCase
      */
     private $key = 'test-key';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storage = $this->prophesize(LockStorageInterface::class);
 
