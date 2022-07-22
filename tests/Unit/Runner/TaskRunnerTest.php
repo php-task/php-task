@@ -58,7 +58,7 @@ class TaskRunnerTest extends TestCase
      */
     private $taskRunner;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->taskExecutionRepository = $this->prophesize(TaskExecutionRepositoryInterface::class);
         $this->executionFinder = $this->prophesize(ExecutionFinderInterface::class);
@@ -259,11 +259,7 @@ class TaskRunnerTest extends TestCase
 
     private function dispatch($eventName, $event)
     {
-        if (class_exists(LegacyEventDispatcherProxy::class)) {
-            return $this->eventDispatcher->dispatch($event, $eventName)->shouldBeCalled()->willReturnArgument(0);
-        } else {
-            return $this->eventDispatcher->dispatch($eventName, $event)->shouldBeCalled()->willReturnArgument(0);
-        }
+        return $this->eventDispatcher->dispatch($event, $eventName)->shouldBeCalled()->willReturnArgument(0);
     }
 }
 

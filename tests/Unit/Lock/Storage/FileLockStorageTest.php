@@ -30,7 +30,7 @@ class FileLockStorageTest extends TestCase
      */
     private $storage;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->root = vfsStream::setup('tmp');
 

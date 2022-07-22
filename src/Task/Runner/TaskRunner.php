@@ -12,7 +12,6 @@
 namespace Task\Runner;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
 use Task\Event\Events;
 use Task\Event\TaskExecutionEvent;
 use Task\Execution\TaskExecutionInterface;
@@ -218,10 +217,6 @@ class TaskRunner implements TaskRunnerInterface
 
     private function dispatch($eventName, $event)
     {
-        if (class_exists(LegacyEventDispatcherProxy::class)) {
-            return $this->eventDispatcher->dispatch($event, $eventName);
-        } else {
-            return $this->eventDispatcher->dispatch($eventName, $event);
-        }
+        return $this->eventDispatcher->dispatch($event, $eventName);
     }
 }

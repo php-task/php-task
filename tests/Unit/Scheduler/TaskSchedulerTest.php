@@ -60,7 +60,7 @@ class TaskSchedulerTest extends TestCase
      */
     private $taskScheduler;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->factory = $this->prophesize(TaskBuilderFactoryInterface::class);
         $this->taskRepository = $this->prophesize(TaskRepositoryInterface::class);
@@ -197,11 +197,7 @@ class TaskSchedulerTest extends TestCase
 
     private function dispatch($eventName, $event)
     {
-        if (class_exists(LegacyEventDispatcherProxy::class)) {
-            return $this->eventDispatcher->dispatch($event, $eventName)->shouldBeCalled()->willReturnArgument(0);
-        } else {
-            return $this->eventDispatcher->dispatch($eventName, $event)->shouldBeCalled()->willReturnArgument(0);
-        }
+        return $this->eventDispatcher->dispatch($event, $eventName)->shouldBeCalled()->willReturnArgument(0);
     }
 }
 
