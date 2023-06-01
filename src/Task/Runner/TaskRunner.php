@@ -163,6 +163,8 @@ class TaskRunner implements TaskRunnerInterface
             new TaskExecutionEvent($execution->getTask(), $execution)
         );
 
+        $this->taskExecutionRepository->save($execution);
+
         return $execution;
     }
 
@@ -186,6 +188,8 @@ class TaskRunner implements TaskRunnerInterface
             Events::TASK_FAILED,
             new TaskExecutionEvent($execution->getTask(), $execution)
         );
+
+        $this->taskExecutionRepository->save($execution);
 
         return $execution;
     }
