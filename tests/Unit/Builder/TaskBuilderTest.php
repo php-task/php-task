@@ -24,6 +24,7 @@ use Task\TaskInterface;
 class TaskBuilderTest extends TestCase
 {
     use ProphecyTrait;
+
     public function testHourly()
     {
         $task = $this->prophesize(TaskInterface::class);
