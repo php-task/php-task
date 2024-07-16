@@ -84,8 +84,8 @@ class TaskRunnerTest extends TestCase
             $this->createTaskExecution($task, new \DateTime(), 'Test 2')->setStatus(TaskStatus::PLANNED),
         ];
 
-        $this->taskExecutionRepository->save($executions[0])->willReturnArgument(0)->shouldBeCalledTimes(2);
-        $this->taskExecutionRepository->save($executions[1])->willReturnArgument(0)->shouldBeCalledTimes(2);
+        $this->taskExecutionRepository->save($executions[0])->willReturnArgument(0)->shouldBeCalledTimes(3);
+        $this->taskExecutionRepository->save($executions[1])->willReturnArgument(0)->shouldBeCalledTimes(3);
 
         $this->executor->execute($executions[0])->willReturn(strrev('Test 1'));
         $this->executor->execute($executions[1])->willReturn(strrev('Test 2'));
@@ -118,8 +118,8 @@ class TaskRunnerTest extends TestCase
             $this->createTaskExecution($task, new \DateTime(), 'Test 2')->setStatus(TaskStatus::PLANNED),
         ];
 
-        $this->taskExecutionRepository->save($executions[0])->willReturnArgument(0)->shouldBeCalledTimes(2);
-        $this->taskExecutionRepository->save($executions[1])->willReturnArgument(0)->shouldBeCalledTimes(2);
+        $this->taskExecutionRepository->save($executions[0])->willReturnArgument(0)->shouldBeCalledTimes(3);
+        $this->taskExecutionRepository->save($executions[1])->willReturnArgument(0)->shouldBeCalledTimes(3);
 
         $this->executor->execute($executions[0])->willThrow(new \Exception());
         $this->executor->execute($executions[1])->willReturn(strrev('Test 2'));
