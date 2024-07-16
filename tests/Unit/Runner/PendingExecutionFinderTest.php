@@ -13,6 +13,7 @@ namespace Task\Tests\Unit\Runner;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Ramsey\Uuid\Uuid;
 use Task\Execution\TaskExecutionInterface;
 use Task\Handler\TaskHandlerFactoryInterface;
@@ -24,6 +25,8 @@ use Task\Storage\TaskExecutionRepositoryInterface;
 
 class PendingExecutionFinderTest extends TestCase
 {
+    use ProphecyTrait;
+
     const HANDLER = 'AppBundle\\Handler\\TestHandler';
 
     const LOCKING_HANDLER = 'AppBundle\\Handler\\LockingTestHandler';

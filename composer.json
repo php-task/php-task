@@ -10,16 +10,18 @@
         }
     ],
     "require": {
-        "php": "^8.0 || ^8.1",
-        "doctrine/collections": "^1.0",
+        "php": "^8.0",
+        "doctrine/collections": "^1.0 || ^2.0",
         "ramsey/uuid": "^3.1 || ^4.0",
-        "symfony/event-dispatcher": "^5.4 || ^6.0",
+        "symfony/event-dispatcher": "^5.4 || ^6.0 || ^7.0",
         "dragonmantank/cron-expression": "^1.1 || ^2.0 || ^3.0"
     },
     "require-dev": {
         "mikey179/vfsstream": "^1.6.7",
-        "psr/log": "^1.0",
-        "symfony/phpunit-bridge": "^5.4 || ^6.0"
+        "psr/log": "^1.0 || ^2.0 || ^3.0",
+        "phpunit/phpunit": "^9.6.5 || ^10 || ^11",
+        "phpspec/prophecy-phpunit": "^2.0.1",
+        "phpspec/prophecy": "^1.14"
     },
     "autoload": {
         "psr-4": {

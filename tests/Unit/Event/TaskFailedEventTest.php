@@ -12,6 +12,7 @@
 namespace Task\Tests\Unit\Event;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Task\Event\TaskFailedEvent;
 use Task\TaskInterface;
 
@@ -20,6 +21,8 @@ use Task\TaskInterface;
  */
 class TaskFailedEventTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testGetTask()
     {
         $task = $this->prophesize(TaskInterface::class);

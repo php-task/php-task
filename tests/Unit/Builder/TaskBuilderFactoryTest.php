@@ -12,6 +12,7 @@
 namespace Task\Tests\Unit\Builder;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Task\Builder\TaskBuilderFactory;
 use Task\Builder\TaskBuilderInterface;
 use Task\Scheduler\TaskSchedulerInterface;
@@ -22,6 +23,8 @@ use Task\TaskInterface;
  */
 class TaskBuilderFactoryTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testCreate()
     {
         $task = $this->prophesize(TaskInterface::class);

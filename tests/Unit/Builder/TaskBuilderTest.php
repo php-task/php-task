@@ -13,6 +13,7 @@ namespace Task\Tests\Unit\Builder;
 
 use Cron\CronExpression;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Task\Builder\TaskBuilder;
 use Task\Scheduler\TaskSchedulerInterface;
 use Task\TaskInterface;
@@ -22,6 +23,8 @@ use Task\TaskInterface;
  */
 class TaskBuilderTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testHourly()
     {
         $task = $this->prophesize(TaskInterface::class);
