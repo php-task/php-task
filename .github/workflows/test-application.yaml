@@ -22,7 +22,9 @@ jobs:
                 include:
                     - php-version: '8.0'
                       dependencies: 'lowest'
+                      phpunit-config: 'phpunit-9.xml.dist'
                     - php-version: '8.0'
+                      phpunit-config: 'phpunit-9.xml.dist'
                     - php-version: '8.1'
                     - php-version: '8.2'
                     - php-version: '8.3'
@@ -50,7 +52,7 @@ jobs:
                   composer-options: --prefer-dist --no-suggest
 
             - name: Execute test
-              run: vendor/bin/phpunit --coverage-clover=coverage.clover
+              run: vendor/bin/phpunit --config ${{ matrix.phpunit-config || 'phpunit.xml.dist' }} --coverage-clover=coverage.clover
 
             - name: Coverage
               if: ${{ matrix.coverage }}

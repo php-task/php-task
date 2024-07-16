@@ -4,3 +4,4 @@ composer.phar
 
 *.iml
 .idea
+.phpunit.cache
