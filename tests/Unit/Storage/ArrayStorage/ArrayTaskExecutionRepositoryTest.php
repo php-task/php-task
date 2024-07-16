@@ -14,6 +14,7 @@ namespace Task\Tests\Unit\Storage\ArrayStorage;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Task\Execution\TaskExecution;
 use Task\Execution\TaskExecutionInterface;
 use Task\Storage\ArrayStorage\ArrayTaskExecutionRepository;
@@ -25,6 +26,8 @@ use Task\TaskStatus;
  */
 class ArrayTaskExecutionRepositoryTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testSave()
     {
         $taskExecutionCollection = $this->prophesize(Collection::class);

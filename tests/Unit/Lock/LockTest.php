@@ -12,6 +12,7 @@
 namespace Task\Tests\Unit\Lock;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Task\Lock\Exception\LockConflictException;
 use Task\Lock\Lock;
 use Task\Lock\LockInterface;
@@ -19,6 +20,8 @@ use Task\Lock\LockStorageInterface;
 
 class LockTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var LockStorageInterface
      */

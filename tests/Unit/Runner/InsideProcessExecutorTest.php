@@ -12,6 +12,7 @@
 namespace Unit\Runner;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Task\Execution\TaskExecutionInterface;
 use Task\Executor\FailedException;
 use Task\Executor\InsideProcessExecutor;
@@ -22,6 +23,8 @@ use Task\Handler\TaskHandlerInterface;
 
 class InsideProcessExecutorTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var TaskHandlerFactoryInterface
      */

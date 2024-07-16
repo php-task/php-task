@@ -12,6 +12,7 @@
 namespace Task\Tests\Unit\Execution;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Task\Execution\TaskExecution;
 use Task\Task;
 use Task\TaskStatus;
@@ -21,6 +22,8 @@ use Task\TaskStatus;
  */
 class TaskExecutionTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testUuid()
     {
         $task = $this->prophesize(Task::class);

@@ -13,6 +13,7 @@ namespace Task\Tests\Unit\Runner;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
 use Task\Event\Events;
@@ -33,6 +34,8 @@ use Task\TaskStatus;
  */
 class TaskRunnerTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var TaskExecutionRepositoryInterface
      */

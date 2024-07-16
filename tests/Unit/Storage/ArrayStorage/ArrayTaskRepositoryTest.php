@@ -15,6 +15,7 @@ use Cron\CronExpression;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Task\Storage\ArrayStorage\ArrayTaskRepository;
 use Task\Task;
 use Task\TaskInterface;
@@ -24,6 +25,8 @@ use Task\TaskInterface;
  */
 class ArrayTaskRepositoryTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testFindByUuid()
     {
         $tasks = [

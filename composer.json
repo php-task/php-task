@@ -19,7 +19,8 @@
     "require-dev": {
         "mikey179/vfsstream": "^1.6.7",
         "psr/log": "^1.0 || ^2.0 || ^3.0",
-        "symfony/phpunit-bridge": "^5.4 || ^6.0 || ^7.0"
+        "phpunit/phpunit": "^9.5 || ^10 || ^11",
+        "phpspec/prophecy-phpunit": "^2.0"
     },
     "autoload": {
         "psr-4": {
