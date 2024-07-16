@@ -20,7 +20,8 @@
         "mikey179/vfsstream": "^1.6.7",
         "psr/log": "^1.0 || ^2.0 || ^3.0",
         "phpunit/phpunit": "^9.6.5 || ^10 || ^11",
-        "phpspec/prophecy-phpunit": "^2.0.1"
+        "phpspec/prophecy-phpunit": "^2.0.1",
+        "phpspec/prophecy": "^1.14"
     },
     "autoload": {
         "psr-4": {

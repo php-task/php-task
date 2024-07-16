@@ -30,6 +30,7 @@ jobs:
                     - php-version: '8.3'
                       coverage: 'true'
                     - php-version: '8.4'
+                      composer-flags: '--ignore-platform-reqs'
 
         steps:
             - name: Checkout project
@@ -49,7 +50,7 @@ jobs:
               uses: ramsey/composer-install@v2
               with:
                   dependency-versions: ${{ matrix.dependencies }}
-                  composer-options: --prefer-dist --no-suggest
+                  composer-options: --prefer-dist --no-suggest ${{ matrix.composer-flags }}
 
             - name: Execute test
               run: vendor/bin/phpunit --config ${{ matrix.phpunit-config || 'phpunit.xml.dist' }} --coverage-clover=coverage.clover
