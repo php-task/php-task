@@ -12,7 +12,7 @@
 namespace Task;
 
 use Cron\CronExpression;
-use Ramsey\Uuid\Uuid;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * Task information.
@@ -56,7 +56,7 @@ class Task implements TaskInterface
      */
     public function __construct($handlerClass, $workload = null, $uuid = null)
     {
-        $this->uuid = $uuid ?: Uuid::uuid4()->toString();
+        $this->uuid = $uuid ?: Uuid::v7()->toRfc4122();
         $this->handlerClass = $handlerClass;
         $this->workload = $workload;
 
