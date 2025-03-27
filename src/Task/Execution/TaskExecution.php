@@ -94,7 +94,7 @@ class TaskExecution implements TaskExecutionInterface
         $workload = null,
         $uuid = null
     ) {
-        $this->uuid = $uuid ?: Uuid::v7()->toRfc4122();
+        $this->uuid = $uuid ?: Uuid::v4()->toRfc4122();
         $this->task = $task;
         $this->handlerClass = $handlerClass;
         $this->scheduleTime = $scheduleTime;

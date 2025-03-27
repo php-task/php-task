@@ -56,7 +56,7 @@ class Task implements TaskInterface
      */
     public function __construct($handlerClass, $workload = null, $uuid = null)
     {
-        $this->uuid = $uuid ?: Uuid::v7()->toRfc4122();
+        $this->uuid = $uuid ?: Uuid::v4()->toRfc4122();
         $this->handlerClass = $handlerClass;
         $this->workload = $workload;
 

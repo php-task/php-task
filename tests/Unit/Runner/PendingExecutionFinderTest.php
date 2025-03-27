@@ -166,7 +166,7 @@ class PendingExecutionFinderTest extends TestCase
     private function createExecution($handler = self::HANDLER)
     {
         $execution = $this->prophesize(TaskExecutionInterface::class);
-        $execution->getUuid()->willReturn(Uuid::v7()->toRfc4122());
+        $execution->getUuid()->willReturn(Uuid::v4()->toRfc4122());
         $execution->getHandlerClass()->willReturn($handler);
         $execution->getWorkload()->willReturn('test-workload');
 
