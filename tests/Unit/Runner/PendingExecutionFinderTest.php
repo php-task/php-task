@@ -14,7 +14,7 @@ namespace Task\Tests\Unit\Runner;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
-use Ramsey\Uuid\Uuid;
+use Symfony\Component\Uid\Uuid;
 use Task\Execution\TaskExecutionInterface;
 use Task\Handler\TaskHandlerFactoryInterface;
 use Task\Handler\TaskHandlerInterface;
@@ -166,7 +166,7 @@ class PendingExecutionFinderTest extends TestCase
     private function createExecution($handler = self::HANDLER)
     {
         $execution = $this->prophesize(TaskExecutionInterface::class);
-        $execution->getUuid()->willReturn(Uuid::uuid4()->toString());
+        $execution->getUuid()->willReturn(Uuid::v4()->toRfc4122());
         $execution->getHandlerClass()->willReturn($handler);
         $execution->getWorkload()->willReturn('test-workload');
 

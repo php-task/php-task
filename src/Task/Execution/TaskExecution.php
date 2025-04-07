@@ -11,7 +11,7 @@
 
 namespace Task\Execution;
 
-use Ramsey\Uuid\Uuid;
+use Symfony\Component\Uid\Uuid;
 use Task\TaskInterface;
 use Task\TaskStatus;
 
@@ -94,7 +94,7 @@ class TaskExecution implements TaskExecutionInterface
         $workload = null,
         $uuid = null
     ) {
-        $this->uuid = $uuid ?: Uuid::uuid4()->toString();
+        $this->uuid = $uuid ?: Uuid::v4()->toRfc4122();
         $this->task = $task;
         $this->handlerClass = $handlerClass;
         $this->scheduleTime = $scheduleTime;
