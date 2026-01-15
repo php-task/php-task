@@ -139,7 +139,7 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findAll($page = 1, $pageSize = null)
+    public function findAllPaginated(int $page = 1, ?int $pageSize = null): array
     {
         return array_values($this->taskExecutionCollection->slice(($page - 1) * $pageSize, $pageSize));
     }

@@ -87,11 +87,11 @@ interface TaskExecutionRepositoryInterface
      * Returns all task-executions.
      *
      * @param int $page
-     * @param int $pageSize
+     * @param int|null $pageSize
      *
      * @return TaskExecutionInterface[]
      */
-    public function findAll($page = 1, $pageSize = null);
+    public function findAllPaginated(int $page = 1, ?int $pageSize = null): array;
 
     /**
      * Returns scheduled task-execution.

@@ -226,13 +226,13 @@ class ArrayTaskExecutionRepositoryTest extends TestCase
 
         $repository = new ArrayTaskExecutionRepository(new ArrayCollection($executions));
 
-        $result = $repository->findAll(1, 2);
+        $result = $repository->findAllPaginated(1, 2);
         $this->assertCount(2, $result);
 
         $this->assertEquals($executions[0], $result[0]);
         $this->assertEquals($executions[1], $result[1]);
 
-        $result = $repository->findAll(2, 2);
+        $result = $repository->findAllPaginated(2, 2);
         $this->assertCount(1, $result);
 
         $this->assertEquals($executions[2], $result[0]);
