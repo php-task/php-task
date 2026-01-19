@@ -27,7 +27,7 @@ class TaskExecutionTest extends TestCase
     public function testUuid()
     {
         $task = $this->prophesize(Task::class);
-        $execution = new TaskExecution($task->reveal(), \stdClass::class, new \DateTime(), null, '123-123-123');
+        $execution = new TaskExecution($task->reveal(), \stdClass::class, new \DateTimeImmutable(), null, '123-123-123');
 
         $this->assertEquals('123-123-123', $execution->getUuid());
     }
@@ -35,7 +35,7 @@ class TaskExecutionTest extends TestCase
     public function testDuration()
     {
         $task = $this->prophesize(Task::class);
-        $execution = new TaskExecution($task->reveal(), \stdClass::class, new \DateTime());
+        $execution = new TaskExecution($task->reveal(), \stdClass::class, new \DateTimeImmutable());
 
         $this->assertNull($execution->getDuration());
 
@@ -46,11 +46,11 @@ class TaskExecutionTest extends TestCase
     public function testEndTime()
     {
         $task = $this->prophesize(Task::class);
-        $execution = new TaskExecution($task->reveal(), \stdClass::class, new \DateTime());
+        $execution = new TaskExecution($task->reveal(), \stdClass::class, new \DateTimeImmutable());
 
         $this->assertNull($execution->getEndTime());
 
-        $date = new \DateTime('now');
+        $date = new \DateTimeImmutable('now');
         $execution->setEndTime($date);
         $this->assertEquals($date, $execution->getEndTime());
     }
@@ -58,7 +58,7 @@ class TaskExecutionTest extends TestCase
     public function testException()
     {
         $task = $this->prophesize(Task::class);
-        $execution = new TaskExecution($task->reveal(), \stdClass::class, new \DateTime());
+        $execution = new TaskExecution($task->reveal(), \stdClass::class, new \DateTimeImmutable());
 
         $this->assertNull($execution->getException());
 
@@ -70,7 +70,7 @@ class TaskExecutionTest extends TestCase
     public function testResult()
     {
         $task = $this->prophesize(Task::class);
-        $execution = new TaskExecution($task->reveal(), \stdClass::class, new \DateTime());
+        $execution = new TaskExecution($task->reveal(), \stdClass::class, new \DateTimeImmutable());
 
         $this->assertNull($execution->getResult());
 
@@ -82,11 +82,11 @@ class TaskExecutionTest extends TestCase
     public function testStartTime()
     {
         $task = $this->prophesize(Task::class);
-        $execution = new TaskExecution($task->reveal(), \stdClass::class, new \DateTime());
+        $execution = new TaskExecution($task->reveal(), \stdClass::class, new \DateTimeImmutable());
 
         $this->assertNull($execution->getStartTime());
 
-        $date = new \DateTime('now');
+        $date = new \DateTimeImmutable('now');
         $execution->setStartTime($date);
         $this->assertEquals($date, $execution->getStartTime());
     }
@@ -94,7 +94,7 @@ class TaskExecutionTest extends TestCase
     public function testStatus()
     {
         $task = $this->prophesize(Task::class);
-        $execution = new TaskExecution($task->reveal(), \stdClass::class, new \DateTime());
+        $execution = new TaskExecution($task->reveal(), \stdClass::class, new \DateTimeImmutable());
 
         $this->assertNull($execution->getStatus());
 
@@ -106,7 +106,7 @@ class TaskExecutionTest extends TestCase
     {
         $task = $this->prophesize(Task::class);
         $workload = 'test workload';
-        $execution = new TaskExecution($task->reveal(), \stdClass::class, new \DateTime(), $workload);
+        $execution = new TaskExecution($task->reveal(), \stdClass::class, new \DateTimeImmutable)), $workload);
 
         $this->assertEquals($workload, $execution->getWorkload());
     }
@@ -114,7 +114,7 @@ class TaskExecutionTest extends TestCase
     public function testHandlerClass()
     {
         $task = $this->prophesize(Task::class);
-        $execution = new TaskExecution($task->reveal(), \stdClass::class, new \DateTime());
+        $execution = new TaskExecution($task->reveal(), \stdClass::class, new \DateTimeImmutable)));
 
         $this->assertEquals(\stdClass::class, $execution->getHandlerClass());
     }
@@ -122,7 +122,7 @@ class TaskExecutionTest extends TestCase
     public function testScheduleTime()
     {
         $task = $this->prophesize(Task::class);
-        $date = new \DateTime('now');
+        $date = new \DateTimeImmutable)'now');
         $execution = new TaskExecution($task->reveal(), \stdClass::class, $date);
 
         $this->assertEquals($date, $execution->getScheduleTime());

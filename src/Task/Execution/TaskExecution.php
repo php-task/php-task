@@ -41,17 +41,17 @@ class TaskExecution implements TaskExecutionInterface
     protected $handlerClass;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeImmutable
      */
     protected $scheduleTime;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeImmutable
      */
     protected $startTime;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeImmutable
      */
     protected $endTime;
 
@@ -83,14 +83,14 @@ class TaskExecution implements TaskExecutionInterface
     /**
      * @param TaskInterface $task
      * @param $handlerClass
-     * @param \DateTime $scheduleTime
+     * @param \DateTimeImmutable $scheduleTime
      * @param string|\Serializable $workload
      * @param string $uuid
      */
     public function __construct(
         TaskInterface $task,
         $handlerClass,
-        \DateTime $scheduleTime,
+        \DateTimeImmutable $scheduleTime,
         $workload = null,
         $uuid = null
     ) {
@@ -144,7 +144,7 @@ class TaskExecution implements TaskExecutionInterface
     /**
      * {@inheritdoc}
      */
-    public function setStartTime(\DateTime $startTime)
+    public function setStartTime(\DateTimeImmutable $startTime)
     {
         $this->startTime = $startTime;
 
@@ -154,7 +154,7 @@ class TaskExecution implements TaskExecutionInterface
     /**
      * {@inheritdoc}
      */
-    public function setEndTime(\DateTime $endTime)
+    public function setEndTime(\DateTimeImmutable $endTime)
     {
         $this->endTime = $endTime;
 

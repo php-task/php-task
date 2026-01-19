@@ -81,7 +81,7 @@ class TaskRunner implements TaskRunnerInterface
     private function run(TaskExecutionInterface $execution)
     {
         $start = microtime(true);
-        $execution->setStartTime(new \DateTime());
+        $execution->setStartTime(new \DateTimeImmutable());
         $execution->setStatus(TaskStatus::RUNNING);
         $this->taskExecutionRepository->save($execution);
 
@@ -207,7 +207,7 @@ class TaskRunner implements TaskRunnerInterface
         $execution = $this->taskExecutionRepository->findByUuid($execution->getUuid());
 
         if (TaskStatus::PLANNED !== $execution->getStatus()) {
-            $execution->setEndTime(new \DateTime());
+            $execution->setEndTime(new \DateTimeImmutable());
             $execution->setDuration(microtime(true) - $start);
         }
 

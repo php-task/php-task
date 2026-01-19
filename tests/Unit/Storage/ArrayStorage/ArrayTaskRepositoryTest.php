@@ -144,11 +144,11 @@ class ArrayTaskRepositoryTest extends TestCase
     {
         $tasks = [
             (new Task(\stdClass::class, 'Test 1'))
-                ->setInterval(CronExpression::factory('@daily'), new \DateTime(), new \DateTime('+1 day')),
+                ->setInterval(CronExpression::factory('@daily'), new \DateTimeImmutable(), new \DateTimeImmutable('+1 day')),
             (new Task(\stdClass::class, 'Test 2'))
-                ->setInterval(CronExpression::factory('@yearly'), new \DateTime('-2 day'), new \DateTime('-1 day')),
+                ->setInterval(CronExpression::factory('@yearly'), new \DateTimeImmutable('-2 day'), new \DateTimeImmutable('-1 day')),
             (new Task(\stdClass::class, 'Test 3'))
-                ->setInterval(CronExpression::factory('@monthly'), new \DateTime(), new \DateTime('+1 day')),
+                ->setInterval(CronExpression::factory('@monthly'), new \DateTimeImmutable(), new \DateTimeImmutable('+1 day')),
         ];
 
         $repository = new ArrayTaskRepository(new ArrayCollection($tasks));

@@ -177,7 +177,7 @@ class PendingExecutionFinderTest extends TestCase
     {
         $that = $this;
 
-        $this->taskExecutionRepository->findNextScheduled(Argument::type(\DateTime::class), $lockedUuids)->will(
+        $this->taskExecutionRepository->findNextScheduled(Argument::type(\DateTimeImmutable::class), $lockedUuids)->will(
             function () use ($that, $executions, $locked, $lockedUuids) {
                 $execution = array_shift($executions);
 

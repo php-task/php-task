@@ -80,8 +80,8 @@ class TaskRunnerTest extends TestCase
     {
         $task = $this->createTask();
         $executions = [
-            $this->createTaskExecution($task, new \DateTime(), 'Test 1')->setStatus(TaskStatus::PLANNED),
-            $this->createTaskExecution($task, new \DateTime(), 'Test 2')->setStatus(TaskStatus::PLANNED),
+            $this->createTaskExecution($task, new \DateTimeImmutable(), 'Test 1')->setStatus(TaskStatus::PLANNED),
+            $this->createTaskExecution($task, new \DateTimeImmutable(), 'Test 2')->setStatus(TaskStatus::PLANNED),
         ];
 
         $this->taskExecutionRepository->save($executions[0])->willReturnArgument(0)->shouldBeCalledTimes(3);
@@ -97,8 +97,8 @@ class TaskRunnerTest extends TestCase
 
         $this->taskRunner->runTasks();
 
-        $this->assertLessThanOrEqual(new \DateTime(), $executions[0]->getStartTime());
-        $this->assertLessThanOrEqual(new \DateTime(), $executions[1]->getStartTime());
+        $this->assertLessThanOrEqual(new \DateTimeImmutable(), $executions[0]->getStartTime());
+        $this->assertLessThanOrEqual(new \DateTimeImmutable(), $executions[1]->getStartTime());
         $this->assertLessThanOrEqual($executions[1]->getStartTime(), $executions[0]->getStartTime());
         $this->assertLessThanOrEqual($executions[0]->getEndTime(), $executions[0]->getStartTime());
         $this->assertLessThanOrEqual($executions[1]->getEndTime(), $executions[1]->getStartTime());
@@ -114,8 +114,8 @@ class TaskRunnerTest extends TestCase
     {
         $task = $this->createTask();
         $executions = [
-            $this->createTaskExecution($task, new \DateTime(), 'Test 1')->setStatus(TaskStatus::PLANNED),
-            $this->createTaskExecution($task, new \DateTime(), 'Test 2')->setStatus(TaskStatus::PLANNED),
+            $this->createTaskExecution($task, new \DateTimeImmutable(), 'Test 1')->setStatus(TaskStatus::PLANNED),
+            $this->createTaskExecution($task, new \DateTimeImmutable(), 'Test 2')->setStatus(TaskStatus::PLANNED),
         ];
 
         $this->taskExecutionRepository->save($executions[0])->willReturnArgument(0)->shouldBeCalledTimes(3);
@@ -131,8 +131,8 @@ class TaskRunnerTest extends TestCase
 
         $this->taskRunner->runTasks();
 
-        $this->assertLessThanOrEqual(new \DateTime(), $executions[0]->getStartTime());
-        $this->assertLessThanOrEqual(new \DateTime(), $executions[1]->getStartTime());
+        $this->assertLessThanOrEqual(new \DateTimeImmutable(), $executions[0]->getStartTime());
+        $this->assertLessThanOrEqual(new \DateTimeImmutable(), $executions[1]->getStartTime());
         $this->assertLessThanOrEqual($executions[1]->getStartTime(), $executions[0]->getStartTime());
         $this->assertLessThanOrEqual($executions[0]->getEndTime(), $executions[0]->getStartTime());
         $this->assertLessThanOrEqual($executions[1]->getEndTime(), $executions[1]->getStartTime());
@@ -150,7 +150,7 @@ class TaskRunnerTest extends TestCase
     {
         $task = $this->createTask();
         $executions = [
-            $this->createTaskExecution($task, new \DateTime(), 'Test 1')->setStatus(TaskStatus::PLANNED),
+            $this->createTaskExecution($task, new \DateTimeImmutable(), 'Test 1')->setStatus(TaskStatus::PLANNED),
         ];
 
         $this->taskExecutionRepository->save($executions[0])->willReturnArgument(0)->shouldBeCalled();
@@ -175,7 +175,7 @@ class TaskRunnerTest extends TestCase
     {
         $task = $this->createTask();
         $executions = [
-            $this->createTaskExecution($task, new \DateTime(), 'Test 1')
+            $this->createTaskExecution($task, new \DateTimeImmutable(), 'Test 1')
                 ->setStatus(TaskStatus::PLANNED)
                 ->incrementAttempts(),
         ];

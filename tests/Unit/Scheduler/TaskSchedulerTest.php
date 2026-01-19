@@ -95,7 +95,7 @@ class TaskSchedulerTest extends TestCase
     {
         $task = $this->prophesize(TaskInterface::class);
         $task->getInterval()->willReturn(null);
-        $task->getFirstExecution()->willReturn(new \DateTime());
+        $task->getFirstExecution()->willReturn(new \DateTimeImmutable());
 
         $execution = $this->prophesize(TaskExecutionInterface::class);
 
@@ -129,7 +129,7 @@ class TaskSchedulerTest extends TestCase
 
         $this->taskExecutionRepository->findByTask($task)->willReturn([]);
         $this->taskExecutionRepository->findPending($task)->willReturn(null);
-        $this->taskExecutionRepository->create($task, Argument::type(\DateTime::class))->willReturn($execution);
+        $this->taskExecutionRepository->create($task, Argument::type(\DateTimeImmutable::class))->willReturn($execution);
         $this->taskExecutionRepository->save($execution->reveal())->shouldBeCalledTimes(1);
 
         $this->taskScheduler->addTask($task->reveal());
@@ -140,7 +140,7 @@ class TaskSchedulerTest extends TestCase
         $tasks = [
             $this->createTask($expression1 = CronExpression::factory('@hourly')),
             $this->createTask($expression2 = CronExpression::factory('@yearly')),
-            $this->createTask(null, $date = new \DateTime('+1 day')),
+            $this->createTask(null, $date = new \DateTimeImmutable('+1 day')),
         ];
 
         $this->taskRepository->findEndBeforeNow()->willReturn($tasks);

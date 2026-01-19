@@ -21,72 +21,72 @@ interface TaskBuilderInterface
     /**
      * Use hourly interval.
      *
-     * @param \DateTime $firstExecution
-     * @param \DateTime $lastExecution
+     * @param \DateTimeImmutable $firstExecution
+     * @param \DateTimeImmutable $lastExecution
      *
      * @return $this
      */
-    public function hourly(\DateTime $firstExecution = null, \DateTime $lastExecution = null);
+    public function hourly(\DateTimeImmutable $firstExecution = null, \DateTimeImmutable $lastExecution = null);
 
     /**
      * Use daily interval.
      *
-     * @param \DateTime $start
-     * @param \DateTime $end
+     * @param \DateTimeImmutable $start
+     * @param \DateTimeImmutable $end
      *
      * @return $this
      */
-    public function daily(\DateTime $start = null, \DateTime $end = null);
+    public function daily(\DateTimeImmutable $start = null, \DateTimeImmutable $end = null);
 
     /**
      * Use weekly interval.
      *
-     * @param \DateTime $start
-     * @param \DateTime $end
+     * @param \DateTimeImmutable $start
+     * @param \DateTimeImmutable $end
      *
      * @return $this
      */
-    public function weekly(\DateTime $start = null, \DateTime $end = null);
+    public function weekly(\DateTimeImmutable $start = null, \DateTimeImmutable $end = null);
 
     /**
      * Use monthly interval.
      *
-     * @param \DateTime $start
-     * @param \DateTime $end
+     * @param \DateTimeImmutable $start
+     * @param \DateTimeImmutable $end
      *
      * @return $this
      */
-    public function monthly(\DateTime $start = null, \DateTime $end = null);
+    public function monthly(\DateTimeImmutable $start = null, \DateTimeImmutable $end = null);
 
     /**
      * Use yearly interval.
      *
-     * @param \DateTime $start
-     * @param \DateTime $end
+     * @param \DateTimeImmutable $start
+     * @param \DateTimeImmutable $end
      *
      * @return $this
      */
-    public function yearly(\DateTime $start = null, \DateTime $end = null);
+    public function yearly(\DateTimeImmutable $start = null, \DateTimeImmutable $end = null);
 
     /**
      * Use given cron-interval.
      *
      * @param string $cronExpression
-     * @param \DateTime $start
-     * @param \DateTime $end
+     * @param \DateTimeImmutable $start
+     * @param \DateTimeImmutable $end
      *
      * @return $this
      */
-    public function cron($cronExpression, \DateTime $start = null, \DateTime $end = null);
+    public function cron($cronExpression, \DateTimeImmutable $start = null, \DateTimeImmutable $end = null);
 
     /**
      * Set execution-date.
      *
-     * @param \DateTime $executionDate
+     * @param \DateTimeImmutable $executionDate
      *
      * @return $this
      */
-    public function executeAt(\DateTime $executionDate);
+    public function executeAt(\DateTimeImmutable $executionDate);
 
     /**
      * Schedules built task and returns it.

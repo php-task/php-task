@@ -101,7 +101,7 @@ class ArrayTaskRepository implements TaskRepositoryInterface
      */
     public function findEndBeforeNow()
     {
-        $now = new \DateTime();
+        $now = new \DateTimeImmutable();
 
         return array_values(
             $this->taskCollection->filter(
