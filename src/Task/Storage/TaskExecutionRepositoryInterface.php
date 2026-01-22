@@ -23,11 +23,11 @@ interface TaskExecutionRepositoryInterface
      * Create task-execution.
      *
      * @param TaskInterface $task
-     * @param \DateTime $scheduleTime
+     * @param \DateTimeImmutable $scheduleTime
      *
      * @return TaskExecutionInterface
      */
-    public function create(TaskInterface $task, \DateTime $scheduleTime);
+    public function create(TaskInterface $task, \DateTimeImmutable $scheduleTime);
 
     /**
      * Save task-execution.
@@ -87,21 +87,21 @@ interface TaskExecutionRepositoryInterface
      * Returns all task-executions.
      *
      * @param int $page
-     * @param int $pageSize
+     * @param int|null $pageSize
      *
      * @return TaskExecutionInterface[]
      */
-    public function findAll($page = 1, $pageSize = null);
+    public function findAllPaginated(int $page = 1, ?int $pageSize = null): array;
 
     /**
      * Returns scheduled task-execution.
      *
      * Scheduled-time in the past relative to given date.
      *
-     * @param \DateTime|null $dateTime
+     * @param \DateTimeImmutable|null $dateTime
      * @param array $skippedExecutions
      *
      * @return TaskExecutionInterface
      */
-    public function findNextScheduled(\DateTime $dateTime = null, array $skippedExecutions = []);
+    public function findNextScheduled(\DateTimeImmutable $dateTime = null, array $skippedExecutions = []);
 }

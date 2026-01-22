@@ -91,7 +91,7 @@ class ArrayTaskRepository implements TaskRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findAll($page = 1, $pageSize = null)
+    public function findAllPaginated(int $page = 1, ?int $pageSize = null): array
     {
         return array_values($this->taskCollection->slice(($page - 1) * $pageSize, $pageSize));
     }
@@ -101,7 +101,7 @@ class ArrayTaskRepository implements TaskRepositoryInterface
      */
     public function findEndBeforeNow()
     {
-        $now = new \DateTime();
+        $now = new \DateTimeImmutable();
 
         return array_values(
             $this->taskCollection->filter(

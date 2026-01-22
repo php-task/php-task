@@ -128,13 +128,13 @@ class ArrayTaskRepositoryTest extends TestCase
 
         $repository = new ArrayTaskRepository(new ArrayCollection($tasks));
 
-        $result = $repository->findAll(1, 2);
+        $result = $repository->findAllPaginated(1, 2);
         $this->assertCount(2, $result);
 
         $this->assertEquals($tasks[0], $result[0]);
         $this->assertEquals($tasks[1], $result[1]);
 
-        $result = $repository->findAll(2, 2);
+        $result = $repository->findAllPaginated(2, 2);
         $this->assertCount(1, $result);
 
         $this->assertEquals($tasks[2], $result[0]);
@@ -144,11 +144,11 @@ class ArrayTaskRepositoryTest extends TestCase
     {
         $tasks = [
             (new Task(\stdClass::class, 'Test 1'))
-                ->setInterval(CronExpression::factory('@daily'), new \DateTime(), new \DateTime('+1 day')),
+                ->setInterval(CronExpression::factory('@daily'), new \DateTimeImmutable(), new \DateTimeImmutable('+1 day')),
             (new Task(\stdClass::class, 'Test 2'))
-                ->setInterval(CronExpression::factory('@yearly'), new \DateTime('-2 day'), new \DateTime('-1 day')),
+                ->setInterval(CronExpression::factory('@yearly'), new \DateTimeImmutable('-2 day'), new \DateTimeImmutable('-1 day')),
             (new Task(\stdClass::class, 'Test 3'))
-                ->setInterval(CronExpression::factory('@monthly'), new \DateTime(), new \DateTime('+1 day')),
+                ->setInterval(CronExpression::factory('@monthly'), new \DateTimeImmutable(), new \DateTimeImmutable('+1 day')),
         ];
 
         $repository = new ArrayTaskRepository(new ArrayCollection($tasks));

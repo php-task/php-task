@@ -49,21 +49,21 @@ interface TaskExecutionInterface
     /**
      * Returns schedule-time.
      *
-     * @return \DateTime
+     * @return \DateTimeImmutable
      */
     public function getScheduleTime();
 
     /**
      * Returns start-time.
      *
-     * @return \DateTime
+     * @return \DateTimeImmutable
      */
     public function getStartTime();
 
     /**
      * Returns end-time.
      *
-     * @return \DateTime
+     * @return \DateTimeImmutable
      */
     public function getEndTime();
 
@@ -129,16 +129,16 @@ interface TaskExecutionInterface
      *
      * @return $this
      */
-    public function setStartTime(\DateTime $startTime);
+    public function setStartTime(\DateTimeImmutable $startTime);
 
     /**
      * Set end-time.
      *
-     * @param \DateTime $endTime
+     * @param \DateTimeImmutable $endTime
      *
      * @return $this
      */
-    public function setEndTime(\DateTime $endTime);
+    public function setEndTime(\DateTimeImmutable $endTime);
 
     /**
      * Set duration.

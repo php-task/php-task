@@ -49,23 +49,23 @@ interface TaskInterface
     /**
      * Returns first-execution date-time.
      *
-     * @return \DateTime
+     * @return \DateTimeImmutable
      */
     public function getFirstExecution();
 
     /**
      * Set first-execution.
      *
-     * @param \DateTime $firstExecution
+     * @param \DateTimeImmutable $firstExecution
      *
      * @return $this
      */
-    public function setFirstExecution(\DateTime $firstExecution);
+    public function setFirstExecution(\DateTimeImmutable $firstExecution);
 
     /**
      * Returns first-execution date-time.
      *
-     * @return \DateTime
+     * @return \DateTimeImmutable
      */
     public function getLastExecution();
 
@@ -73,10 +73,10 @@ interface TaskInterface
      * Set interval.
      *
      * @param CronExpression $interval
-     * @param \DateTime $firstExecution null means for "now"
-     * @param \DateTime $lastExecution null means forever
+     * @param \DateTimeImmutable $firstExecution null means for "now"
+     * @param \DateTimeImmutable $lastExecution null means forever
      *
      * @return $this
      */
-    public function setInterval(CronExpression $interval, \DateTime $firstExecution = null, \DateTime $lastExecution = null);
+    public function setInterval(CronExpression $interval, \DateTimeImmutable $firstExecution = null, \DateTimeImmutable $lastExecution = null);
 }

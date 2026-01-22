@@ -66,7 +66,7 @@ class PendingExecutionFinder implements ExecutionFinderInterface
      */
     public function find()
     {
-        $runTime = new \DateTime();
+        $runTime = new \DateTimeImmutable();
 
         $skippedExecutions = [];
         while ($execution = $this->taskExecutionRepository->findNextScheduled($runTime, $skippedExecutions)) {

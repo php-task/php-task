@@ -40,12 +40,12 @@ class Task implements TaskInterface
     protected $interval;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeImmutable
      */
     protected $firstExecution;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeImmutable
      */
     protected $lastExecution;
 
@@ -60,8 +60,8 @@ class Task implements TaskInterface
         $this->handlerClass = $handlerClass;
         $this->workload = $workload;
 
-        $this->firstExecution = new \DateTime();
-        $this->lastExecution = new \DateTime();
+        $this->firstExecution = new \DateTimeImmutable();
+        $this->lastExecution = new \DateTimeImmutable();
     }
 
     /**
@@ -107,7 +107,7 @@ class Task implements TaskInterface
     /**
      * {@inheritdoc}
      */
-    public function setFirstExecution(\DateTime $firstExecution)
+    public function setFirstExecution(\DateTimeImmutable $firstExecution)
     {
         $this->firstExecution = $firstExecution;
         $this->lastExecution = null;
@@ -128,11 +128,11 @@ class Task implements TaskInterface
      */
     public function setInterval(
         CronExpression $interval,
-        \DateTime $firstExecution = null,
-        \DateTime $lastExecution = null
+        \DateTimeImmutable $firstExecution = null,
+        \DateTimeImmutable $lastExecution = null
     ) {
         $this->interval = $interval;
-        $this->firstExecution = $firstExecution ?: new \DateTime();
+        $this->firstExecution = $firstExecution ?: new \DateTimeImmutable();
         $this->lastExecution = $lastExecution;
 
         return $this;

@@ -31,8 +31,8 @@ class TaskBuilderTest extends TestCase
         $taskScheduler = $this->prophesize(TaskSchedulerInterface::class);
         $taskBuilder = new TaskBuilder($task->reveal(), $taskScheduler->reveal());
 
-        $firstExecution = new \DateTime('-1 day');
-        $lastExecution = new \DateTime('+1 day');
+        $firstExecution = new \DateTimeImmutable('-1 day');
+        $lastExecution = new \DateTimeImmutable('+1 day');
 
         $this->assertEquals($taskBuilder, $taskBuilder->hourly($firstExecution, $lastExecution));
 
@@ -45,8 +45,8 @@ class TaskBuilderTest extends TestCase
         $taskScheduler = $this->prophesize(TaskSchedulerInterface::class);
         $taskBuilder = new TaskBuilder($task->reveal(), $taskScheduler->reveal());
 
-        $firstExecution = new \DateTime('-1 day');
-        $lastExecution = new \DateTime('+1 day');
+        $firstExecution = new \DateTimeImmutable('-1 day');
+        $lastExecution = new \DateTimeImmutable('+1 day');
 
         $this->assertEquals($taskBuilder, $taskBuilder->daily($firstExecution, $lastExecution));
 
@@ -59,8 +59,8 @@ class TaskBuilderTest extends TestCase
         $taskScheduler = $this->prophesize(TaskSchedulerInterface::class);
         $taskBuilder = new TaskBuilder($task->reveal(), $taskScheduler->reveal());
 
-        $firstExecution = new \DateTime('-1 day');
-        $lastExecution = new \DateTime('+1 day');
+        $firstExecution = new \DateTimeImmutable('-1 day');
+        $lastExecution = new \DateTimeImmutable('+1 day');
 
         $this->assertEquals($taskBuilder, $taskBuilder->weekly($firstExecution, $lastExecution));
 
@@ -73,8 +73,8 @@ class TaskBuilderTest extends TestCase
         $taskScheduler = $this->prophesize(TaskSchedulerInterface::class);
         $taskBuilder = new TaskBuilder($task->reveal(), $taskScheduler->reveal());
 
-        $firstExecution = new \DateTime('-1 day');
-        $lastExecution = new \DateTime('+1 day');
+        $firstExecution = new \DateTimeImmutable('-1 day');
+        $lastExecution = new \DateTimeImmutable('+1 day');
 
         $this->assertEquals($taskBuilder, $taskBuilder->monthly($firstExecution, $lastExecution));
 
@@ -87,8 +87,8 @@ class TaskBuilderTest extends TestCase
         $taskScheduler = $this->prophesize(TaskSchedulerInterface::class);
         $taskBuilder = new TaskBuilder($task->reveal(), $taskScheduler->reveal());
 
-        $firstExecution = new \DateTime('-1 day');
-        $lastExecution = new \DateTime('+1 day');
+        $firstExecution = new \DateTimeImmutable('-1 day');
+        $lastExecution = new \DateTimeImmutable('+1 day');
 
         $this->assertEquals($taskBuilder, $taskBuilder->yearly($firstExecution, $lastExecution));
 
@@ -101,8 +101,8 @@ class TaskBuilderTest extends TestCase
         $taskScheduler = $this->prophesize(TaskSchedulerInterface::class);
         $taskBuilder = new TaskBuilder($task->reveal(), $taskScheduler->reveal());
 
-        $firstExecution = new \DateTime('-1 day');
-        $lastExecution = new \DateTime('+1 day');
+        $firstExecution = new \DateTimeImmutable('-1 day');
+        $lastExecution = new \DateTimeImmutable('+1 day');
 
         $this->assertEquals($taskBuilder, $taskBuilder->cron('0 * * * *', $firstExecution, $lastExecution));
 
@@ -115,7 +115,7 @@ class TaskBuilderTest extends TestCase
         $taskScheduler = $this->prophesize(TaskSchedulerInterface::class);
         $taskBuilder = new TaskBuilder($task->reveal(), $taskScheduler->reveal());
 
-        $executionDate = new \DateTime('+1 day');
+        $executionDate = new \DateTimeImmutable('+1 day');
         $this->assertEquals($taskBuilder, $taskBuilder->executeAt($executionDate));
 
         $task->setFirstExecution($executionDate)->shouldBeCalled();

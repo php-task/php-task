@@ -40,7 +40,7 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function create(TaskInterface $task, \DateTime $scheduleTime)
+    public function create(TaskInterface $task, \DateTimeImmutable $scheduleTime)
     {
         return new TaskExecution($task, $task->getHandlerClass(), $scheduleTime, $task->getWorkload());
     }
@@ -139,7 +139,7 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findAll($page = 1, $pageSize = null)
+    public function findAllPaginated(int $page = 1, ?int $pageSize = null): array
     {
         return array_values($this->taskExecutionCollection->slice(($page - 1) * $pageSize, $pageSize));
     }
@@ -147,9 +147,9 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findNextScheduled(\DateTime $dateTime = null, array $skippedExecutions = [])
+    public function findNextScheduled(\DateTimeImmutable $dateTime = null, array $skippedExecutions = [])
     {
-        $dateTime = $dateTime ?: new \DateTime();
+        $dateTime = $dateTime ?: new \DateTimeImmutable();
 
         $result = $this->taskExecutionCollection->filter(
             function (TaskExecutionInterface $execution) use ($dateTime, $skippedExecutions) {
