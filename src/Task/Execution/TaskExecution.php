@@ -31,7 +31,7 @@ class TaskExecution implements TaskExecutionInterface
     protected $task;
 
     /**
-     * @var \Serializable|string
+     * @var string
      */
     protected $workload;
 
@@ -66,7 +66,7 @@ class TaskExecution implements TaskExecutionInterface
     protected $status;
 
     /**
-     * @var string|\Serializable
+     * @var string
      */
     protected $result;
 
@@ -98,7 +98,7 @@ class TaskExecution implements TaskExecutionInterface
         $this->task = $task;
         $this->handlerClass = $handlerClass;
         $this->scheduleTime = $scheduleTime;
-        $this->workload = $workload;
+        $this->workload = @\serialize($workload);
     }
 
     /**
@@ -122,7 +122,7 @@ class TaskExecution implements TaskExecutionInterface
      */
     public function getWorkload()
     {
-        return $this->workload;
+        return @\unserialize($this->workload);
     }
 
     /**
@@ -208,7 +208,7 @@ class TaskExecution implements TaskExecutionInterface
      */
     public function getResult()
     {
-        return $this->result;
+        return @\unserialize($this->result);
     }
 
     /**
@@ -234,7 +234,7 @@ class TaskExecution implements TaskExecutionInterface
      */
     public function setResult($result)
     {
-        $this->result = $result;
+        $this->result = @\serialize($result);
 
         return $this;
     }
