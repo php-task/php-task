@@ -30,7 +30,7 @@ class Task implements TaskInterface
     protected $handlerClass;
 
     /**
-     * @var string|\Serializable
+     * @var string
      */
     protected $workload;
 
@@ -58,7 +58,7 @@ class Task implements TaskInterface
     {
         $this->uuid = $uuid ?: Uuid::v4()->toRfc4122();
         $this->handlerClass = $handlerClass;
-        $this->workload = $workload;
+        $this->workload = @\serialize($workload);
 
         $this->firstExecution = new \DateTimeImmutable();
         $this->lastExecution = new \DateTimeImmutable();
@@ -85,7 +85,7 @@ class Task implements TaskInterface
      */
     public function getWorkload()
     {
-        return $this->workload;
+        return @\unserialize($this->workload);
     }
 
     /**
