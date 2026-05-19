@@ -208,6 +208,10 @@ class TaskExecution implements TaskExecutionInterface
      */
     public function getResult()
     {
+        if (null === $this->result) {
+            return null;
+        }
+
         return @\unserialize($this->result);
     }
 

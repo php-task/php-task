@@ -110,7 +110,7 @@ class ArrayTaskRepositoryTest extends TestCase
 
         $repository = new ArrayTaskRepository(new ArrayCollection($tasks));
 
-        $result = $repository->findAll();
+        $result = $repository->findAllPaginated(1);
         $this->assertCount(3, $result);
 
         $this->assertEquals($tasks[0], $result[0]);

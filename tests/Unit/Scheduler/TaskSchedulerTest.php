@@ -158,9 +158,10 @@ class TaskSchedulerTest extends TestCase
 
         $execution1 = $this->prophesize(TaskExecutionInterface::class);
         $execution1->setStatus(TaskStatus::PLANNED)->shouldBeCalled();
-        $this->taskExecutionRepository->create($tasks[1], $expression2->getNextRunDate())->willReturn(
-            $execution1->reveal()
-        );
+        $this->taskExecutionRepository->create(
+            $tasks[1],
+            \DateTimeImmutable::createFromMutable($expression2->getNextRunDate())
+        )->willReturn($execution1->reveal());
         $this->taskExecutionRepository->save($execution1)->shouldBeCalled();
 
         $execution2 = $this->prophesize(TaskExecutionInterface::class);

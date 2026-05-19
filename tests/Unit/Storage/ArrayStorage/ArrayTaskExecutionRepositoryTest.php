@@ -162,9 +162,9 @@ class ArrayTaskExecutionRepositoryTest extends TestCase
         $task = new Task(\stdClass::class, 'Test 1', '123-123-123');
         $executions = [
             new TaskExecution($task, \stdClass::class, new \DateTimeImmutable('+1 day'), 'Test 1'),
-            new TaskExecution($task, \stdClass::class, new \DateTimeImmutable)'+1 minute'), 'Test 1'),
-            new TaskExecution($task, \stdClass::class, new \DateTimeImmutable)'+1 hour'), 'Test 1'),
-            new TaskExecution($task, \stdClass::class, new \DateTimeImmutable)'+1 hour'), 'Test 1'),
+            new TaskExecution($task, \stdClass::class, new \DateTimeImmutable('+1 minute'), 'Test 1'),
+            new TaskExecution($task, \stdClass::class, new \DateTimeImmutable('+1 hour'), 'Test 1'),
+            new TaskExecution($task, \stdClass::class, new \DateTimeImmutable('+1 hour'), 'Test 1'),
         ];
 
         $executions[0]->setStatus(TaskStatus::COMPLETED);
@@ -181,9 +181,9 @@ class ArrayTaskExecutionRepositoryTest extends TestCase
     {
         $task = new Task(\stdClass::class, 'Test 1', '123-123-123');
         $executions = [
-            new TaskExecution($task, \stdClass::class, new \DateTimeImmutable)'+1 day'), 'Test 1'),
-            new TaskExecution($task, \stdClass::class, new \DateTimeImmutable)'+1 minute'), 'Test 1'),
-            new TaskExecution($task, \stdClass::class, new \DateTimeImmutable)'+1 hour'), 'Test 1'),
+            new TaskExecution($task, \stdClass::class, new \DateTimeImmutable('+1 day'), 'Test 1'),
+            new TaskExecution($task, \stdClass::class, new \DateTimeImmutable('+1 minute'), 'Test 1'),
+            new TaskExecution($task, \stdClass::class, new \DateTimeImmutable('+1 hour'), 'Test 1'),
         ];
 
         foreach ($executions as $execution) {
@@ -200,14 +200,14 @@ class ArrayTaskExecutionRepositoryTest extends TestCase
     {
         $task = new Task(\stdClass::class, 'Test 1', '123-123-123');
         $executions = [
-            new TaskExecution($task, \stdClass::class, new \DateTimeImmutable)'+1 day'), 'Test 1'),
-            new TaskExecution($task, \stdClass::class, new \DateTimeImmutable)'+1 minute'), 'Test 1'),
-            new TaskExecution($task, \stdClass::class, new \DateTimeImmutable)'+1 hour'), 'Test 1'),
+            new TaskExecution($task, \stdClass::class, new \DateTimeImmutable('+1 day'), 'Test 1'),
+            new TaskExecution($task, \stdClass::class, new \DateTimeImmutable('+1 minute'), 'Test 1'),
+            new TaskExecution($task, \stdClass::class, new \DateTimeImmutable('+1 hour'), 'Test 1'),
         ];
 
         $repository = new ArrayTaskExecutionRepository(new ArrayCollection($executions));
 
-        $result = $repository->findAll();
+        $result = $repository->findAllPaginated(1);
         $this->assertCount(3, $result);
 
         $this->assertEquals($executions[0], $result[0]);
@@ -219,9 +219,9 @@ class ArrayTaskExecutionRepositoryTest extends TestCase
     {
         $task = new Task(\stdClass::class, 'Test 1', '123-123-123');
         $executions = [
-            new TaskExecution($task, \stdClass::class, new \DateTimeImmutable)'+1 day'), 'Test 1'),
-            new TaskExecution($task, \stdClass::class, new \DateTimeImmutable)'+1 minute'), 'Test 1'),
-            new TaskExecution($task, \stdClass::class, new \DateTimeImmutable)'+1 hour'), 'Test 1'),
+            new TaskExecution($task, \stdClass::class, new \DateTimeImmutable('+1 day'), 'Test 1'),
+            new TaskExecution($task, \stdClass::class, new \DateTimeImmutable('+1 minute'), 'Test 1'),
+            new TaskExecution($task, \stdClass::class, new \DateTimeImmutable('+1 hour'), 'Test 1'),
         ];
 
         $repository = new ArrayTaskExecutionRepository(new ArrayCollection($executions));
@@ -242,11 +242,11 @@ class ArrayTaskExecutionRepositoryTest extends TestCase
     {
         $task = new Task(\stdClass::class, 'Test 1', '123-123-123');
         $executions = [
-            (new TaskExecution($task, \stdClass::class, new \DateTimeImmutable)'1 day ago'), 'Test 1'))
+            (new TaskExecution($task, \stdClass::class, new \DateTimeImmutable('1 day ago'), 'Test 1'))
                 ->setStatus(TaskStatus::PLANNED),
-            (new TaskExecution($task, \stdClass::class, new \DateTimeImmutable)'+1 minute'), 'Test 1'))
+            (new TaskExecution($task, \stdClass::class, new \DateTimeImmutable('+1 minute'), 'Test 1'))
                 ->setStatus(TaskStatus::FAILED),
-            (new TaskExecution($task, \stdClass::class, new \DateTimeImmutable)'1 hour ago'), 'Test 1'))
+            (new TaskExecution($task, \stdClass::class, new \DateTimeImmutable('1 hour ago'), 'Test 1'))
                 ->setStatus(TaskStatus::COMPLETED),
         ];
 
