@@ -100,7 +100,7 @@ class ArrayTaskRepositoryTest extends TestCase
         );
     }
 
-    public function testFindAll()
+    public function testFindAllPaginatedUnbounded()
     {
         $tasks = [
             new Task(\stdClass::class, 'Test 1'),
@@ -110,7 +110,7 @@ class ArrayTaskRepositoryTest extends TestCase
 
         $repository = new ArrayTaskRepository(new ArrayCollection($tasks));
 
-        $result = $repository->findAll();
+        $result = $repository->findAllPaginated(1);
         $this->assertCount(3, $result);
 
         $this->assertEquals($tasks[0], $result[0]);

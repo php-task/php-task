@@ -107,6 +107,12 @@ class TaskScheduler implements TaskSchedulerInterface
         }
 
         $scheduleTime = $task->getInterval() ? $task->getInterval()->getNextRunDate() : $task->getFirstExecution();
+        if ($scheduleTime instanceof \DateTime) {
+            // \Cron\CronExpression::getNextRunDate() returns a mutable
+            // \DateTime; normalize to \DateTimeImmutable to match the
+            // TaskExecutionRepositoryInterface::create() contract.
+            $scheduleTime = \DateTimeImmutable::createFromMutable($scheduleTime);
+        }
         $execution = $this->taskExecutionRepository->create($task, $scheduleTime);
         $execution->setStatus(TaskStatus::PLANNED);
 
