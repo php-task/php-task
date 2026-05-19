@@ -100,7 +100,7 @@ class ArrayTaskRepositoryTest extends TestCase
         );
     }
 
-    public function testFindAll()
+    public function testFindAllPaginatedUnbounded()
     {
         $tasks = [
             new Task(\stdClass::class, 'Test 1'),

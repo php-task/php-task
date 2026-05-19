@@ -196,7 +196,7 @@ class ArrayTaskExecutionRepositoryTest extends TestCase
         $this->assertEquals($executions[2], $repository->findPending($task));
     }
 
-    public function testFindAll()
+    public function testFindAllPaginatedUnbounded()
     {
         $task = new Task(\stdClass::class, 'Test 1', '123-123-123');
         $executions = [

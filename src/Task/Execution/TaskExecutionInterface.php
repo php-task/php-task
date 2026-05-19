@@ -84,7 +84,7 @@ interface TaskExecutionInterface
     /**
      * Returns result.
      *
-     * @return \Serializable|string
+     * @return \Serializable|string|null
      */
     public function getResult();
 
