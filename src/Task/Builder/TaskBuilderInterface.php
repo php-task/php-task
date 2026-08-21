@@ -26,7 +26,7 @@ interface TaskBuilderInterface
      *
      * @return $this
      */
-    public function hourly(\DateTimeImmutable $firstExecution = null, \DateTimeImmutable $lastExecution = null);
+    public function hourly(?\DateTimeImmutable $firstExecution = null, ?\DateTimeImmutable $lastExecution = null);
 
     /**
      * Use daily interval.
@@ -36,7 +36,7 @@ interface TaskBuilderInterface
      *
      * @return $this
      */
-    public function daily(\DateTimeImmutable $start = null, \DateTimeImmutable $end = null);
+    public function daily(?\DateTimeImmutable $start = null, ?\DateTimeImmutable $end = null);
 
     /**
      * Use weekly interval.
@@ -46,7 +46,7 @@ interface TaskBuilderInterface
      *
      * @return $this
      */
-    public function weekly(\DateTimeImmutable $start = null, \DateTimeImmutable $end = null);
+    public function weekly(?\DateTimeImmutable $start = null, ?\DateTimeImmutable $end = null);
 
     /**
      * Use monthly interval.
@@ -56,7 +56,7 @@ interface TaskBuilderInterface
      *
      * @return $this
      */
-    public function monthly(\DateTimeImmutable $start = null, \DateTimeImmutable $end = null);
+    public function monthly(?\DateTimeImmutable $start = null, ?\DateTimeImmutable $end = null);
 
     /**
      * Use yearly interval.
@@ -66,7 +66,7 @@ interface TaskBuilderInterface
      *
      * @return $this
      */
-    public function yearly(\DateTimeImmutable $start = null, \DateTimeImmutable $end = null);
+    public function yearly(?\DateTimeImmutable $start = null, ?\DateTimeImmutable $end = null);
 
     /**
      * Use given cron-interval.
@@ -77,7 +77,7 @@ interface TaskBuilderInterface
      *
      * @return $this
      */
-    public function cron($cronExpression, \DateTimeImmutable $start = null, \DateTimeImmutable $end = null);
+    public function cron($cronExpression, ?\DateTimeImmutable $start = null, ?\DateTimeImmutable $end = null);
 
     /**
      * Set execution-date.

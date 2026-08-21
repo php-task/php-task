@@ -30,9 +30,9 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
     private $taskExecutionCollection;
 
     /**
-     * @param Collection $taskExecutions
+     * @param Collection|null $taskExecutions
      */
-    public function __construct(Collection $taskExecutions = null)
+    public function __construct(?Collection $taskExecutions = null)
     {
         $this->taskExecutionCollection = $taskExecutions ?: new ArrayCollection();
     }
@@ -147,7 +147,7 @@ class ArrayTaskExecutionRepository implements TaskExecutionRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findNextScheduled(\DateTimeImmutable $dateTime = null, array $skippedExecutions = [])
+    public function findNextScheduled(?\DateTimeImmutable $dateTime = null, array $skippedExecutions = [])
     {
         $dateTime = $dateTime ?: new \DateTimeImmutable();
 

@@ -78,5 +78,5 @@ interface TaskInterface
      *
      * @return $this
      */
-    public function setInterval(CronExpression $interval, \DateTimeImmutable $firstExecution = null, \DateTimeImmutable $lastExecution = null);
+    public function setInterval(CronExpression $interval, ?\DateTimeImmutable $firstExecution = null, ?\DateTimeImmutable $lastExecution = null);
 }
