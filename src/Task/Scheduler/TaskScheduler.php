@@ -12,7 +12,6 @@
 namespace Task\Scheduler;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
 use Task\Builder\TaskBuilderFactoryInterface;
 use Task\Event\Events;
 use Task\Event\TaskEvent;
