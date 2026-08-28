@@ -128,8 +128,8 @@ class Task implements TaskInterface
      */
     public function setInterval(
         CronExpression $interval,
-        \DateTimeImmutable $firstExecution = null,
-        \DateTimeImmutable $lastExecution = null
+        ?\DateTimeImmutable $firstExecution = null,
+        ?\DateTimeImmutable $lastExecution = null
     ) {
         $this->interval = $interval;
         $this->firstExecution = $firstExecution ?: new \DateTimeImmutable();

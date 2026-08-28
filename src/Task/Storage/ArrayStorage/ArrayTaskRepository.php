@@ -28,9 +28,9 @@ class ArrayTaskRepository implements TaskRepositoryInterface
     private $taskCollection;
 
     /**
-     * @param Collection $tasks
+     * @param Collection|null $tasks
      */
-    public function __construct(Collection $tasks = null)
+    public function __construct(?Collection $tasks = null)
     {
         $this->taskCollection = $tasks ?: new ArrayCollection();
     }

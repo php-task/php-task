@@ -43,7 +43,7 @@ class TaskBuilder implements TaskBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function hourly(\DateTimeImmutable $firstExecution = null, \DateTimeImmutable $lastExecution = null)
+    public function hourly(?\DateTimeImmutable $firstExecution = null, ?\DateTimeImmutable $lastExecution = null)
     {
         $this->task->setInterval(CronExpression::factory('@hourly'), $firstExecution, $lastExecution);
 
@@ -53,7 +53,7 @@ class TaskBuilder implements TaskBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function daily(\DateTimeImmutable $firstExecution = null, \DateTimeImmutable $lastExecution = null)
+    public function daily(?\DateTimeImmutable $firstExecution = null, ?\DateTimeImmutable $lastExecution = null)
     {
         $this->task->setInterval(CronExpression::factory('@daily'), $firstExecution, $lastExecution);
 
@@ -63,7 +63,7 @@ class TaskBuilder implements TaskBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function weekly(\DateTimeImmutable $firstExecution = null, \DateTimeImmutable $lastExecution = null)
+    public function weekly(?\DateTimeImmutable $firstExecution = null, ?\DateTimeImmutable $lastExecution = null)
     {
         $this->task->setInterval(CronExpression::factory('@weekly'), $firstExecution, $lastExecution);
 
@@ -73,7 +73,7 @@ class TaskBuilder implements TaskBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function monthly(\DateTimeImmutable $firstExecution = null, \DateTimeImmutable $lastExecution = null)
+    public function monthly(?\DateTimeImmutable $firstExecution = null, ?\DateTimeImmutable $lastExecution = null)
     {
         $this->task->setInterval(CronExpression::factory('@monthly'), $firstExecution, $lastExecution);
 
@@ -83,7 +83,7 @@ class TaskBuilder implements TaskBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function yearly(\DateTimeImmutable $firstExecution = null, \DateTimeImmutable $lastExecution = null)
+    public function yearly(?\DateTimeImmutable $firstExecution = null, ?\DateTimeImmutable $lastExecution = null)
     {
         $this->task->setInterval(CronExpression::factory('@yearly'), $firstExecution, $lastExecution);
 
@@ -93,7 +93,7 @@ class TaskBuilder implements TaskBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function cron($cronExpression, \DateTimeImmutable $firstExecution = null, \DateTimeImmutable $lastExecution = null)
+    public function cron($cronExpression, ?\DateTimeImmutable $firstExecution = null, ?\DateTimeImmutable $lastExecution = null)
     {
         $this->task->setInterval(CronExpression::factory($cronExpression), $firstExecution, $lastExecution);
 

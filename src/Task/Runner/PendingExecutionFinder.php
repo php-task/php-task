@@ -47,13 +47,13 @@ class PendingExecutionFinder implements ExecutionFinderInterface
      * @param TaskExecutionRepositoryInterface $taskExecutionRepository
      * @param TaskHandlerFactoryInterface $taskHandlerFactory
      * @param LockInterface $lock
-     * @param LoggerInterface $logger
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         TaskExecutionRepositoryInterface $taskExecutionRepository,
         TaskHandlerFactoryInterface $taskHandlerFactory,
         LockInterface $lock,
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         $this->taskExecutionRepository = $taskExecutionRepository;
         $this->taskHandlerFactory = $taskHandlerFactory;

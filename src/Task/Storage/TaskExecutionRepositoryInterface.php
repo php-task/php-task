@@ -103,5 +103,5 @@ interface TaskExecutionRepositoryInterface
      *
      * @return TaskExecutionInterface
      */
-    public function findNextScheduled(\DateTimeImmutable $dateTime = null, array $skippedExecutions = []);
+    public function findNextScheduled(?\DateTimeImmutable $dateTime = null, array $skippedExecutions = []);
 }
